@@ -1,4 +1,4 @@
-package GUI;
+package UI;
 
 /* Imports */
 import javax.swing.JFrame;
