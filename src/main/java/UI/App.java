@@ -22,7 +22,10 @@ public class App extends JFrame implements IApp {
     @NotNull private JTabbedPane tabbedPane;
     @Nullable private AppActionListener actionListener;
 
-    public App() {
+    /* Singleton pattern */
+    private static IApp instance;
+
+    private App() {
         super("BNMOStore by AJG ( ✧Д✧)"); // init JFrame
 
         /* Window Configuration */
@@ -39,6 +42,14 @@ public class App extends JFrame implements IApp {
         
         /* Initialize window with its components */
         init();
+    }
+
+    public static IApp getInstance() {
+        if (App.instance == null) {
+            App.instance = new App();
+        }
+
+        return App.instance;
     }
 
     private void init() {
@@ -63,6 +74,11 @@ public class App extends JFrame implements IApp {
         add(this.tabbedPane);
 
         addTab("Main Menu", new JLabel("Main Menu"));
+    }
+
+    @Override
+    public void setVisible(boolean bool) {
+        super.setVisible(bool);
     }
 
     @Override

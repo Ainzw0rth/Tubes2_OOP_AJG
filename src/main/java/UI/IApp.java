@@ -52,4 +52,10 @@ public interface IApp {
      * @param index Index of the item to be added
     */
     public void addMenuItem(int index, JMenuItem item);
+
+    /**
+     * Set visibility of App
+     * @param bool visible if true, otherwise, not visible
+    */
+    public void setVisible(boolean bool);
 }
