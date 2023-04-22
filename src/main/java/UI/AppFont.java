@@ -1,7 +1,6 @@
 package UI;
 
 import java.awt.Font;
-import java.io.File;
 import java.io.InputStream;
 
 public class AppFont {
@@ -11,16 +10,6 @@ public class AppFont {
     public static final int BOLD = 2;
     public static final int SEMIBOLD = 3;
 
-    /* FONT FILE */
-    private static final InputStream PoppinsRegular = 
-        AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Regular.ttf");
-    private static final InputStream PoppinsMedium = 
-        AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Medium.ttf");
-    private static final InputStream PoppinsBold =
-        AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Bold.ttf");
-    private static final InputStream PoppinsSemibold =
-        AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-SemiBold.ttf");
-
     /**
      * Create font with specified weight and size
      * @param weight `REGULAR`, `MEDIUM`, `BOLD`, `SEMIBOLD`
@@ -29,24 +18,22 @@ public class AppFont {
      */
     public static Font create(int weight, float size) {
         InputStream requested;
-        // System.out.println("Creating font...");
-        // System.out.println(new File(AppFont.class.getClassLoader().getResource("fonts/Poppins-Medium.ttf").getFile()));
 
         switch (weight) {
             case REGULAR:
-                requested = PoppinsRegular;
+                requested = AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Regular.ttf");
                 break;
             case MEDIUM:
-                requested = PoppinsMedium;
+                requested = AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Medium.ttf");
                 break;
             case BOLD:
-                requested = PoppinsBold;
+                requested = AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Bold.ttf");;
                 break;
             case SEMIBOLD:
-                requested = PoppinsSemibold;
+                requested = AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-SemiBold.ttf");
                 break;
             default:
-                requested = PoppinsRegular;
+                requested = AppFont.class.getClassLoader().getResourceAsStream("fonts/Poppins-Regular.ttf");
                 break;
         }
 
