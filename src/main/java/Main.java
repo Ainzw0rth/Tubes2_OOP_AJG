@@ -1,8 +1,9 @@
 import UI.App;
+import UI.IApp;
 
 public class Main {
     public static void main(String[] args) {
-        App app = new App();
+        IApp app = App.getInstance();
         app.setVisible(true);
     }
 }
