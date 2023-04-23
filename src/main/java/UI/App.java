@@ -116,6 +116,8 @@ public class App extends JFrame implements IApp {
         pnlTab.add(closeButton);
 
         this.tabbedPane.setTabComponentAt(index, pnlTab);
+
+        this.tabbedPane.setSelectedIndex(index);
     }
 
     @Override
