@@ -57,7 +57,7 @@ public class TambahBarang extends JFrame {
 
         c.gridy = 5;
         c.anchor = GridBagConstraints.LINE_START; // set the anchor to the left
-        imageLocField = new JTextField(16);
+        imageLocField = new JTextField(15);
         imageLocField.setFont(new Font("Poppins", Font.PLAIN, 14));
         imageLocField.setEditable(false); // disable direct text editing
         panel.add(imageLocField, c);
@@ -68,7 +68,7 @@ public class TambahBarang extends JFrame {
         c2.gridy = 5;
         c2.anchor = GridBagConstraints.EAST;
         c2.insets = new Insets(5, 20, 5, 20);
-        JButton chooseImageButton = new JButton("Open File");
+        JButton chooseImageButton = new JButton("Choose File");
         chooseImageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chooseImage();
