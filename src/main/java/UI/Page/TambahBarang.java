@@ -66,8 +66,8 @@ public class TambahBarang extends JFrame {
         GridBagConstraints c2 = new GridBagConstraints();
         c2.gridx = 0;
         c2.gridy = 5;
-        c2.anchor = GridBagConstraints.EAST; // set the anchor to the center
-        c2.insets = new Insets(5, 20, 5, 20); // set the insets
+        c2.anchor = GridBagConstraints.EAST;
+        c2.insets = new Insets(5, 20, 5, 20);
         JButton chooseImageButton = new JButton("Open File");
         chooseImageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -102,12 +102,11 @@ public class TambahBarang extends JFrame {
         priceField.setFont(new Font("Poppins", Font.PLAIN, 14));
         panel.add(priceField, c);
 
-        // Add "Add Item" button at bottom
+        // Add button
         c.gridx = 0;
         c.gridy = 10;
         c.gridwidth = 2;
-        // c.anchor = GridBagConstraints.PAGE_END;
-        c.insets = new Insets(40, 20, 0, 0); // add 10 pixels of padding to top
+        c.insets = new Insets(40, 20, 0, 0);
         JButton addButton = new JButton("Tambah Barang");
         addButton.setFont(new Font("Poppins", Font.BOLD, 14));
         addButton.setForeground(Color.white);
