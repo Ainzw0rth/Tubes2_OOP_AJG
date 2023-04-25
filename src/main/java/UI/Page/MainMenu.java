@@ -1,6 +1,7 @@
 package UI.Page;
 
 import UI.AppFont;
+import UI.Component.AppClock;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -69,6 +70,11 @@ public class MainMenu extends JPanel {
         clockLabel.setFont(AppFont.create(AppFont.BOLD, 64));
         clockLabel.setForeground(Color.BLACK);
         rightPanel.add(clockLabel);
+
+        /* Threading clock */
+        AppClock clock = new AppClock(dateLabel, clockLabel);
+        Thread clockThread = new Thread(clock);
+        clockThread.start();
 
         /* Title label */
         JLabel titleLabel = new JLabel("BNMOStore");
