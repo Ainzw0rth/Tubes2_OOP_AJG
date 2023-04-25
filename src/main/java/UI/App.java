@@ -11,6 +11,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 
 import javax.swing.*;
+import UI.Page.*;
 
 public class App extends JFrame implements IApp {
     
@@ -73,7 +74,7 @@ public class App extends JFrame implements IApp {
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         add(this.tabbedPane);
 
-        addTab("Main Menu", new JLabel("Main Menu"));
+        addTab("Main Menu", new MainMenu());
     }
 
     @Override
