@@ -69,7 +69,7 @@ public class AppActionListener implements ActionListener {
             } else if (title.equals("Update Barang")) {
                 app.addTab("Update Barang", new UpdateBarang());
             } else if (title.equals("Laporan Penjualan")) {
-                app.addTab("Laporan Penjualan", new JLabel("Laporan Penjualan"));
+                app.addTab("Laporan Penjualan", new LaporanPenjualan());
             } else {
                 System.out.println("Menu tidak dikenali");
             }

@@ -1,14 +1,12 @@
 package UI.Page;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.*;
 import java.awt.*;
 
-public class LaporanPenjualan extends JFrame {
+public class LaporanPenjualan extends JPanel {
 
     public LaporanPenjualan() {
-        // set judul frame
-        super("Laporan Penjualan");
+        // // set judul frame
+        // super("Laporan Penjualan");
 
         // set ukuran frame
         setSize(600, 400);
@@ -74,14 +72,14 @@ public class LaporanPenjualan extends JFrame {
         add(kananPanel, BorderLayout.EAST);
 
         // tampilkan frame
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // pack();
         setSize(1200, 720);
-        setLocationRelativeTo(null);
+        // setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        LaporanPenjualan lapPenjualan = new LaporanPenjualan();
-    }
+    // public static void main(String[] args) {
+    //     new LaporanPenjualan();
+    // }
 }
