@@ -84,7 +84,7 @@ public class Bill extends JPanel {
         billLabel.setBounds(15, 10, 50, 40);
 
         // daftar belanjaan
-        Item[] itemList = {new Item("Ayam", 12000), new Item("Bebek", 15000)};
+        Item[] itemList = {new Item("Ayam", 12000, "../../../resources/images/icon.jpg", 5), new Item("Bebek", 15000, "../../../resources/images/icon.jpg", 7)};
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
         itemPanel.setBackground(Color.white);
