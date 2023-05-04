@@ -3,7 +3,7 @@ package UI.Page.Customers;
 import javax.swing.*;
 import java.awt.*;
 
-public class UpdateMember extends JFrame {
+public class UpdateMember extends JPanel {
 
     public UpdateMember() {
         JPanel panel = new JPanel();
@@ -109,10 +109,10 @@ public class UpdateMember extends JFrame {
         panel.add(regisButton);
         panel.add(Box.createVerticalGlue());
 
-        setContentPane(panel);
+        this.add(panel);
         setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // setLocationRelativeTo(null);
         setVisible(true);
     }
 

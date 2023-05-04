@@ -2,7 +2,7 @@ package UI.Page;
 import javax.swing.*;
 import java.awt.*;
 
-public class HistoriTransaksi extends JFrame {
+public class HistoriTransaksi extends JPanel {
     private JLabel titleLabel;
     private JTextField namaMemberField;
     private JButton tampilkanButton;
@@ -12,8 +12,9 @@ public class HistoriTransaksi extends JFrame {
     private JTextArea riwayatTextArea;
 
     public HistoriTransaksi() {
-        // Membuat judul frame
-        super("Histori Transaksi");
+        // // Membuat judul frame
+        // super("Histori Transaksi");
+        this.setLayout(new BorderLayout());
 
         // Membuat panel untuk kolom kiri
         JPanel kiriPanel = new JPanel();
@@ -68,12 +69,12 @@ public class HistoriTransaksi extends JFrame {
         kiriPanel.add(tampilkanButton, c);
 
         // Menambahkan panel ke frame
-        getContentPane().add(kiriPanel, BorderLayout.WEST);
+        this.add(kiriPanel, BorderLayout.WEST);
 
         // Menambahkan garis pemisah
         JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
         separator.setPreferredSize(new Dimension(1, Integer.MAX_VALUE));
-        getContentPane().add(separator, BorderLayout.CENTER);
+        this.add(separator, BorderLayout.CENTER);
 
         // Membuat panel untuk kolom kanan
         kananPanel = new JPanel();
@@ -87,13 +88,13 @@ public class HistoriTransaksi extends JFrame {
         kananPanel.add(scrollPane);
 
         // Menambahkan panel kanan ke frame
-        getContentPane().add(kananPanel, BorderLayout.EAST);
+        this.add(kananPanel, BorderLayout.EAST);
 
         // Menampilkan frame
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // pack();
         setSize(1200, 720);
-        setLocationRelativeTo(null);
+        // setLocationRelativeTo(null);
         setVisible(true);
     }
 

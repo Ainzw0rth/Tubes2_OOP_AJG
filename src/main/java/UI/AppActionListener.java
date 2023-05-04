@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.util.*;
 
 import UI.Page.*;
+import UI.Page.Customers.TambahMember;
+import UI.Page.Customers.UpdateMember;
 
 public class AppActionListener implements ActionListener {
     private List<JButton> tabCloseButtons = new ArrayList<JButton>();
@@ -53,10 +55,10 @@ public class AppActionListener implements ActionListener {
                 app.addTab("Main Menu", new MainMenu());
             } else if (title.equals("Tambah Member")) {
                 // Menu Tambah Member
-                app.addTab("Tambah Member", new JLabel("Tambah Member"));
+                app.addTab("Tambah Member", new TambahMember());
             } else if (title.equals("Update Member")) {
                 // Menu Update Member
-                app.addTab("Update Member", new JLabel("Update Member"));
+                app.addTab("Update Member", new UpdateMember());
             } else if (title.equals("Riwayat Transaksi Member")) {
                 // Menu Riwayat Transaksi Member
                 app.addTab("Riwayat Transaksi Member", new HistoriTransaksi());
@@ -67,7 +69,7 @@ public class AppActionListener implements ActionListener {
             } else if (title.equals("Update Barang")) {
                 app.addTab("Update Barang", new UpdateBarang());
             } else if (title.equals("Laporan Penjualan")) {
-                app.addTab("Laporan Penjualan", new JLabel("Laporan Penjualan"));
+                app.addTab("Laporan Penjualan", new LaporanPenjualan());
             } else {
                 System.out.println("Menu tidak dikenali");
             }
