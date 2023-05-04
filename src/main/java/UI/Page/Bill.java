@@ -4,7 +4,7 @@ import javax.swing.*;
 import Entity.Item;
 import java.awt.*;
 
-public class Bill {
+public class Bill extends JPanel {
     public Bill() {
         // JPanel backgroundPanel = new JPanel();
         // backgroundPanel.setBackground(Color.black);
@@ -122,59 +122,59 @@ public class Bill {
 
         JScrollPane scrollPane = new JScrollPane(itemPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(15, 60, 370, 300);
+        scrollPane.setBounds(15, 60, 370, 270);
         scrollPane.setBackground(Color.white);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x36459A)));
 
         // checkout button
         JButton checkoutButton = new JButton("CHECKOUT");
         checkoutButton.setFocusPainted(false);
         checkoutButton.setFont(new Font("Poppins", Font.BOLD, 32));
         checkoutButton.setForeground(Color.white);
-        checkoutButton.setBounds(15, 570, 359, 94);
+        checkoutButton.setBounds(30, 530, 329, 79);
         checkoutButton.setBackground(new Color(0x36459A));
 
         // member dropdown
         String[] items = {"Pilih nama member"};
         JComboBox<String> dropdown = new JComboBox<>(items);
-        dropdown.setBounds(15, 450, 150, 30);
+        dropdown.setBounds(15, 420, 150, 30);
 
         // subtotal label
         JLabel subtotalLabel = new JLabel("Subtotal");
         subtotalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        subtotalLabel.setBounds(15, 370, 100, 40);
+        subtotalLabel.setBounds(15, 340, 100, 40);
         
         // subtotal nominal
         JLabel subtotalLabelNumber = new JLabel("RP 27.000");
         subtotalLabelNumber.setFont(new Font("Poppins", Font.PLAIN, 16));
-        subtotalLabelNumber.setBounds(230, 370, 100, 40);
+        subtotalLabelNumber.setBounds(230, 340, 100, 40);
 
         // diskon label
         JLabel discountLabel = new JLabel("Diskon");
         discountLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        discountLabel.setBounds(15, 390, 100, 40);
+        discountLabel.setBounds(15, 360, 100, 40);
 
         // diskon nominal
         JLabel discountLabelNumbers = new JLabel("RP 2.700");
         discountLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
-        discountLabelNumbers.setBounds(230, 390, 100, 40);
+        discountLabelNumbers.setBounds(230, 360, 100, 40);
 
         // total price
         JLabel totalLabel = new JLabel("Total:");
         totalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        totalLabel.setBounds(230, 430, 70, 40);
+        totalLabel.setBounds(230, 400, 70, 40);
 
         // nominal total price
         JLabel totalLabelNumbers = new JLabel("Rp 25.000");
         totalLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
-        totalLabelNumbers.setBounds(230, 450, 100, 40);
+        totalLabelNumbers.setBounds(230, 420, 100, 40);
 
         // tombol save bill
         JButton saveBillButton = new JButton("Save Bill");
         saveBillButton.setFocusPainted(false);
         saveBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
         saveBillButton.setForeground(Color.black);
-        saveBillButton.setBounds(1, 500,201, 48);
+        saveBillButton.setBounds(1, 470,201, 48);
         saveBillButton.setBackground(new Color(0xEBEBEB));
 
         // tombol print bill
@@ -182,13 +182,13 @@ public class Bill {
         printBillButton.setFocusPainted(false);
         printBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
         printBillButton.setForeground(Color.black);
-        printBillButton.setBounds(201, 500,201, 48);
+        printBillButton.setBounds(201, 470,201, 48);
         printBillButton.setBackground(new Color(0xEBEBEB));
 
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
         panel.setBackground(Color.white);
-        panel.setBounds(800, 0, 400, 720);
+        panel.setBounds(800, 0, 400, 620);
         panel.setLayout(null);
         panel.add(scrollPane);
         panel.add(totalLabel);
@@ -204,13 +204,13 @@ public class Bill {
         panel.add(dropdown);
 
         // frame pagenya
-        JFrame frame = new JFrame();
-        frame.setLayout(null);
-        frame.setVisible(true);
-        frame.setSize(1200, 720);
-        frame.add(filterPanel);
-        frame.add(panel);
-        frame.add(stockScrollPane);
+        // JFrame frame = new JFrame();
+        this.setLayout(null);
+        this.setVisible(true);
+        this.setSize(1200, 720);
+        this.add(filterPanel);
+        this.add(panel);
+        this.add(stockScrollPane);
         // frame.add(backgroundPanel);
     }
 

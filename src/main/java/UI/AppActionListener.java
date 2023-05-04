@@ -61,7 +61,7 @@ public class AppActionListener implements ActionListener {
                 // Menu Riwayat Transaksi Member
                 app.addTab("Riwayat Transaksi Member", new HistoriTransaksi());
             } else if (title.equals("Jual Barang")) {
-                app.addTab("Jual Barang", new JLabel("Jual Barang"));
+                app.addTab("Jual Barang", new Bill());
             } else if (title.equals("Tambah Barang")) {
                 app.addTab("Tambah Barang", new TambahBarang());
             } else if (title.equals("Update Barang")) {
