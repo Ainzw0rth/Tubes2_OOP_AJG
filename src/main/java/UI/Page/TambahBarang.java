@@ -9,7 +9,7 @@ import java.io.File;
 
 import javax.swing.text.NumberFormatter;
 
-public class TambahBarang extends JFrame {
+public class TambahBarang extends JPanel {
     private JTextField nameField;
     private JTextField categoryField;
     private JTextField imageLocField;
@@ -122,10 +122,8 @@ public class TambahBarang extends JFrame {
         contentPanel.add(titlePanel, BorderLayout.PAGE_START);
         contentPanel.add(panel, BorderLayout.CENTER);
 
-        setContentPane(contentPanel);
+        this.add(contentPanel);
         setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 

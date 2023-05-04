@@ -9,7 +9,7 @@ import java.io.File;
 
 import javax.swing.text.NumberFormatter;
 
-public class UpdateBarang extends JFrame {
+public class UpdateBarang extends JPanel {
     private JTextField nameField;
     private JTextField categoryField;
     private JTextField imageLocField;
@@ -151,10 +151,8 @@ public class UpdateBarang extends JFrame {
         // contentPanel.add(topPanel, BorderLayout.PAGE_START);
         // contentPanel.add(panel, BorderLayout.CENTER);
 
-        setContentPane(contentPanel);
+        this.add(contentPanel);
         setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 

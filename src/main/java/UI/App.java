@@ -33,6 +33,7 @@ public class App extends JFrame implements IApp {
         setSize(WIDTH, HEIGHT);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         
         /* Set icon */
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/icon.jpg"));
