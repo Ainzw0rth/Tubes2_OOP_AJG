@@ -1,4 +1,5 @@
 package Entity;
+
 import org.jetbrains.annotations.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,8 @@ public class Item {
     private String name;
     @NotNull
     private Integer price;
-    // gambar item??
+    @NotNull
+    private String imageUrl;
+    @NotNull
+    private Integer stock;
 }
-
