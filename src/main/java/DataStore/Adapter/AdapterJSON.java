@@ -44,7 +44,8 @@ public class AdapterJSON implements DataStoreAdapter {
     public void writeCustomers(ArrayList<Customer> customers) throws IOException{
         try {
             FileWriter writer = new FileWriter("database/JSON/customers.json");
-            this.gson.toJson(customers, writer);
+            String json = this.gson.toJson(customers);
+            writer.write(json);
             writer.close();
         } catch (IOException e) {
             printError("Fail to write to customers.json", e);
@@ -67,7 +68,8 @@ public class AdapterJSON implements DataStoreAdapter {
     public void writeItems(ArrayList<Item> items) throws IOException{
         try {
             FileWriter writer = new FileWriter("database/JSON/items.json");
-            this.gson.toJson(items, writer);
+            String json = this.gson.toJson(items);
+            writer.write(json);
             writer.close();
         } catch (IOException e) {
             printError("Fail to write to items.json", e);
@@ -76,7 +78,6 @@ public class AdapterJSON implements DataStoreAdapter {
     }
 
     public ArrayList<Member> readMembers() throws IOException {
-        // TODO: implement
         try {
             FileReader reader = new FileReader("database/JSON/members.json");
             ArrayList<Member> members = this.gson.fromJson(reader, new TypeToken<ArrayList<Member>>(){}.getType());
@@ -91,7 +92,8 @@ public class AdapterJSON implements DataStoreAdapter {
     public void writeMembers(ArrayList<Member> members) throws IOException {
         try {
             FileWriter writer = new FileWriter("database/JSON/members.json");
-            this.gson.toJson(members, writer);
+            String json = this.gson.toJson(members);
+            writer.write(json);
             writer.close();
         } catch (IOException e) {
             printError("Fail to write to members.json", e);
@@ -112,10 +114,10 @@ public class AdapterJSON implements DataStoreAdapter {
     }
 
     public void writeBills(ArrayList<Bill> bills) throws IOException {
-        // TODO: implement
         try {
             FileWriter writer = new FileWriter("database/JSON/bills.json");
-            this.gson.toJson(bills, writer);
+            String json = this.gson.toJson(bills);
+            writer.write(json);
             writer.close();
         } catch (IOException e) {
             printError("Fail to write to bills.json", e);
@@ -124,7 +126,6 @@ public class AdapterJSON implements DataStoreAdapter {
     }
     
     public ArrayList<FixedBill> readFixedBills() throws IOException {
-        // TODO: implement
         try {
             FileReader reader = new FileReader("database/JSON/fixed_bills.json");
             ArrayList<FixedBill> fixedBills = this.gson.fromJson(reader, new TypeToken<ArrayList<FixedBill>>(){}.getType());
@@ -137,10 +138,10 @@ public class AdapterJSON implements DataStoreAdapter {
     }
 
     public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws IOException {
-        // TODO: implement
         try {
             FileWriter writer = new FileWriter("database/JSON/fixed_bills.json");
-            this.gson.toJson(fixedBills, writer);
+            String json = this.gson.toJson(fixedBills);
+            writer.write(json);
             writer.close();
         } catch (IOException e) {
             printError("Fail to write to fixed_bills.json", e);

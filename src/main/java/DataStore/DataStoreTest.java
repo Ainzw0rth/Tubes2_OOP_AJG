@@ -18,19 +18,33 @@ public class DataStoreTest {
     // };
     
     public static void main(String[] args) {
-        ArrayList<Member> members = new ArrayList<>();
+        Bill bill1 = new Bill(1, 1000, new LinkedList<Item>(), 1);
+        Bill bill2 = new Bill(2, 2000, new LinkedList<Item>(), 2);
+
         DataStore data = DataStore.getInstance();
+
         try {
-            members = data.getMembers();
+            data.startNewBill(bill1);
+            data.startNewBill(bill2);
+            Thread.sleep(8000);
+            bill1.setTotalPrice(900);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-        if (members != null) {
-            for (Member member : members) {
-                System.out.println(member);
-            }
-        }
+        // ArrayList<Member> members = new ArrayList<>();
+        // DataStore data = DataStore.getInstance();
+        // try {
+        //     members = data.getMembers();
+        // } catch (Exception e) {
+        //     System.out.println(e.getMessage());
+        // }
+
+        // if (members != null) {
+        //     for (Member member : members) {
+        //         System.out.println(member);
+        //     }
+        // }
         // for (int i = 0; i < 20; i++) {
         //     try {
         //         data.addItem(new Item(

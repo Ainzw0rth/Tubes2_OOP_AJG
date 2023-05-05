@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "totalPrice": 900,
+    "items": [],
+    "idCustomer": 1
+  },
+  {
+    "id": 2,
+    "totalPrice": 2000,
+    "items": [],
+    "idCustomer": 2
+  }
+]
