@@ -6,6 +6,7 @@ import lombok.Setter;
 
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class Bill {
     private int id;

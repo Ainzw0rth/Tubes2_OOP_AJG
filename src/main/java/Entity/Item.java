@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Item {
     @NotNull
+    private Integer id;
+    @NotNull
     private String name;
     @NotNull
     private Integer price;

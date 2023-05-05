@@ -13,10 +13,6 @@ public class FixedBill {
     private int totalPrice;
     private Item[] items;
     private int idCustomer;
-
-    public void FixedBill(){
-
-    }
 }
 
 
