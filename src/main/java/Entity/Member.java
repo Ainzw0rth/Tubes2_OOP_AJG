@@ -1,18 +1,20 @@
 package Entity;
 import org.jetbrains.annotations.NotNull;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@XStreamAlias("Member")
 public class Member extends Customer {
     @NotNull
     protected String name;
     @NotNull
     protected String phoneNumber;
     @NotNull
-    protected boolean isActive;
-    // @NonNegative (ntar bikin) 
+    protected Boolean isActive;
+    @NotNull
     protected Integer point;
 
     public Member(Integer id, String name, String phoneNumber, boolean isActive, Integer point) {

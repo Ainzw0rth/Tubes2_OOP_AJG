@@ -6,7 +6,7 @@ import DataStore.DataStore;
 import Entity.*;
 import java.io.IOException;
 
-public class DataStoreAdapterOBJ implements DataStoreAdapter {
+public class AdapterOBJ implements DataStoreAdapter {
     public void read(DataStore d) throws IOException {
         // TODO: implement
     }

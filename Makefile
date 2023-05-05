@@ -8,6 +8,9 @@ JSON_FILES := $(foreach table, $(DB_TABLES), database/$(JSON_DIR)/$(table).json)
 XML_FILES := $(foreach table, $(DB_TABLES), database/$(XML_DIR)/$(table).xml)
 
 db:
+	@echo "[0] 	Remove old database"
+	rm -rf database
+
 	@echo "[1] 	Creating database"
 	mkdir -p database
 	@echo "[2] 	Creating directories"

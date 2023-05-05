@@ -6,7 +6,7 @@ import DataStore.DataStore;
 import Entity.*;
 import java.io.IOException;
 
-public class DataStoreAdapterXML implements DataStoreAdapter {
+public class AdapterXML implements DataStoreAdapter {
     public void read(DataStore d) throws IOException {
         // TODO: implement
     }

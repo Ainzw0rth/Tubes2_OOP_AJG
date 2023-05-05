@@ -9,12 +9,12 @@ import com.google.gson.reflect.TypeToken;
 import DataStore.DataStore;
 import Entity.*;
 
-public class DataStoreAdapterJSON implements DataStoreAdapter {
+public class AdapterJSON implements DataStoreAdapter {
     private Gson gson;
     final String RED = "\033[0;31m";     // RED
     final String RESET = "\033[0m";  // Text Reset
 
-    public DataStoreAdapterJSON() {
+    public AdapterJSON() {
         this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
