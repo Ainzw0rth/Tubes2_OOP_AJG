@@ -1,4 +1,4 @@
-package DataStore.Adapter.Utils;
+package DataStore.Adapter.TypeAdapter;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;

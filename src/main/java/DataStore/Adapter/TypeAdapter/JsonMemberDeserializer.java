@@ -1,10 +1,10 @@
-package DataStore.Adapter.Utils;
+package DataStore.Adapter.TypeAdapter;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;
 import Entity.*;
 
-class JsonMemberDeserializer implements JsonDeserializer<Member> {
+public class JsonMemberDeserializer implements JsonDeserializer<Member> {
     @Override
     public Member deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();

@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import DataStore.DataStore;
 import Entity.*;
+import DataStore.Adapter.TypeAdapter.*;
 
 public class AdapterJSON implements DataStoreAdapter {
     private Gson gson;
@@ -15,7 +16,11 @@ public class AdapterJSON implements DataStoreAdapter {
     final String RESET = "\033[0m";  // Text Reset
 
     public AdapterJSON() {
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.gson = new GsonBuilder().setPrettyPrinting()
+            .registerTypeAdapter(Member.class, new JsonMemberSerializer())
+            .registerTypeAdapter(Member.class, new JsonMemberDeserializer())
+            .registerTypeAdapter(VIP.class, new JsonMemberSerializer())
+            .create();
     }
 
     public void read(DataStore d) throws IOException{
@@ -34,7 +39,7 @@ public class AdapterJSON implements DataStoreAdapter {
             FileReader reader = new FileReader("database/JSON/customers.json");
             ArrayList<Customer> customers = this.gson.fromJson(reader, new TypeToken<ArrayList<Customer>>(){}.getType());
             reader.close();
-            return customers;
+            return customers == null ? new ArrayList<Customer>() : customers;
         } catch (IOException e) {
             printError("Fail to read from customers.json", e);
             throw e;
@@ -58,7 +63,7 @@ public class AdapterJSON implements DataStoreAdapter {
             FileReader reader = new FileReader("database/JSON/items.json");
             ArrayList<Item> items = this.gson.fromJson(reader, new TypeToken<ArrayList<Item>>(){}.getType());
             reader.close();
-            return items;
+            return items == null ? new ArrayList<Item>() : items;
         } catch (IOException e) {
             printError("Fail to read from items.json", e);
             throw e;
@@ -82,7 +87,7 @@ public class AdapterJSON implements DataStoreAdapter {
             FileReader reader = new FileReader("database/JSON/members.json");
             ArrayList<Member> members = this.gson.fromJson(reader, new TypeToken<ArrayList<Member>>(){}.getType());
             reader.close();
-            return members;
+            return members == null ? new ArrayList<Member>() : members;
         } catch (IOException e) {
             printError("Fail to read from members.json", e);
             return new ArrayList<Member>();
@@ -106,7 +111,7 @@ public class AdapterJSON implements DataStoreAdapter {
             FileReader reader = new FileReader("database/JSON/bills.json");
             ArrayList<Bill> bills = this.gson.fromJson(reader, new TypeToken<ArrayList<Bill>>(){}.getType());
             reader.close();
-            return bills;
+            return bills == null ? new ArrayList<Bill>() : bills;
         } catch (IOException e) {
             printError("Fail to read from bills.json", e);
             throw e;
@@ -130,7 +135,7 @@ public class AdapterJSON implements DataStoreAdapter {
             FileReader reader = new FileReader("database/JSON/fixed_bills.json");
             ArrayList<FixedBill> fixedBills = this.gson.fromJson(reader, new TypeToken<ArrayList<FixedBill>>(){}.getType());
             reader.close();
-            return fixedBills;
+            return fixedBills == null ? new ArrayList<FixedBill>() : fixedBills;
         } catch (IOException e) {
             printError("Fail to read from fixed_bills.json", e);
             throw e;

@@ -41,13 +41,17 @@ public class DataStore {
     private static DataStore instance;
     
     private DataStore() {
-        this.customers = new ArrayList<Customer>();
-        this.items = new ArrayList<Item>();
-        this.members = new ArrayList<Member>();
-        this.bills = new ArrayList<Bill>();
-        this.fixedBills = new ArrayList<FixedBill>();
-
         this.adapter = new AdapterJSON();
+
+        try {
+            this.customers = this.adapter.readCustomers();
+            this.items = this.adapter.readItems();
+            this.members = this.adapter.readMembers();
+            this.bills = this.adapter.readBills();
+            this.fixedBills = this.adapter.readFixedBills();
+        } catch (IOException e) {
+            printError("Fail to load data", e);
+        }
     }
 
     // Singleton point
