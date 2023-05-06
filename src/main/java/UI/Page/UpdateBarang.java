@@ -12,14 +12,18 @@ import java.util.*;
 import javax.swing.text.NumberFormatter;
 
 import Entity.*;
+import Utils.Collections.Observer;
 import DataStore.DataStore;
 
 public class UpdateBarang extends JPanel {
+
+    // GUI Components
     private JTextField nameField;
     private JTextField categoryField;
     private JTextField imageLocField;
     private JSpinner stockSpinner;
     private JFormattedTextField priceField;
+    private JPanel dropdownPanel;
 
     public UpdateBarang() {
         JPanel titlePanel = new JPanel();
@@ -102,10 +106,30 @@ public class UpdateBarang extends JPanel {
         priceField.setFont(new Font("Poppins", Font.PLAIN, 14));
         panel.add(priceField, c);
 
-        JPanel dropdownPanel = new JPanel();
+        dropdownPanel = new JPanel();
 
         DataStore data = DataStore.getInstance();
-        ArrayList<Item> items = data.getItems();
+        
+        data.getItems().addObserver(
+            new Observer() {
+                @Override
+                public void update() {
+                    ArrayList<Item> items = data.getItems().getElements();
+
+                    String[] listItems = new String[items.size() + 1];
+                    listItems[0] = "Pilih nama barang";
+                    for (int i = 0; i < items.size(); i++) {
+                        listItems[i + 1] = items.get(i).getName();
+                    }
+            
+                    @SuppressWarnings("unchecked")
+                    JComboBox<String> itemsDropdown = (JComboBox<String>) dropdownPanel.getComponent(0);
+                    itemsDropdown.setModel(new DefaultComboBoxModel<>(listItems));
+                }
+            }
+        );
+
+        ArrayList<Item> items = data.getItems().getElements();
 
         String[] listItems = new String[items.size() + 1];
         listItems[0] = "Pilih nama barang";

@@ -4,16 +4,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import DataStore.Adapter.*;
-import DataStore.Utils.BillWorker;
+import DataStore.Thread.BillWorker;
 import Entity.*;
 import lombok.*;
 
+import Utils.Collections.ObservableCollection;
+
 public class DataStore {
-    @Setter @Getter private ArrayList<Customer> customers;
-    @Setter @Getter private ArrayList<Item> items;
-    @Setter @Getter private ArrayList<Member> members;
-    @Setter @Getter private ArrayList<Bill> bills;
-    @Setter @Getter private ArrayList<FixedBill> fixedBills;
+    @Getter private ObservableCollection<Customer> customers;
+    @Getter private ObservableCollection<Item> items;
+    @Getter private ObservableCollection<Member> members;
+    @Getter private ObservableCollection<Bill> bills;
+    @Getter private ObservableCollection<FixedBill> fixedBills;
     // @WaitForImplement
     // @Setter private ArrayList<String> pluginPaths;
 
@@ -43,11 +45,11 @@ public class DataStore {
         this.adapter = new AdapterJSON();
 
         try {
-            this.customers = this.adapter.readCustomers();
-            this.items = this.adapter.readItems();
-            this.members = this.adapter.readMembers();
-            this.bills = this.adapter.readBills();
-            this.fixedBills = this.adapter.readFixedBills();
+            this.customers = new ObservableCollection<Customer>(this.adapter.readCustomers());
+            this.items = new ObservableCollection<Item>(this.adapter.readItems());
+            this.members = new ObservableCollection<Member>(this.adapter.readMembers());
+            this.bills = new ObservableCollection<Bill>(this.adapter.readBills());
+            this.fixedBills = new ObservableCollection<FixedBill>(this.adapter.readFixedBills());
         } catch (Exception e) {
             printError("Fail to load data", e);
         }
@@ -64,6 +66,26 @@ public class DataStore {
             new Thread(DataStore.billWorker).start();
         }
         return DataStore.instance;
+    }
+
+    public void setCustomers(ArrayList<Customer> customers) {
+        this.customers.setElements(customers);
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        this.items.setElements(items);
+    }
+
+    public void setMembers(ArrayList<Member> members) {
+        this.members.setElements(members);
+    }
+
+    public void setBills(ArrayList<Bill> bills) {
+        this.bills.setElements(bills);
+    }
+
+    public void setFixedBills(ArrayList<FixedBill> fixedBills) {
+        this.fixedBills.setElements(fixedBills);
     }
 
     /**
@@ -100,11 +122,11 @@ public class DataStore {
         }
 
         try {            
-            this.adapter.writeBills(this.bills);
-            this.adapter.writeCustomers(this.customers);
-            this.adapter.writeItems(this.items);
-            this.adapter.writeMembers(this.members);
-            this.adapter.writeFixedBills(this.fixedBills);
+            this.adapter.writeBills(this.bills.getElements());
+            this.adapter.writeCustomers(this.customers.getElements());
+            this.adapter.writeFixedBills(this.fixedBills.getElements());
+            this.adapter.writeItems(this.items.getElements());
+            this.adapter.writeMembers(this.members.getElements());
         } catch (Exception e) {
             printError("Fail to change file extension", e);
             throw e;
@@ -132,7 +154,7 @@ public class DataStore {
     public void addCustomer(Customer customer) throws Exception{
         try {
             this.customers.add(customer);
-            this.adapter.writeCustomers(customers);
+            this.adapter.writeCustomers(customers.getElements());
         } catch (Exception e) {
             printError("Fail to add customer", e);
             this.customers.remove(customer);
@@ -180,7 +202,7 @@ public class DataStore {
     public void addItem(Item item) throws Exception{
         try {
             this.items.add(item);
-            this.adapter.writeItems(items);
+            this.adapter.writeItems(items.getElements());
         } catch (Exception e) {
             printError("Fail to add item", e);
             this.items.remove(item);
@@ -194,13 +216,13 @@ public class DataStore {
      */
     public void removeItem(Integer item_id) throws Exception{
         try {
-            for (Item item : this.items) {
+            for (Item item : this.items.getElements()) {
                 if (item.getId() == item_id) {
                     this.items.remove(item);
                     break;
                 }
             }
-            this.adapter.writeItems(items);
+            this.adapter.writeItems(items.getElements());
         } catch (Exception e) {
             printError("Fail to remove item", e);
             throw e;
@@ -214,14 +236,14 @@ public class DataStore {
     */
     public void updateItem(Integer item_id, Item new_item) throws Exception{
         try {
-            for (Item item : this.items) {
+            for (Item item : this.items.getElements()) {
                 if (item.getId() == item_id) {
                     this.items.remove(item);
                     this.items.add(new_item);
                     break;
                 }
             }
-            this.adapter.writeItems(items);
+            this.adapter.writeItems(items.getElements());
         } catch (Exception e) {
             printError("Fail to update item", e);
             throw e;
@@ -270,7 +292,7 @@ public class DataStore {
         // try {
             // setMembers(this.adapter.readMembers());
 
-        ArrayList<Member> mem_arr = this.members.stream()
+        ArrayList<Member> mem_arr = this.members.getElements().stream()
             .filter(member -> member.getIsActive())
             .collect(Collectors.toCollection(ArrayList::new));
 
@@ -303,7 +325,7 @@ public class DataStore {
     public Member getMemberById(Integer member_id) throws Exception {
         // try {
         //     setMembers(this.adapter.readMembers());
-        for (Member member : this.members) {
+        for (Member member : this.members.getElements()) {
             if (member.getId() == member_id) {
                 return member;
             }
@@ -322,7 +344,7 @@ public class DataStore {
     public void addMember(Member member) throws Exception {
         try {
             this.members.add(member);
-            this.adapter.writeMembers(members);
+            this.adapter.writeMembers(members.getElements());
         } catch (Exception e) {
             printError("Fail to add member", e);
             this.members.remove(member);
@@ -338,7 +360,7 @@ public class DataStore {
     public void updateMember(Integer member_id, Member member) throws Exception {
         try {
             Boolean found = false;
-            for (Member m : this.members) {
+            for (Member m : this.members.getElements()) {
                 if (m.getId() == member_id) {
                     this.members.remove(m);
                     this.members.add(new Member(
@@ -352,7 +374,7 @@ public class DataStore {
                 throw new Exception("Member not found");
             }
 
-            this.adapter.writeMembers(members);
+            this.adapter.writeMembers(members.getElements());
         } catch (Exception e) {
             printError("Fail to update member", e);
             throw e;
@@ -368,7 +390,7 @@ public class DataStore {
         try {
             int index = -1;
             int it = 0;
-            for (Member m : this.members) {
+            for (Member m : this.members.getElements()) {
                 if (m.getId() == member_id) {
                     index = it;
                     break;
@@ -426,7 +448,7 @@ public class DataStore {
         // try {
         //     setFixedBills(this.adapter.readFixedBills());
         ArrayList<FixedBill> bills = new ArrayList<FixedBill>();
-        for (FixedBill bill : this.fixedBills) {
+        for (FixedBill bill : this.fixedBills.getElements()) {
             if (bill.getIdCustomer() == cust_id) {
                 bills.add(bill);
             }
@@ -450,7 +472,7 @@ public class DataStore {
     private void addFixedBill(FixedBill fixedBill) throws Exception {
         try {
             this.fixedBills.add(fixedBill);
-            this.adapter.writeFixedBills(fixedBills);
+            this.adapter.writeFixedBills(fixedBills.getElements());
         } catch (Exception e) {
             printError("Fail to add fixed bill", e);
             this.fixedBills.remove(fixedBill);
@@ -512,7 +534,7 @@ public class DataStore {
                 bill.getId(), bill.getTotalPrice(), bill.getItems(), bill.getIdCustomer()
             ));
 
-            this.adapter.writeBills(bills);
+            this.adapter.writeBills(bills.getElements());
         } catch (Exception e) {
             printError("Fail to finish bill, might cause fixed bill data desync", e);
             DataStore.billWorker.addBill(bill);
