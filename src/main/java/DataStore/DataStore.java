@@ -45,11 +45,11 @@ public class DataStore {
         this.adapter = new AdapterJSON();
 
         try {
-            this.customers.setElements(this.adapter.readCustomers());
-            this.items.setElements(this.adapter.readItems());
-            this.members.setElements(this.adapter.readMembers());
-            this.bills.setElements(this.adapter.readBills());
-            this.fixedBills.setElements(this.adapter.readFixedBills());
+            this.customers = new ObservableCollection<Customer>(this.adapter.readCustomers());
+            this.items = new ObservableCollection<Item>(this.adapter.readItems());
+            this.members = new ObservableCollection<Member>(this.adapter.readMembers());
+            this.bills = new ObservableCollection<Bill>(this.adapter.readBills());
+            this.fixedBills = new ObservableCollection<FixedBill>(this.adapter.readFixedBills());
         } catch (Exception e) {
             printError("Fail to load data", e);
         }

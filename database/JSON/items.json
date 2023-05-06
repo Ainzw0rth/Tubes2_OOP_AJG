@@ -14,5 +14,13 @@
     "price": 2000000,
     "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\9376f4bc2cf659688e4fe9887adddc4a.png",
     "stock": 2
+  },
+  {
+    "id": 3,
+    "name": "Upnormal Indomie",
+    "category": "Food and Beverages",
+    "price": 16000,
+    "imageUrl": "C:\\Users\\Moonawar\\Downloads\\1fe3140a25034fbd003ec6bccbebe21c.png",
+    "stock": 1
   }
 ]

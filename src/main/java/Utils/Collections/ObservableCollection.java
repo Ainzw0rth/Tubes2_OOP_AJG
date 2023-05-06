@@ -11,7 +11,7 @@ public class ObservableCollection<E> {
     private ArrayList<Observer> observers;
 
     public ObservableCollection(ArrayList<E> list) {
-        elements = list;
+        elements = list == null ? new ArrayList<>() : list;
         observers = new ArrayList<>();
     }
 
