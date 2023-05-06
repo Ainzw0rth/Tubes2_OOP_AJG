@@ -1,9 +1,10 @@
 package Entity;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import org.jetbrains.annotations.NotNull;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@XStreamAlias("Bill")
-public class Bill {
+public class Bill implements Serializable{
     @NotNull private int id;
     @NotNull private int totalPrice;
     @NotNull private LinkedList<Item> items;
