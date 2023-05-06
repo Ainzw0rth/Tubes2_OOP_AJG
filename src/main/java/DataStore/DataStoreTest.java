@@ -31,7 +31,7 @@ public class DataStoreTest {
         }
 
         try {
-            ArrayList<Item> items = data.getItems();
+            ArrayList<Item> items = data.getItems().getElements();
             for (Item item : items) {
                 System.out.println(item.toString());
             }
