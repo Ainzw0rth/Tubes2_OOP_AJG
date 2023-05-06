@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "Aqua",
+    "category": "Minuman",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 2,
+    "name": "Milo",
+    "category": "Minuman",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 3,
+    "name": "EsTeh",
+    "category": "Minuman",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 4,
+    "name": "Hai",
+    "category": "Minuman",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 5,
+    "name": "Le Minerale",
+    "category": "Minuman",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 6,
+    "name": "Warkop",
+    "category": "Minuman",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 7,
+    "name": "Jar",
+    "category": "File",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  },
+  {
+    "id": 8,
+    "name": "Sonic",
+    "category": "Exe",
+    "price": 6000,
+    "imageUrl": "C:\\Users\\louis\\Downloads\\𝐙𝐞𝐭𝐚 ៸៸ ᥉hᥲꪮꪮƒ﹗.jpg",
+    "stock": 30
+  }
+]

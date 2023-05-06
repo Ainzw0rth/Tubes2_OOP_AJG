@@ -30,6 +30,10 @@ public class Bill implements Serializable{
         this.totalPrice = 0;
         this.items = new LinkedList<Item>();
     }
+
+    public void tambah (Item other) {
+        this.items.add(other);
+    }
 }
 
 
