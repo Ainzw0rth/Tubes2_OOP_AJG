@@ -1,5 +1,5 @@
 package DataStore.Utils;
-import java.io.IOException;
+
 import java.util.*;
 import DataStore.DataStore;
 import Entity.*;
@@ -31,7 +31,7 @@ public class BillWorker implements Runnable{
                 System.out.println("Bill autosaved!");
             } catch (InterruptedException e) {
                 System.out.println("Error in BillWorker: " + e.getMessage());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.println("Error in BillWorker: " + e.getMessage());
             }
         }
