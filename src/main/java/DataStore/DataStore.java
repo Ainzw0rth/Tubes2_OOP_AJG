@@ -469,7 +469,7 @@ public class DataStore {
      * @param fixedBill
      * @throws Exception
      */
-    private void addFixedBill(FixedBill fixedBill) throws Exception {
+    public void addFixedBill(FixedBill fixedBill) throws Exception {
         try {
             this.fixedBills.add(fixedBill);
             this.adapter.writeFixedBills(fixedBills.getElements());
