@@ -22,17 +22,25 @@ public class DataStoreTest {
         // Bill bill2 = new Bill(2, 2000, new LinkedList<Item>(), 2);
 
         DataStore data = DataStore.getInstance();
-        
-        Integer id;
         try {
-            ArrayList<Member> members = data.getActiveMembers();
-            System.out.println(members.size());
-            for (Member member : members) {
-                System.out.println(member.toString());
-            }
+            Item item = new Item(data.generateItemId(), "Nasi Goreng Abang Gila", "Nasi Goreng", 20000,"xxx", 10);
+            data.addItem(item);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            
         }
+    
+
+        
+        // Integer id;
+        // try {
+        //     ArrayList<Member> members = data.getActiveMembers();
+        //     System.out.println(members.size());
+        //     for (Member member : members) {
+        //         System.out.println(member.toString());
+        //     }
+        // } catch (Exception e) {
+        //     System.out.println(e.getMessage());
+        // }
 
 
         // try {

@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.util.*;
 
 import UI.Page.*;
-import UI.Page.Customers.TambahMember;
-import UI.Page.Customers.UpdateMember;
 
 public class AppActionListener implements ActionListener {
     private List<JButton> tabCloseButtons = new ArrayList<JButton>();

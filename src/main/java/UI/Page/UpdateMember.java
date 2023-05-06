@@ -1,4 +1,4 @@
-package UI.Page.Customers;
+package UI.Page;
 
 import javax.swing.*;
 import java.awt.*;
