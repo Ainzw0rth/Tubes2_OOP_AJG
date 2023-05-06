@@ -2,22 +2,46 @@ package DataStore.Adapter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.*;
 
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import javax.xml.parsers.*;
-import java.io.*;
+import org.xml.sax.SAXParseException;
+
+// importimport java.io.Serializable; org.w3c.dom.*;
+// import org.xml.sax.SAXException;
+// import javax.xml.parsers.*;
+// import java.io.*;
 
 import java.util.*;
-import java.util.Locale.Category;
+// import java.util.Locale.Category;
 
 import DataStore.DataStore;
 import Entity.*;
 
 import java.io.FileWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
+// import java.io.BufferedReader;
+// import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+
+
+
+class CustomerList {
+    public ArrayList<Customer> customers;
+}
+class ItemLIst {
+    public ArrayList<Item> items;
+}
+class BillList {
+    public ArrayList<Bill> bills;
+}
+class Members {
+    public ArrayList<Member> members;
+}
+class FixedBillList {
+    public ArrayList<FixedBill> fixedBills;
+}
+
 
 public class AdapterXML implements DataStoreAdapter {
     
@@ -25,12 +49,15 @@ public class AdapterXML implements DataStoreAdapter {
 
     public AdapterXML() {
         xstream = new XStream(new DomDriver());
+        xstream.addPermission(AnyTypePermission.ANY);
+        xstream.alias("list", CustomerList.class);
         xstream.alias("customer", Customer.class);
+        xstream.addImplicitCollection(CustomerList.class, "customers");
+
         xstream.alias("item", Item.class);
         xstream.alias("member", Member.class);
         xstream.alias("bill", Bill.class);
         xstream.alias("fixed_bill", FixedBill.class);
-        xstream.alias("list", ArrayList.class);
     }
 
     public void read(DataStore d) throws IOException {
@@ -43,38 +70,39 @@ public class AdapterXML implements DataStoreAdapter {
     }
 
     public ArrayList<Customer> readCustomers() throws IOException {
-        // TODO: implement
+        // read XML data from file
+        String filename = "database/XML/customers.xml";
+        String xml = "";
         try {
-            File file = new File("database/XML/customers.xml");
+            FileInputStream file = new FileInputStream(filename);
+            byte[] data = new byte[file.available()];
+            file.read(data);
+            file.close();
+            xml = new String(data);
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            NodeList customerList = doc.getElementsByTagName("customer");
+            // deserialize XML data into array of Customer objects
+            CustomerList customerrr = (CustomerList) xstream.fromXML(xml);
+
+            // ArrayList<Customer> temp = new ArrayList<>();
+            return customerrr.customers; 
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            return new ArrayList<Customer>();
             
-            ArrayList<Customer> customers = new ArrayList<Customer>();
-    
-            // Loop through all the customer nodes
-            for (int i = 0; i < customerList.getLength(); i++) {
-                Node customerNode = customerList.item(i);
-                Element customerElement = (Element) customerNode;
-                Element idElement = (Element) customerElement.getElementsByTagName("id").item(0);
-                int id = Integer.parseInt(idElement.getTextContent());
-                Customer customer = new Customer(id);
-                customers.add(customer);
+        } catch (Exception e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
             }
-
-            return customers;
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();            
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+            // e.printStackTrace();
+            // // System.out.println("Error reading file: " + e.getMessage());
+            return new ArrayList<Customer>();
+        }        
     }
 
     public void writeCustomers(ArrayList<Customer> customers) throws IOException {
@@ -92,55 +120,39 @@ public class AdapterXML implements DataStoreAdapter {
     }
 
     public ArrayList<Item> readItems() throws IOException {
-        // TODO: implement
+        // read XML data from file
+        // please implement read items according to readCustomers
+        String filename = "database/XML/items.xml";
+        String xml = "";
         try {
-            File file = new File("database/XML/items.xml");
+            FileInputStream file = new FileInputStream(filename);
+            byte[] data = new byte[file.available()];
+            file.read(data);
+            file.close();
+            xml = new String(data);
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            NodeList itemList = doc.getElementsByTagName("item");
+            // deserialize XML data into array of Customer objects
+            ItemLIst itemmm = (ItemLIst) xstream.fromXML(xml);
+
+            // ArrayList<Customer> temp = new ArrayList<>();
+            return itemmm.items; 
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            return new ArrayList<Item>();
             
-            ArrayList<Item> items = new ArrayList<Item>();
-    
-            // Loop through all the item nodes
-            for (int i = 0; i < itemList.getLength(); i++) {
-                Node itemNode = itemList.item(i);
-                Element itemElement = (Element) itemNode;
-                
-                // get all the attribut of item
-                Element idElement = (Element) itemElement.getElementsByTagName("id").item(0);
-                Element nameElement = (Element) itemElement.getElementsByTagName("name").item(0);
-                Element priceElement = (Element) itemElement.getElementsByTagName("price").item(0);
-                Element categoryElement = (Element) itemElement.getElementsByTagName("category").item(0);
-                Element imageUrlElement = (Element) itemElement.getElementsByTagName("imageUrl").item(0);
-                Element stockElement = (Element) itemElement.getElementsByTagName("stock").item(0);
-                
-                Integer id = Integer.parseInt(idElement.getTextContent());
-                String name = nameElement.getTextContent();
-                String category = categoryElement.getTextContent();
-                Integer price = Integer.parseInt(priceElement.getTextContent());
-                String imageUrl = imageUrlElement.getTextContent();
-                Integer stock = Integer.parseInt(stockElement.getTextContent());
-                
-                Item item = new Item(id, name, category, price, imageUrl, stock);
-                items.add(item);
+        } catch (Exception e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
             }
-
-            return items;
-
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();            
-        
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            return new ArrayList<Item>();
         }
+
     }
 
     public void writeItems(ArrayList<Item> items) throws IOException {
@@ -159,47 +171,37 @@ public class AdapterXML implements DataStoreAdapter {
 
     public ArrayList<Member> readMembers() throws IOException {
         // TODO: implement
+        // please implement according to read customers
+        String filename = "database/XML/members.xml";
+        String xml = "";
         try {
-            File file = new File("database/XML/members.xml");
+            FileInputStream file = new FileInputStream(filename);
+            byte[] data = new byte[file.available()];
+            file.read(data);
+            file.close();
+            xml = new String(data);
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            NodeList memberList = doc.getElementsByTagName("member");
+            // deserialize XML data into array of Customer objects
+            Members mem = (Members) xstream.fromXML(xml);
+
+            // ArrayList<Customer> temp = new ArrayList<>();
+            return mem.members; 
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            return new ArrayList<Member>();
             
-            ArrayList<Member> members = new ArrayList<Member>();
-    
-            // Loop through all the member nodes
-            for (int i = 0; i < memberList.getLength(); i++) {
-
-                Node memberNode = memberList.item(i);
-                Element memberElement = (Element) memberNode;
-                Element idElement = (Element) memberElement.getElementsByTagName("id").item(0);
-                Element nameElement = (Element) memberElement.getElementsByTagName("name").item(0);
-                Element phoneElement = (Element) memberElement.getElementsByTagName("phone").item(0);
-                Element addressElement = (Element) memberElement.getElementsByTagName("address").item(0);
-                Element pointElement = (Element) memberElement.getElementsByTagName("point").item(0);
-                int id = Integer.parseInt(idElement.getTextContent());
-                String name = nameElement.getTextContent();
-                String phone = phoneElement.getTextContent();
-                String address = addressElement.getTextContent();
-                int point = Integer.parseInt(pointElement.getTextContent());
-                Member member = new Member(id, name, phone, address, point);
-                members.add(member);
+        } catch (Exception e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
             }
-
-            return members;
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();            
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            return new ArrayList<Member>();
         }
-    
     }
 
     public void writeMembers(ArrayList<Member> members) throws IOException {
@@ -218,62 +220,36 @@ public class AdapterXML implements DataStoreAdapter {
 
     public ArrayList<Bill> readBills() throws IOException {
         // TODO: implement
+        // please implement according to read customers
+        String filename = "database/XML/bills.xml";
+        String xml = "";
         try {
-            File file = new File("database/XML/bills.xml");
+            FileInputStream file = new FileInputStream(filename);
+            byte[] data = new byte[file.available()];
+            file.read(data);
+            file.close();
+            xml = new String(data);
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            NodeList billList = doc.getElementsByTagName("bill");
+            // deserialize XML data into array of Customer objects
+            BillList billl = (BillList) xstream.fromXML(xml);
+
+            // ArrayList<Customer> temp = new ArrayList<>();
+            return billl.bills; 
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            return new ArrayList<Bill>();
             
-            ArrayList<Bill> bills = new ArrayList<Bill>();
-    
-            // Loop through all the bill nodes
-            for (int i = 0; i < billList.getLength(); i++) {
-                Node billNode = billList.item(i);
-                Element billElement = (Element) billNode;
-
-                // Bill have 4 attribute that is id:int, totalPrice:int, items:LinkedList<Item>, idCustomer:int
-                // please instantiate Bill with all its attribute
-
-                Element idElement = (Element) billElement.getElementsByTagName("id").item(0);
-                Element totalPriceElement = (Element) billElement.getElementsByTagName("totalPrice").item(0);
-                Element itemsElement = (Element) billElement.getElementsByTagName("items").item(0);
-                Element idCustomerElement = (Element) billElement.getElementsByTagName("idCustomer").item(0);
-                
-                int id = Integer.parseInt(idElement.getTextContent());
-                int totalPrice = Integer.parseInt(totalPriceElement.getTextContent());
-                String[] itemStrings = itemsElement.getTextContent().split(";");
-                int idCustomer = Integer.parseInt(idCustomerElement.getTextContent());
-                
-                LinkedList<Item> items = new LinkedList<Item>();
-                for (String itemString : itemStrings) {
-                    String[] itemStringSplit = itemString.split(",");
-
-                    // item attribute: id, name, category, price, imageUrl, stock
-                    int idItem = Integer.parseInt(itemStringSplit[0]);
-                    int quantity = Integer.parseInt(itemStringSplit[1]);
-                    
-
-
-                    Item item = new Item(idItem, quantity);
-                    items.add(item);
-                }
-
-                Bill bill = new Bill(id, totalPrice, items, idCustomer);
-                bills.add(bill);
+        } catch (Exception e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
             }
-
-            return bills;
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();            
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            return new ArrayList<Bill>();
         }
     }
 
@@ -291,45 +267,38 @@ public class AdapterXML implements DataStoreAdapter {
         }
     }
 
-
     public ArrayList<FixedBill> readFixedBills() throws IOException {
         // TODO: implement
+        // please implement according to read customers
+        String filename = "database/XML/fixed_bills.xml";
+        String xml = "";
         try {
-            File file = new File("database/XML/fixedBills.xml");
+            FileInputStream file = new FileInputStream(filename);
+            byte[] data = new byte[file.available()];
+            file.read(data);
+            file.close();
+            xml = new String(data);
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            NodeList fixedBillList = doc.getElementsByTagName("fixedBill");
+            // deserialize XML data into array of Customer objects
+            FixedBillList fixedBilll = (FixedBillList) xstream.fromXML(xml);
+
+            // ArrayList<Customer> temp = new ArrayList<>();
+            return fixedBilll.fixedBills; 
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            return new ArrayList<FixedBill>();
             
-            ArrayList<FixedBill> fixedBills = new ArrayList<FixedBill>();
-    
-            // Loop through all the fixedBill nodes
-            for (int i = 0; i < fixedBillList.getLength(); i++) {
-                Node fixedBillNode = fixedBillList.item(i);
-                Element fixedBillElement = (Element) fixedBillNode;
-                Element idElement = (Element) fixedBillElement.getElementsByTagName("id").item(0);
-                Element customerIDElement = (Element) fixedBillElement.getElementsByTagName("customerID").item(0);
-                Element dateElement = (Element) fixedBillElement.getElementsByTagName("date").item(0);
-                Element totalElement = (Element) fixedBillElement.getElementsByTagName("total").item(0);
-                int id = Integer.parseInt(idElement.getTextContent());
-                int customerID = Integer.parseInt(customerIDElement.getTextContent());
-                String date = dateElement.getTextContent();
-                double total = Double.parseDouble(totalElement.getTextContent());
-                FixedBill fixedBill = new FixedBill(id, customerID, date, total);
-                fixedBills.add(fixedBill);
+        } catch (Exception e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
             }
-
-            return fixedBills;
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();            
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            return new ArrayList<FixedBill>();
         }
     }
 
@@ -337,12 +306,19 @@ public class AdapterXML implements DataStoreAdapter {
         // TODO: implement
         try {
             String xml = xstream.toXML(fixedBills);
-            FileWriter fw = new FileWriter("database/XML/fixedBills.xml");
+            FileWriter fw = new FileWriter("database/XML/fixed_bills.xml");
             fw.write(xml);
             fw.close();
             System.out.println(xml);
         } catch (IOException e) {
-            System.out.println("Fail to write to fixedBills.xml");
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
+            }
             throw e;
         }
     }
@@ -362,15 +338,19 @@ public class AdapterXML implements DataStoreAdapter {
         //     e.printStackTrace();
         // }
 
-        // // test readcustomer
-        // AdapterXML adapterXML = new AdapterXML();
-        // try {
-        //     ArrayList<Customer> customers = adapterXML.readCustomers();
-        //     for (Customer customer : customers) {
-        //         System.out.println(customer);
-        //     }
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
+        // test readcustomer
+        AdapterXML adapterXML = new AdapterXML();
+        try {
+            ArrayList<Item> customerss = adapterXML.readItems();
+            ArrayList<Customer> customers = adapterXML.readCustomers();
+            for (Customer customer : customers) {
+                System.out.println(customer.getId());
+            }
+
+        } catch (IOException e) {
+            System.out.println("disini");
+            e.printStackTrace();
+        }
     }
 }
+
