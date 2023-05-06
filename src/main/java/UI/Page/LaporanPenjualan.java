@@ -2,81 +2,152 @@ package UI.Page;
 import javax.swing.*;
 import java.awt.*;
 
+import Entity.Item;
+
 public class LaporanPenjualan extends JPanel {
 
     public LaporanPenjualan() {
-        // // set judul frame
-        // super("Laporan Penjualan");
+        // TITLE PANEL
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(null);
+        // titlePanel.setBackground(Color.white);
+        titlePanel.setBounds(20, 20, 300, 60);
 
-        // set ukuran frame
-        setSize(600, 400);
+        // TITLE LABEL
+        JLabel titleLabel = new JLabel("Laporan Penjualan");
+        titleLabel.setFont(new Font("Poppins", Font.BOLD, 30));
+        titleLabel.setBounds(0, 6, 600, 60);
 
-        // set layout frame
-        setLayout(new BorderLayout());
+        // ITEM PANEL
+        JPanel itemPanel = new JPanel();
+        itemPanel.setLayout(null);
+        itemPanel.setBounds(30,90,510,30);
 
-        // tambahkan komponen ke panel kiri
-        JPanel kiriPanel = new JPanel();
-        kiriPanel.setLayout(new BorderLayout());
+        // ITEM LABEL
+        JLabel itemLabel = new JLabel("Item :");
+        itemLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+        itemLabel.setBounds(0, 6, 600, 30);
 
-        // tambahkan judul page ke panel kiri
-        JLabel judulLabel = new JLabel("Laporan Penjualan");
-        judulLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        judulLabel.setBorder(BorderFactory.createEmptyBorder(80, 100, 0, 0));
-        kiriPanel.add(judulLabel, BorderLayout.NORTH);
+        // LOOP ITEM
+        Item[] itemList = {};
+        JPanel itemsPanel = new JPanel();
+        itemsPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+        itemsPanel.setBackground(Color.white);
 
-        // tambahkan detail penjualan ke panel kiri
-        JPanel detailPanel = new JPanel();
-        detailPanel.setBorder((BorderFactory.createEmptyBorder(20, 20, 0, 0)));
-        detailPanel.setLayout(new GridLayout(0, 3, 60, 10));
-        detailPanel.add(new JLabel("Nama Item"));
-        detailPanel.add(new JLabel("Jumlah"));
-        detailPanel.add(new JLabel("Harga"));
-        // contoh detail penjualan
-        detailPanel.add(new JLabel("Ayam"));
-        detailPanel.add(new JLabel("2x"));
-        detailPanel.add(new JLabel("Rp12000"));
-        detailPanel.add(new JLabel("Bebek"));
-        detailPanel.add(new JLabel("2x"));
-        detailPanel.add(new JLabel("Rp12000"));
-        // tambahkan detail panel ke dalam JScrollPane
-        JScrollPane scrollPane = new JScrollPane(detailPanel);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(20, 83, 0, 0));
-        kiriPanel.add(scrollPane);
+        for (Item item : itemList) {
+            JPanel panelItem = new JPanel();
+            panelItem.setBackground(Color.white);
+            panelItem.setMaximumSize(new Dimension(1000, 30));
 
-        // tambahkan panel kiri ke dalam frame
-        add(kiriPanel, BorderLayout.WEST);
+            JPanel itemNames = new JPanel();
+            itemNames.setBounds(15, 0, 80, 20);
+            itemNames.setBackground(Color.white);
+            itemNames.setLayout(null);
 
-        // tambahkan komponen ke panel kanan
-        JPanel kananPanel = new JPanel();
-        kananPanel.setLayout(new BoxLayout(kananPanel, BoxLayout.Y_AXIS));
+            JPanel itemQuantity = new JPanel();
+            itemQuantity.setBounds(110, 0, 80, 20);
+            itemQuantity.setBackground(Color.white);
+            itemQuantity.setLayout(null);
 
-        // tambahkan label Total Pemasukan ke panel kanan
-        JLabel totalLabel = new JLabel("Total Pemasukan:");
-        totalLabel.setBorder(BorderFactory.createEmptyBorder(135, 80, 5, 480));
-        kananPanel.add(totalLabel, BorderLayout.NORTH);
+            JPanel itemPrices = new JPanel();
+            itemPrices.setBounds(210, 0, 80, 20);
+            itemPrices.setBackground(Color.white);
+            itemPrices.setLayout(null);
 
-        // tambahkan jumlah total harga ke panel kanan
-        JLabel hargaLabel = new JLabel("Rp24000");
-        hargaLabel.setBorder(BorderFactory.createEmptyBorder(5, 80, 5, 480));
-        kananPanel.add(hargaLabel);
+            JLabel nameLabel = new JLabel(item.getName());
+            nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
+            nameLabel.setBounds(0, 0, 120, 20);
+            itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
 
-        // tambahkan tombol print ke panel kanan
-        JButton printButton = new JButton("Print Laporan Penjualan");
-        printButton.setBorder(BorderFactory.createEmptyBorder(5, 80, 5, 80));
-        printButton.setPreferredSize(new Dimension(150, 30));
-        kananPanel.add(printButton, BorderLayout.SOUTH);
+            JLabel quantityLabel = new JLabel(item.getName());
+            quantityLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
+            quantityLabel.setBounds(0, 0, 120, 20);
+            itemQuantity.add(quantityLabel, BorderLayout.WEST); // add name label to left side of panel
 
-        // tambahkan panel kanan ke dalam frame
-        add(kananPanel, BorderLayout.EAST);
+            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
+            priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
+            priceLabel.setBounds(0, 0, 120, 20);
+            itemPrices.add(priceLabel, BorderLayout.EAST);
+        }
 
-        // tampilkan frame
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // pack();
-        setSize(1200, 720);
-        // setLocationRelativeTo(null);
-        setVisible(true);
+        // HISTORY SCROLL
+        JScrollPane historyScrollPane = new JScrollPane(itemPanel);
+        historyScrollPane.setBackground(Color.white);
+        historyScrollPane.setLayout(null);
+        historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        historyScrollPane.setBounds(600, 0, 600, 720);
+        historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+
+        // TOTAL PANEL
+        JPanel totalPanel = new JPanel();
+        totalPanel.setLayout(null);
+        totalPanel.setBounds(60,150,510,30);
+        totalPanel.setBackground(Color.white);
+
+        // TOTAL FIELD
+        JLabel totalLabel = new JLabel("Total Pemasukan");
+        totalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
+        totalLabel.setBounds(0,6,300,30);
+
+        // TOTAL NUMBER PANEL
+        JPanel totalNumPanel = new JPanel();
+        totalNumPanel.setLayout(null);
+        totalNumPanel.setBounds(60,190,510,30);
+        totalNumPanel.setBackground(Color.white);
+
+        // TOTAL NUMBER LABEL
+        JLabel totalNumLabel = new JLabel("Rp48.000,00");
+        totalNumLabel.setFont(new Font("Poppins", Font.BOLD, 16));
+        totalNumLabel.setBounds(0,6,300,30);
+
+        // BUTTON PANEL
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBounds(20,260,300,80);
+        buttonPanel.setBackground(Color.white);
+
+        // BUTTON SUBMIT
+        JButton buttonSubmit = new JButton("Print Laporan Penjualan");
+        buttonSubmit.setFocusPainted(false);
+        buttonSubmit.setFont(new Font("Poppins", Font.BOLD, 16));
+        buttonSubmit.setForeground(Color.white);
+        buttonSubmit.setBounds(80, 6,100, 60);
+        buttonSubmit.setBackground(new Color(0x36459A));
+
+        // // ADDING TO ITS PANEL
+        titlePanel.add(titleLabel);
+        itemPanel.add(itemLabel);
+        totalPanel.add(totalLabel);
+        buttonPanel.add(buttonSubmit);
+        totalNumPanel.add(totalNumLabel);
+
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+        panel.setBackground(Color.white);
+        panel.setBounds(600, 0, 600, 720);
+        panel.setLayout(null);
+        panel.add(totalPanel);
+        panel.add(totalNumPanel);
+        panel.add(buttonPanel);
+
+        // // HISTORY SCROLL
+        // JScrollPane historyScrollPane = new JScrollPane(panel);
+        // historyScrollPane.setBackground(Color.white);
+        // historyScrollPane.setLayout(null);
+        // historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        // historyScrollPane.setBounds(600, 0, 600, 720);
+        // historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+
+        // FRAME
+        this.setLayout(null);
+        this.setVisible(true);
+        this.setSize(1200, 720);
+        this.add(titlePanel);
+        this.add(panel);
+        this.add(itemPanel);
+        this.add(itemsPanel);
+        // this.add(memberTextPanel);
+        // this.add(buttonPanel);
+        this.add(historyScrollPane);
     }
 
     // public static void main(String[] args) {
