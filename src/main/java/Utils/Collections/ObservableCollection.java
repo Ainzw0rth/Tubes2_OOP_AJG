@@ -1,18 +1,20 @@
 package Utils.Collections;
 
 import java.util.ArrayList;
-
 import lombok.Getter;
-import lombok.Setter;
-
 
 public class ObservableCollection<E> {
-    @Getter @Setter private ArrayList<E> elements;
+    @Getter private ArrayList<E> elements;
     private ArrayList<Observer> observers;
 
     public ObservableCollection(ArrayList<E> list) {
         elements = list == null ? new ArrayList<>() : list;
         observers = new ArrayList<>();
+    }
+
+    public void setElements(ArrayList<E> list) {
+        elements = list == null ? new ArrayList<>() : list;
+        notifyObservers();
     }
 
     public void addObserver(Observer observer) {
