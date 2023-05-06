@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Kaos polo",
+    "category": "Fashion",
+    "price": 850000,
+    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\9376f4bc2cf659688e4fe9887adddc4a.png",
+    "stock": 8
+  },
+  {
+    "id": 2,
+    "name": "Tiket UCL",
+    "category": "Entertainment",
+    "price": 2000000,
+    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\9376f4bc2cf659688e4fe9887adddc4a.png",
+    "stock": 2
+  }
+]
