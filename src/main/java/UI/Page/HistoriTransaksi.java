@@ -108,6 +108,8 @@ public class HistoriTransaksi extends JPanel {
             itemPanel.add(panelItem);
         }
 
+        panel.add(itemPanel);
+
         // HISTORY SCROLL
         JScrollPane historyScrollPane = new JScrollPane(panel);
         historyScrollPane.setBackground(Color.white);
