@@ -1,6 +1,7 @@
 .vscode/*
 target/
 .idea/*
+database/
 
 # Local History for Visual Studio Code
 .history/
