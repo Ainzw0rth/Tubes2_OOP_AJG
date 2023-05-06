@@ -119,6 +119,7 @@ public class TambahBarang extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     add();
+                    System.out.println("Item has been added successfully");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -156,15 +157,13 @@ public class TambahBarang extends JPanel {
         int price = (Integer) priceField.getValue();
 
         DataStore data = DataStore.getInstance();
-        
-        Item newItem = new Item(data.generateItemId(), name, category, price, imageLoc, stock);
-        data.addItem(newItem);
 
-        System.out.println("Nama: " + name);
-        System.out.println("Kategori: " + category);
-        System.out.println("Lokasi Gambar: " + imageLoc);
-        System.out.println("Stok: " + stock);
-        System.out.println("Harga: " + price);
+        try {
+            Item newItem = new Item(data.generateItemId(), name, category, price, imageLoc, stock);
+            data.addItem(newItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,5 @@
 package DataStore;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,7 +48,7 @@ public class DataStore {
             this.members = this.adapter.readMembers();
             this.bills = this.adapter.readBills();
             this.fixedBills = this.adapter.readFixedBills();
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to load data", e);
         }
     }
@@ -69,12 +68,12 @@ public class DataStore {
 
     /**
      * Read all datastore from file. Most likely will be deprecated
-     * @throws IOException
+     * @throws Exception
      */
-    public void loadData() throws IOException{
+    public void loadData() throws Exception{
         try {
             this.adapter.read(this);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to load data", e);
             throw e;
         }
@@ -84,7 +83,7 @@ public class DataStore {
      * Change file extension to write/read
      * @param ext
      */
-    public void changeExt(FileStoreExt ext) {
+    public void changeExt(FileStoreExt ext) throws Exception{
         switch (ext) {
             case JSON:
                 this.adapter = new AdapterJSON();
@@ -99,17 +98,28 @@ public class DataStore {
                 this.adapter = new AdapterJSON();
                 break;
         }
+
+        try {            
+            this.adapter.writeBills(this.bills);
+            this.adapter.writeCustomers(this.customers);
+            this.adapter.writeItems(this.items);
+            this.adapter.writeMembers(this.members);
+            this.adapter.writeFixedBills(this.fixedBills);
+        } catch (Exception e) {
+            printError("Fail to change file extension", e);
+            throw e;
+        }
     }
 
     // /**
     //  * Get customers from file
     //  * @return ArrayList of Customer
     //  */
-    // public ArrayList<Customer> getCustomers() throws IOException{
+    // public ArrayList<Customer> getCustomers() throws Exception{
     //     try {
     //         setCustomers(this.adapter.readCustomers());
     //         return this.customers;
-    //     } catch (IOException e) {
+    //     } catch (Exception e) {
     //         printError("Fail to get customers", e);
     //         throw e;
     //     }
@@ -119,11 +129,11 @@ public class DataStore {
      * Add customer to customers and write to file
      * @param customer
      */
-    public void addCustomer(Customer customer) throws IOException{
+    public void addCustomer(Customer customer) throws Exception{
         try {
             this.customers.add(customer);
             this.adapter.writeCustomers(customers);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to add customer", e);
             this.customers.remove(customer);
             throw e;
@@ -134,10 +144,10 @@ public class DataStore {
      * Generate customer id
      * @return Integer item id
      */
-    public Integer generateCustomerId() throws IOException {
+    public Integer generateCustomerId() throws Exception {
         try {
             setCustomers(this.adapter.readCustomers());
-        } catch (IOException e){
+        } catch (Exception e){
             printError("Fail to generate customer id", e);
             throw e;
         }
@@ -153,11 +163,11 @@ public class DataStore {
     //  * Get items from file
     //  * @return ArrayList of Item
     //  */
-    // public ArrayList<Item> getItems() throws IOException{
+    // public ArrayList<Item> getItems() throws Exception{
     //     try {
     //         setItems(this.adapter.readItems());
     //         return this.items;
-    //     } catch (IOException e) {
+    //     } catch (Exception e) {
     //         printError("Fail to get items", e);
     //         throw e;
     //     }
@@ -167,11 +177,11 @@ public class DataStore {
      * Add item to items and write to file
      * @param item
      */
-    public void addItem(Item item) throws IOException{
+    public void addItem(Item item) throws Exception{
         try {
             this.items.add(item);
             this.adapter.writeItems(items);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to add item", e);
             this.items.remove(item);
             throw e;
@@ -182,7 +192,7 @@ public class DataStore {
      * Remove item from items and write to file
      * @param item_id
      */
-    public void removeItem(Integer item_id) throws IOException{
+    public void removeItem(Integer item_id) throws Exception{
         try {
             for (Item item : this.items) {
                 if (item.getId() == item_id) {
@@ -191,21 +201,41 @@ public class DataStore {
                 }
             }
             this.adapter.writeItems(items);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to remove item", e);
             throw e;
         }
     }
 
+    /**
+     * Update item from items and write to file
+     * @param item_id
+     * @param new_item
+    */
+    public void updateItem(Integer item_id, Item new_item) throws Exception{
+        try {
+            for (Item item : this.items) {
+                if (item.getId() == item_id) {
+                    this.items.remove(item);
+                    this.items.add(new_item);
+                    break;
+                }
+            }
+            this.adapter.writeItems(items);
+        } catch (Exception e) {
+            printError("Fail to update item", e);
+            throw e;
+        }
+    }
 
     /**
      * Generate item id
      * @return Integer item id
      */
-    public Integer generateItemId() throws IOException {
+    public Integer generateItemId() throws Exception {
         try {
             setItems(this.adapter.readItems());
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to generate item id", e);
             throw e;
         }
@@ -222,11 +252,11 @@ public class DataStore {
     //  * Get members from file (including inactive members)
     //  * @return ArrayList of Member
     //  */
-    // public ArrayList<Member> getMembers() throws IOException {
+    // public ArrayList<Member> getMembers() throws Exception {
     //     try {
     //         setMembers(this.adapter.readMembers());
     //         return this.members;
-    //     } catch (IOException e) {
+    //     } catch (Exception e) {
     //         printError("Fail to get members", e);
     //         throw e;
     //     }
@@ -236,7 +266,7 @@ public class DataStore {
      * Get members from file
      * @return ArrayList of Member
      */
-    public ArrayList<Member> getActiveMembers(Boolean includeVIP) /*throws IOException*/ {
+    public ArrayList<Member> getActiveMembers(Boolean includeVIP) /*throws Exception*/ {
         // try {
             // setMembers(this.adapter.readMembers());
 
@@ -251,7 +281,7 @@ public class DataStore {
                 .filter(member -> !(member instanceof VIP))
                 .collect(Collectors.toCollection(ArrayList::new));
             }
-        // } catch (IOException e) {
+        // } catch (Exception e) {
         //     printError("Fail to get members", e);
         //     throw e;
         // }
@@ -261,16 +291,16 @@ public class DataStore {
      * Get members from file (does include VIP)
      * @return ArrayList of Member
      */
-    public ArrayList<Member> getActiveMembers() throws IOException {
+    public ArrayList<Member> getActiveMembers() throws Exception {
         return getActiveMembers(true);
     }
 
     /**
      * Get member by id
      * @param member
-     * @throws IOException
+     * @throws Exception
      */
-    public Member getMemberById(Integer member_id) throws IOException {
+    public Member getMemberById(Integer member_id) throws Exception {
         // try {
         //     setMembers(this.adapter.readMembers());
         for (Member member : this.members) {
@@ -279,7 +309,7 @@ public class DataStore {
             }
         }
         return null;
-        // } catch (IOException e) {
+        // } catch (Exception e) {
         //     printError("Fail to get member by id", e);
         //     throw e;
         // }
@@ -289,11 +319,11 @@ public class DataStore {
      * Add member to members and write to file
      * @param member
      */
-    public void addMember(Member member) throws IOException {
+    public void addMember(Member member) throws Exception {
         try {
             this.members.add(member);
             this.adapter.writeMembers(members);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to add member", e);
             this.members.remove(member);
             throw e;
@@ -323,7 +353,7 @@ public class DataStore {
             }
 
             this.adapter.writeMembers(members);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to update member", e);
             throw e;
         }
@@ -365,7 +395,7 @@ public class DataStore {
                         throw new Exception("Invalid status");
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to change member status", e);
             throw e;
         }
@@ -376,11 +406,11 @@ public class DataStore {
      * Get fixed bills from file
      * @return ArrayList of FixedBill
     */
-    // public ArrayList<FixedBill> getFixedBills() throws IOException {
+    // public ArrayList<FixedBill> getFixedBills() throws Exception {
     //     try {
     //         setFixedBills(this.adapter.readFixedBills());
     //         return this.fixedBills;
-    //     } catch (IOException e) {
+    //     } catch (Exception e) {
     //         printError("Fail to get fixed bills", e);
     //         throw e;
     //     }
@@ -406,7 +436,7 @@ public class DataStore {
         }
 
         return bills;
-        // } catch (IOException e) {
+        // } catch (Exception e) {
         //     printError("Fail to get fixed bills by cust_id", e);
         //     throw e;
         // }
@@ -415,13 +445,13 @@ public class DataStore {
     /**
      * Add FixedBill to fixedBills and write to file
      * @param fixedBill
-     * @throws IOException
+     * @throws Exception
      */
-    private void addFixedBill(FixedBill fixedBill) throws IOException {
+    private void addFixedBill(FixedBill fixedBill) throws Exception {
         try {
             this.fixedBills.add(fixedBill);
             this.adapter.writeFixedBills(fixedBills);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to add fixed bill", e);
             this.fixedBills.remove(fixedBill);
             throw e;
@@ -433,12 +463,12 @@ public class DataStore {
      * @implNote **DO NOT CALL THIS METHOD DIRECTLY**! Only Called by BillWorker
      * @param bill_id
      * @param fixedBill
-     * @throws IOException
+     * @throws Exception
      */
-    public void writeBills(ArrayList<Bill> bills) throws IOException {
+    public void writeBills(ArrayList<Bill> bills) throws Exception {
         try {
             this.adapter.writeBills(bills);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to write bills", e);
             throw e;
         }
@@ -448,11 +478,11 @@ public class DataStore {
      * Get bills from file
      * @return ArrayList of Bill
     */
-    // public ArrayList<Bill> getBills() throws IOException {
+    // public ArrayList<Bill> getBills() throws Exception {
     //     try {
     //         setBills(this.adapter.readBills());
     //         return this.bills;
-    //     } catch (IOException e) {
+    //     } catch (Exception e) {
     //         printError("Fail to get bills", e);
     //         throw e;
     //     }
@@ -461,9 +491,9 @@ public class DataStore {
     /**
      * Start new bill session
      * @param bill
-     * @throws IOException
+     * @throws Exception
      */
-    public void startNewBill(Bill bill) throws IOException {
+    public void startNewBill(Bill bill) throws Exception {
         this.bills.add(bill);
         DataStore.billWorker.addBill(bill);
     }
@@ -471,9 +501,9 @@ public class DataStore {
     /**
      * Finish bill session
      * @param bill
-     * @throws IOException
+     * @throws Exception
      */
-    public void finishBill(Bill bill) throws IOException {
+    public void finishBill(Bill bill) throws Exception {
         try {
             this.bills.remove(bill);
             DataStore.billWorker.removeBill(bill);
@@ -483,7 +513,7 @@ public class DataStore {
             ));
 
             this.adapter.writeBills(bills);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to finish bill, might cause fixed bill data desync", e);
             DataStore.billWorker.addBill(bill);
             this.bills.add(bill);
@@ -494,14 +524,14 @@ public class DataStore {
     /**
      * Generate bill id (same as fixed bill id)
      * @return Integer
-     * @throws IOException
+     * @throws Exception
     */
-    public Integer generateBillId() throws IOException {
+    public Integer generateBillId() throws Exception {
         Integer activeBillsLen = 0;
         try {
             setFixedBills(this.adapter.readFixedBills());
             activeBillsLen = this.bills.size();
-        } catch (IOException e){
+        } catch (Exception e){
             printError("Fail to generate fixed bills id", e);
             throw e;
         }

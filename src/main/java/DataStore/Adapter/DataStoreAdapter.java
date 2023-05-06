@@ -1,6 +1,5 @@
 package DataStore.Adapter;
 
-import java.io.IOException;
 import java.util.*;
 
 import DataStore.DataStore;
@@ -11,68 +10,68 @@ public interface DataStoreAdapter {
      * Read all datastore from file
      * @param d DataStore instance
      */
-    public void read(DataStore d) throws IOException;
+    public void read(DataStore d) throws Exception;
     
     /**
      * Read customers data from file
      * @return ArrayList of Customer
      */
-    public ArrayList<Customer> readCustomers() throws IOException;
+    public ArrayList<Customer> readCustomers() throws Exception;
 
     /**
      * Write customers data to file
      * @param customers ArrayList of Customer
      */
-    public void writeCustomers(ArrayList<Customer> customers) throws IOException;
+    public void writeCustomers(ArrayList<Customer> customers) throws Exception;
 
     /**
      * Read items data from file
      * @return ArrayList of Item
      */
-    public ArrayList<Item> readItems() throws IOException;
+    public ArrayList<Item> readItems() throws Exception;
 
     /**
      * Write items data to file
      * @param items ArrayList of Item
      */
-    public void writeItems(ArrayList<Item> items) throws IOException;
+    public void writeItems(ArrayList<Item> items) throws Exception;
 
     /**
      * Read members data from file
      * @return ArrayList of Member
      */
-    public ArrayList<Member> readMembers() throws IOException;
+    public ArrayList<Member> readMembers() throws Exception;
 
     /**
      * write members data to file
      * @param members ArrayList of Member
      */
-    public void writeMembers(ArrayList<Member> members) throws IOException;
+    public void writeMembers(ArrayList<Member> members) throws Exception;
 
     /**
      * Read bills data from file
      * @return ArrayList of Bill
      */
-    public ArrayList<Bill> readBills() throws IOException;
+    public ArrayList<Bill> readBills() throws Exception;
 
     /**
      * Write bills data to file
      * @param bills ArrayList of Bill
      */
-    public void writeBills(ArrayList<Bill> bills) throws IOException;
+    public void writeBills(ArrayList<Bill> bills) throws Exception;
 
 
     /**
      * Read fixed bills data from file
      * @return ArrayList of FixedBill
      */
-    public ArrayList<FixedBill> readFixedBills() throws IOException;
+    public ArrayList<FixedBill> readFixedBills() throws Exception;
 
     /**
      * Write fixed bills data to file
      * @param fixedBills ArrayList of FixedBill
      */
-    public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws IOException;
+    public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws Exception;
 
     // @WaitForImplement
     /**

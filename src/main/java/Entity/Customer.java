@@ -1,13 +1,14 @@
 package Entity;
+import java.io.Serializable;
+
 import org.jetbrains.annotations.NotNull;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@XStreamAlias("Customer")
-public class Customer {
+public class Customer implements Serializable{
     @NotNull
     protected Integer id;
 

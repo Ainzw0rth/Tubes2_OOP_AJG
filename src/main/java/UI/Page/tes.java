@@ -4,9 +4,9 @@ import java.awt.*;
 
 import Entity.Item;
 
-public class LaporanPenjualan extends JPanel {
+public class tes extends JFrame {
 
-    public LaporanPenjualan() {
+    public tes() {
         // TITLE PANEL
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(null);
@@ -150,7 +150,7 @@ public class LaporanPenjualan extends JPanel {
         this.add(historyScrollPane);
     }
 
-    // public static void main(String[] args) {
-    //     new LaporanPenjualan();
-    // }
+    public static void main(String[] args) {
+        new tes();
+    }
 }

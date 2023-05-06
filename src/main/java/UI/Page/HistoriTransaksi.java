@@ -2,100 +2,131 @@ package UI.Page;
 import javax.swing.*;
 import java.awt.*;
 
+import Entity.Item;
+
 public class HistoriTransaksi extends JPanel {
-    private JLabel titleLabel;
-    private JTextField namaMemberField;
-    private JButton tampilkanButton;
-
-    // Variabel untuk panel kanan
-    private JPanel kananPanel;
-    private JTextArea riwayatTextArea;
-
     public HistoriTransaksi() {
-        // // Membuat judul frame
-        // super("Histori Transaksi");
-        this.setLayout(new BorderLayout());
-
-        // Membuat panel untuk kolom kiri
-        JPanel kiriPanel = new JPanel();
-        kiriPanel.setLayout(new GridBagLayout());
-
-        // Membuat label judul
+        // TITLE PANEL
         JPanel titlePanel = new JPanel();
-        titleLabel = new JLabel("Riwayat Transaksi Member");
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setFont(new Font("Poppins", Font.BOLD, 40));
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(80, 80, 0, 0));
-        titlePanel.add(titleLabel);
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 2;
-        c.insets = new Insets(0, 20, 5, 20);
-        kiriPanel.add(titlePanel, c);
+        titlePanel.setLayout(null);
+        // titlePanel.setBackground(Color.white);
+        titlePanel.setBounds(80, 80, 510, 50);
 
-        // Membuat label member
+        // TITLE LABEL
+        JLabel titleLabel = new JLabel("Riwayat Transaksi");
+        titleLabel.setFont(new Font("Poppins", Font.BOLD, 24));
+        titleLabel.setBounds(0, 6, 600, 30);
+
+        // MEMBER PANEL
         JPanel memberPanel = new JPanel();
+        memberPanel.setLayout(null);
+        memberPanel.setBounds(80,120,510,30);
+
+        // MEMBER LABEL
         JLabel memberLabel = new JLabel("Member");
-        memberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        memberLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        memberPanel.setBorder(BorderFactory.createEmptyBorder(10, 83, 0, 0));
+        memberLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+        memberLabel.setBounds(0, 6, 600, 30);
+
+        // MEMBER TEXT PANEL
+        JPanel memberTextPanel = new JPanel();
+        memberTextPanel.setLayout(null);
+        memberTextPanel.setBounds(80,170,510,30);
+
+        // MEMBER TEXT FIELD
+        JTextField memberTextArea = new JTextField();
+        memberTextArea.setBounds(0,6,300,30);
+
+        // BUTTON PANEL
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBounds(-132,220,600,80);
+
+        // BUTTON SUBMIT
+        JButton buttonSubmit = new JButton("Tampilkan Riwayat");
+        buttonSubmit.setFocusPainted(false);
+        buttonSubmit.setFont(new Font("Poppins", Font.BOLD, 16));
+        buttonSubmit.setForeground(Color.white);
+        buttonSubmit.setBounds(80, 6,201, 60);
+        buttonSubmit.setBackground(new Color(0x36459A));
+
+        // ADDING TO ITS PANEL
+        titlePanel.add(titleLabel);
         memberPanel.add(memberLabel);
-        c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 1;
-        c.anchor = GridBagConstraints.LINE_END;
-        c.insets = new Insets(10, 20, 5, 20);
-        kiriPanel.add(memberPanel, c);
+        memberTextPanel.add(memberTextArea);
+        buttonPanel.add(buttonSubmit);
 
-        // Membuat text field untuk nama member
-        namaMemberField = new JTextField(20);
-        namaMemberField.setMaximumSize(new Dimension(250, 30));
-        namaMemberField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        namaMemberField.setBorder(BorderFactory.createEmptyBorder(10, 60, 0, 0));
-        c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 2;
-        c.insets = new Insets(10, 0, 5, 20);
-        kiriPanel.add(namaMemberField, c);
+        // HISTORY PANEL
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+        panel.setBackground(Color.white);
+        panel.setBounds(600, 0, 600, 720);
+        panel.setLayout(null);
 
-        // Membuat tombol submit
-        tampilkanButton = new JButton("Tampilkan riwayat");
-        tampilkanButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 3;
-        c.insets = new Insets(10, 0, 5, 20);
-        kiriPanel.add(tampilkanButton, c);
+        // FOR LOOP ALL ITEMS IN HISTORY
+        Item[] itemList = {};
+        JPanel itemPanel = new JPanel();
+        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+        itemPanel.setBackground(Color.white);
 
-        // Menambahkan panel ke frame
-        this.add(kiriPanel, BorderLayout.WEST);
+        for (Item item : itemList) {
+            JPanel panelItem = new JPanel();
+            panelItem.setBackground(Color.white);
+            panelItem.setMaximumSize(new Dimension(1000, 30));
 
-        // Menambahkan garis pemisah
-        JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-        separator.setPreferredSize(new Dimension(1, Integer.MAX_VALUE));
-        this.add(separator, BorderLayout.CENTER);
+            JPanel itemNames = new JPanel();
+            itemNames.setBounds(15, 0, 120, 20);
+            itemNames.setBackground(Color.white);
+            itemNames.setLayout(null);
 
-        // Membuat panel untuk kolom kanan
-        kananPanel = new JPanel();
-        kananPanel.setLayout(new BoxLayout(kananPanel, BoxLayout.PAGE_AXIS));
+            JPanel itemQuantity = new JPanel();
+            itemQuantity.setBounds(110, 0, 120, 20);
+            itemQuantity.setBackground(Color.white);
+            itemQuantity.setLayout(null);
 
-        // Membuat text area untuk menampilkan riwayat transaksi
-        riwayatTextArea = new JTextArea(100, 50);
-        riwayatTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(riwayatTextArea);
-        kananPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        kananPanel.add(scrollPane);
+            JPanel itemPrices = new JPanel();
+            itemPrices.setBounds(210, 0, 120, 20);
+            itemPrices.setBackground(Color.white);
+            itemPrices.setLayout(null);
 
-        // Menambahkan panel kanan ke frame
-        this.add(kananPanel, BorderLayout.EAST);
+            JLabel nameLabel = new JLabel(item.getName());
+            nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
+            nameLabel.setBounds(0, 0, 120, 20);
+            itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
 
-        // Menampilkan frame
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // pack();
-        setSize(1200, 720);
-        // setLocationRelativeTo(null);
-        setVisible(true);
+            JLabel quantityLabel = new JLabel(item.getName());
+            quantityLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
+            quantityLabel.setBounds(0, 0, 120, 20);
+            itemQuantity.add(quantityLabel, BorderLayout.WEST); // add name label to left side of panel
+
+            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
+            priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
+            priceLabel.setBounds(0, 0, 120, 20);
+            itemPrices.add(priceLabel, BorderLayout.EAST);
+
+            panelItem.add(itemNames);
+            panelItem.add(itemPrices);
+            panelItem.setLayout(null);
+            itemPanel.add(panelItem);
+        }
+
+        panel.add(itemPanel);
+
+        // HISTORY SCROLL
+        JScrollPane historyScrollPane = new JScrollPane(panel);
+        historyScrollPane.setBackground(Color.white);
+        historyScrollPane.setLayout(null);
+        historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        historyScrollPane.setBounds(600, 0, 600, 720);
+        historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+
+        // FRAME
+        this.setLayout(null);
+        this.setVisible(true);
+        this.setSize(1200, 720);
+        this.add(titlePanel);
+        this.add(memberPanel);
+        this.add(memberTextPanel);
+        this.add(buttonPanel);
+        this.add(historyScrollPane);
     }
 
     public static void main(String[] args) {
