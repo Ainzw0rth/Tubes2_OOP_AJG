@@ -341,7 +341,7 @@ public class AdapterXML implements DataStoreAdapter {
         // test readcustomer
         AdapterXML adapterXML = new AdapterXML();
         try {
-            ArrayList<Item> customerss = adapterXML.readItems();
+            // ArrayList<Item> customerss = adapterXML.readItems();
             ArrayList<Customer> customers = adapterXML.readCustomers();
             for (Customer customer : customers) {
                 System.out.println(customer.getId());
