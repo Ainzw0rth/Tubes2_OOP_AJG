@@ -6,8 +6,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.text.NumberFormatter;
+
+import Entity.Item;
+import DataStore.DataStore;
 
 public class TambahBarang extends JPanel {
     private JTextField nameField;
@@ -113,7 +117,7 @@ public class TambahBarang extends JPanel {
         addButton.setBackground(new Color(0x36459A));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                addItem();
+                add();
             }
         });
         panel.add(addButton, c);
@@ -140,12 +144,20 @@ public class TambahBarang extends JPanel {
         }
     }
 
-    private void addItem() {
+    private void add() {
         String name = nameField.getText();
         String category = categoryField.getText();
         String imageLoc = imageLocField.getText();
         int stock = (Integer) stockSpinner.getValue();
         int price = (Integer) priceField.getValue();
+
+        DataStore data = DataStore.getInstance();
+        Item newItem = new Item(1, name, price, imageLoc, stock);
+        try {
+            data.addItem(newItem);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Nama: " + name);
         System.out.println("Kategori: " + category);
