@@ -250,12 +250,20 @@ public class UpdateBarang extends JPanel {
         Item updatedItem = new Item(id, name, category, price, imageLoc, stock);
 
         DataStore data = DataStore.getInstance();
-        data.updateItem(id, updatedItem);
+        try {
+            data.updateItem(id, updatedItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void deleteItem(Integer id) throws IOException {
         DataStore data = DataStore.getInstance();
-        data.removeItem(id);
+        try {
+            data.removeItem(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

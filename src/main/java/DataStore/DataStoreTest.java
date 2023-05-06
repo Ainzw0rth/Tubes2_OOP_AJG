@@ -3,6 +3,8 @@ package DataStore;
 import Entity.*;
 import java.util.*;
 
+import DataStore.DataStore.FileStoreExt;
+
 public class DataStoreTest {
     // private final static String[] item_names = {
     //     "Baju",
@@ -22,17 +24,35 @@ public class DataStoreTest {
         // Bill bill2 = new Bill(2, 2000, new LinkedList<Item>(), 2);
 
         DataStore data = DataStore.getInstance();
-        
-        Integer id;
         try {
-            ArrayList<Member> members = data.getActiveMembers();
-            System.out.println(members.size());
-            for (Member member : members) {
-                System.out.println(member.toString());
-            }
+            data.changeExt(FileStoreExt.OBJ);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        try {
+            ArrayList<Item> items = data.getItems();
+            for (Item item : items) {
+                System.out.println(item.toString());
+            }
+            data.addItem(new Item(data.generateItemId(), "Laptop", "Elektronik", 18000000, "Dimana aja", 2));
+            data.changeExt(FileStoreExt.JSON);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+        
+        // Integer id;
+        // try {
+        //     ArrayList<Member> members = data.getActiveMembers();
+        //     System.out.println(members.size());
+        //     for (Member member : members) {
+        //         System.out.println(member.toString());
+        //     }
+        // } catch (Exception e) {
+        //     System.out.println(e.getMessage());
+        // }
 
 
         // try {

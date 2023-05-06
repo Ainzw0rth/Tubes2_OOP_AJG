@@ -158,8 +158,12 @@ public class TambahBarang extends JPanel {
 
         DataStore data = DataStore.getInstance();
 
-        Item newItem = new Item(data.generateItemId(), name, category, price, imageLoc, stock);
-        data.addItem(newItem);
+        try {
+            Item newItem = new Item(data.generateItemId(), name, category, price, imageLoc, stock);
+            data.addItem(newItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

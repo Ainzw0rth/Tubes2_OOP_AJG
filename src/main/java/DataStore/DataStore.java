@@ -212,7 +212,7 @@ public class DataStore {
      * @param item_id
      * @param new_item
     */
-    public void updateItem(Integer item_id, Item new_item) throws IOException{
+    public void updateItem(Integer item_id, Item new_item) throws Exception{
         try {
             for (Item item : this.items) {
                 if (item.getId() == item_id) {
@@ -222,7 +222,7 @@ public class DataStore {
                 }
             }
             this.adapter.writeItems(items);
-        } catch (IOException e) {
+        } catch (Exception e) {
             printError("Fail to update item", e);
             throw e;
         }
