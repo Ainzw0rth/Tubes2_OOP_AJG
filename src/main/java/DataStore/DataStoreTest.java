@@ -23,7 +23,7 @@ public class DataStoreTest {
 
         DataStore data = DataStore.getInstance();
         
-        Integer id;
+        // Integer id;
         try {
             ArrayList<Member> members = data.getActiveMembers();
             System.out.println(members.size());
