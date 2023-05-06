@@ -26,11 +26,11 @@ public class AppClock implements Runnable {
     }
 
     private String getDate() {
-        return this.dateFormat.format(new Date());
+        return this.dateFormat.format(new Date(), new StringBuffer(), new java.text.FieldPosition(0)).toString();
     }
 
     private String getTime() {
-        return this.timeFormat.format(new Date());
+        return this.timeFormat.format(new Date(), new StringBuffer(), new java.text.FieldPosition(0)).toString();
     }
 
     public void run(){

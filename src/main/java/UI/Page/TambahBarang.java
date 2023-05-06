@@ -6,8 +6,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.text.NumberFormatter;
+
+import Entity.Item;
+import DataStore.DataStore;
 
 public class TambahBarang extends JPanel {
     private JTextField nameField;
@@ -113,7 +117,12 @@ public class TambahBarang extends JPanel {
         addButton.setBackground(new Color(0x36459A));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                addItem();
+                try {
+                    add();
+                    System.out.println("Item has been added successfully");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         panel.add(addButton, c);
@@ -140,18 +149,21 @@ public class TambahBarang extends JPanel {
         }
     }
 
-    private void addItem() {
+    private void add() throws IOException {
         String name = nameField.getText();
         String category = categoryField.getText();
         String imageLoc = imageLocField.getText();
         int stock = (Integer) stockSpinner.getValue();
         int price = (Integer) priceField.getValue();
 
-        System.out.println("Nama: " + name);
-        System.out.println("Kategori: " + category);
-        System.out.println("Lokasi Gambar: " + imageLoc);
-        System.out.println("Stok: " + stock);
-        System.out.println("Harga: " + price);
+        DataStore data = DataStore.getInstance();
+
+        try {
+            Item newItem = new Item(data.generateItemId(), name, category, price, imageLoc, stock);
+            data.addItem(newItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

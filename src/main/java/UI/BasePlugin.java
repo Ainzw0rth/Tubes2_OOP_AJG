@@ -40,4 +40,8 @@ class PluginChart2 implements BasePlugin {
     }
 }
 
+// public class PluginSistem implements BasePlugin {
+//     public void onLoad() {
 
+//     }
+// }
