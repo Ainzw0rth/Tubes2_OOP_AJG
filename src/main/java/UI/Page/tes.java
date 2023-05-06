@@ -4,8 +4,9 @@ import java.awt.*;
 
 import Entity.Item;
 
-public class HistoriTransaksi extends JPanel {
-    public HistoriTransaksi() {
+public class tes extends JFrame {
+
+    public tes() {
         // TITLE PANEL
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(null);
@@ -128,6 +129,6 @@ public class HistoriTransaksi extends JPanel {
     }
 
     public static void main(String[] args) {
-        new HistoriTransaksi();
+        new tes();
     }
 }
