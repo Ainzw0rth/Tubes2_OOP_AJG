@@ -117,7 +117,11 @@ public class TambahBarang extends JPanel {
         addButton.setBackground(new Color(0x36459A));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                add();
+                try {
+                    add();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         panel.add(addButton, c);
@@ -144,7 +148,7 @@ public class TambahBarang extends JPanel {
         }
     }
 
-    private void add() {
+    private void add() throws IOException {
         String name = nameField.getText();
         String category = categoryField.getText();
         String imageLoc = imageLocField.getText();
@@ -152,12 +156,9 @@ public class TambahBarang extends JPanel {
         int price = (Integer) priceField.getValue();
 
         DataStore data = DataStore.getInstance();
-        Item newItem = new Item(1, name, category, price, imageLoc, stock);
-        try {
-            data.addItem(newItem);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
+        Item newItem = new Item(data.generateItemId(), name, category, price, imageLoc, stock);
+        data.addItem(newItem);
 
         System.out.println("Nama: " + name);
         System.out.println("Kategori: " + category);
