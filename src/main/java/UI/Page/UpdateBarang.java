@@ -165,7 +165,22 @@ public class UpdateBarang extends JPanel {
         updateButton.setBackground(new Color(0x36459A));
         updateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                updateItem();
+                String selectedName = (String) itemsDropdown.getSelectedItem();
+                if (!selectedName.equals("Pilih nama barang")) {
+                    Item selectedItem = null;
+                    for (Item item : items) {
+                        if (item.getName().equals(selectedName)) {
+                            selectedItem = item;
+                            try {
+                                update(selectedItem.getId());
+                                System.out.println("Item has been updated successfully");
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         });
 
@@ -225,19 +240,17 @@ public class UpdateBarang extends JPanel {
         }
     }
 
-    private void updateItem() {
+    private void update(Integer id) throws IOException {
         String name = nameField.getText();
         String category = categoryField.getText();
         String imageLoc = imageLocField.getText();
         int stock = (Integer) stockSpinner.getValue();
         int price = (Integer) priceField.getValue();
 
-        System.out.println("Updated Data");
-        System.out.println("Nama: " + name);
-        System.out.println("Kategori: " + category);
-        System.out.println("Lokasi Gambar: " + imageLoc);
-        System.out.println("Stok: " + stock);
-        System.out.println("Harga: " + price);
+        Item updatedItem = new Item(id, name, category, price, imageLoc, stock);
+
+        DataStore data = DataStore.getInstance();
+        data.updateItem(id, updatedItem);
     }
 
     private void deleteItem(Integer id) throws IOException {

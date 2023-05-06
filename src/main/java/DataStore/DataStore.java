@@ -207,6 +207,26 @@ public class DataStore {
         }
     }
 
+    /**
+     * Update item from items and write to file
+     * @param item_id
+     * @param new_item
+    */
+    public void updateItem(Integer item_id, Item new_item) throws IOException{
+        try {
+            for (Item item : this.items) {
+                if (item.getId() == item_id) {
+                    this.items.remove(item);
+                    this.items.add(new_item);
+                    break;
+                }
+            }
+            this.adapter.writeItems(items);
+        } catch (IOException e) {
+            printError("Fail to update item", e);
+            throw e;
+        }
+    }
 
     /**
      * Generate item id
