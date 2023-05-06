@@ -18,6 +18,8 @@ public class Item {
     @NotNull
     private String name;
     @NotNull
+    private String category;
+    @NotNull
     private Integer price;
     @NotNull
     private String imageUrl;

@@ -2,8 +2,9 @@
   {
     "id": 1,
     "name": "baju",
+    "category": "pakaian",
     "price": 55000,
-    "imageUrl": "C:\\Users\\ASUS\\Documents\\Margaretha Olivia\\4. ITB\\4. SEMESTER 4\\OOP\\Tubes2_OOP_AJG\\src\\main\\resources\\images\\icon.jpg",
+    "imageUrl": "C:\\Users\\ASUS\\Documents\\417859.jpg",
     "stock": 3
   }
 ]

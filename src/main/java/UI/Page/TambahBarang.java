@@ -152,7 +152,7 @@ public class TambahBarang extends JPanel {
         int price = (Integer) priceField.getValue();
 
         DataStore data = DataStore.getInstance();
-        Item newItem = new Item(1, name, price, imageLoc, stock);
+        Item newItem = new Item(1, name, category, price, imageLoc, stock);
         try {
             data.addItem(newItem);
         } catch (IOException e) {
