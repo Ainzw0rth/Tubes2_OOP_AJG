@@ -84,7 +84,7 @@ public class Bill extends JPanel {
         billLabel.setBounds(15, 10, 50, 40);
 
         // daftar belanjaan
-        Item[] itemList = {new Item("Ayam", 12000), new Item("Bebek", 15000)};
+        Item[] itemList = {};
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
         itemPanel.setBackground(Color.white);
@@ -174,7 +174,7 @@ public class Bill extends JPanel {
         saveBillButton.setFocusPainted(false);
         saveBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
         saveBillButton.setForeground(Color.black);
-        saveBillButton.setBounds(1, 470,201, 48);
+        saveBillButton.setBounds(1, 470,199, 48);
         saveBillButton.setBackground(new Color(0xEBEBEB));
 
         // tombol print bill
@@ -182,7 +182,7 @@ public class Bill extends JPanel {
         printBillButton.setFocusPainted(false);
         printBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
         printBillButton.setForeground(Color.black);
-        printBillButton.setBounds(201, 470,201, 48);
+        printBillButton.setBounds(199, 470,199, 48);
         printBillButton.setBackground(new Color(0xEBEBEB));
 
         JPanel panel = new JPanel();
