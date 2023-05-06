@@ -73,7 +73,7 @@ public class JualBarang extends JPanel {
         // nanti traverse list, terus visualize satu satu
         int ctr = 102;
         for (int i = 0; i < ctr; i++) {
-            ImageIcon image1 = new ImageIcon("C:/Users/louis/Downloads/Projects/tubes2-ajg/src/main/resources/images/icon.jpg"); // path nanti diganti dengan image yang sesuai
+            ImageIcon image1 = new ImageIcon(getClass().getResource("/images/icon.jpg")); // path nanti diganti dengan image yang sesuai
             Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
             image1 = new ImageIcon(scaledImage);
             JButton button1 = new JButton(image1);
