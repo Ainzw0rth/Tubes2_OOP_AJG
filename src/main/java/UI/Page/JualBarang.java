@@ -1,11 +1,24 @@
 package UI.Page;
 import javax.swing.*;
 
+import DataStore.DataStore;
+import Entity.Bill;
 import Entity.Item;
 import java.awt.*;
 
-public class Bill extends JPanel {
-    public Bill() {
+public class JualBarang extends JPanel {
+    public JualBarang() {
+        Bill x;
+        DataStore d;
+        
+        try {
+            d = DataStore.getInstance();
+            x = new Bill(-1);
+            d.startNewBill(x);
+        } catch (Exception e) {
+
+        }
+
         // JPanel backgroundPanel = new JPanel();
         // backgroundPanel.setBackground(Color.black);
         // backgroundPanel.setBounds(0, 0, 1200, 720);
@@ -58,7 +71,8 @@ public class Bill extends JPanel {
         stockPanel.setBackground(Color.white);
         
         // nanti traverse list, terus visualize satu satu
-        for (int i = 0; i < 30; i++) {
+        int ctr = 102;
+        for (int i = 0; i < ctr; i++) {
             ImageIcon image1 = new ImageIcon("C:/Users/louis/Downloads/Projects/tubes2-ajg/src/main/resources/images/icon.jpg"); // path nanti diganti dengan image yang sesuai
             Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
             image1 = new ImageIcon(scaledImage);
@@ -69,12 +83,16 @@ public class Bill extends JPanel {
             stockPanel.add(button1);
         }
 
-        Dimension panelSize = new Dimension(802, 653);
+        ctr = ctr / 5;
+
+        
+
+        Dimension panelSize = new Dimension(802, (ctr+1)*116);
         stockPanel.setPreferredSize(panelSize);
         
         JScrollPane stockScrollPane = new JScrollPane(stockPanel);
         stockScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        stockScrollPane.setBounds(0, 50, 802, 653);
+        stockScrollPane.setBounds(0, 50, 800, 590);
         stockScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         // BILL PANEL
@@ -215,7 +233,7 @@ public class Bill extends JPanel {
         // frame.add(backgroundPanel);
     }
 
-    public static void main(String[] args) {  
-        new Bill();  
+    public static void main(String[] args) throws Exception {  
+        new JualBarang();  
     } 
 }   
