@@ -6,8 +6,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 import javax.swing.text.NumberFormatter;
+
+import Entity.*;
+import DataStore.DataStore;
 
 public class UpdateBarang extends JPanel {
     private JTextField nameField;
@@ -23,18 +28,10 @@ public class UpdateBarang extends JPanel {
         titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         titlePanel.add(titleLabel);
 
-        JPanel dropdownPanel = new JPanel();
-        String[] items = { "Pilih nama barang" };
-        JComboBox<String> itemsDropdown = new JComboBox<>(items);
-        itemsDropdown.setPreferredSize(new Dimension(400, itemsDropdown.getPreferredSize().height));
-        itemsDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
-        dropdownPanel.add(itemsDropdown);
-
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(10, 20, 5, 20);
 
-        // Add Name label and field to left column
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
@@ -46,7 +43,6 @@ public class UpdateBarang extends JPanel {
         nameField.setFont(new Font("Poppins", Font.PLAIN, 14));
         panel.add(nameField, c);
 
-        // Add Category label and field to left column
         c.gridy = 2;
         JLabel categoryLabel = new JLabel("Kategori");
         categoryLabel.setFont(new Font("Poppins", Font.BOLD, 14));
@@ -56,25 +52,23 @@ public class UpdateBarang extends JPanel {
         categoryField.setFont(new Font("Poppins", Font.PLAIN, 14));
         panel.add(categoryField, c);
 
-        // Add Image Loc label and field to left column
         c.gridy = 4;
         JLabel imageLabel = new JLabel("Gambar");
         imageLabel.setFont(new Font("Poppins", Font.BOLD, 14));
         panel.add(imageLabel, c);
 
         c.gridy = 5;
-        c.anchor = GridBagConstraints.LINE_START; // set the anchor to the left
+        c.anchor = GridBagConstraints.LINE_START;
         imageLocField = new JTextField(15);
         imageLocField.setFont(new Font("Poppins", Font.PLAIN, 14));
-        imageLocField.setEditable(false); // disable direct text editing
+        imageLocField.setEditable(false);
         panel.add(imageLocField, c);
 
-        // create a new GridBagConstraints object for the chooseImageButton component
         GridBagConstraints c2 = new GridBagConstraints();
         c2.gridx = 0;
         c2.gridy = 5;
         c2.anchor = GridBagConstraints.EAST;
-        c2.insets = new Insets(5, 20, 5, 20); // set the insets
+        c2.insets = new Insets(5, 20, 5, 20);
         JButton chooseImageButton = new JButton("Choose File");
         chooseImageButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -83,7 +77,6 @@ public class UpdateBarang extends JPanel {
         });
         panel.add(chooseImageButton, c2);
 
-        // Add Stock label and field to right column
         c.gridx = 1;
         c.gridy = 0;
         JLabel stockLabel = new JLabel("Stok");
@@ -109,6 +102,59 @@ public class UpdateBarang extends JPanel {
         priceField.setFont(new Font("Poppins", Font.PLAIN, 14));
         panel.add(priceField, c);
 
+        JPanel dropdownPanel = new JPanel();
+
+        DataStore data = DataStore.getInstance();
+        ArrayList<Item> items = data.getItems();
+
+        String[] listItems = new String[items.size() + 1];
+        listItems[0] = "Pilih nama barang";
+        for (int i = 0; i < items.size(); i++) {
+            listItems[i + 1] = items.get(i).getName();
+        }
+
+        JComboBox<String> itemsDropdown = new JComboBox<>(listItems);
+
+        itemsDropdown.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedName = (String) itemsDropdown.getSelectedItem();
+                if (!selectedName.equals("Pilih nama barang")) {
+                    Item selectedItem = null;
+                    for (Item item : items) {
+                        if (item.getName().equals(selectedName)) {
+                            selectedItem = item;
+                            break;
+                        }
+                    }
+                    nameField.setText(selectedItem.getName());
+                    categoryField.setText(selectedItem.getCategory());
+                    stockSpinner.setValue(selectedItem.getStock());
+                    priceField.setValue(selectedItem.getPrice());
+                    imageLocField.setText(selectedItem.getImageUrl());
+                }
+            }
+        });
+
+        itemsDropdown.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+                    boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (index == 0) {
+                    setEnabled(false);
+                    setFont(getFont().deriveFont(Font.ITALIC));
+                } else {
+                    setEnabled(true);
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                }
+                return this;
+            }
+        });
+
+        itemsDropdown.setPreferredSize(new Dimension(400, itemsDropdown.getPreferredSize().height));
+        itemsDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
+        dropdownPanel.add(itemsDropdown);
+
         c.gridx = 0;
         c.gridy = 10;
         c.gridwidth = 2;
@@ -123,18 +169,32 @@ public class UpdateBarang extends JPanel {
             }
         });
 
-        // create a new GridBagConstraints object for the chooseImageButton component
         GridBagConstraints c3 = new GridBagConstraints();
         c3.gridx = 0;
         c3.gridy = 10;
-        c3.insets = new Insets(40, 0, 0, 20); // set the insets
+        c3.insets = new Insets(40, 0, 0, 20);
         JButton deleteButton = new JButton("Hapus");
         deleteButton.setFont(new Font("Poppins", Font.BOLD, 14));
         deleteButton.setForeground(Color.white);
         deleteButton.setBackground(new Color(0x943433));
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                deleteItem();
+                String selectedName = (String) itemsDropdown.getSelectedItem();
+                if (!selectedName.equals("Pilih nama barang")) {
+                    Item selectedItem = null;
+                    for (Item item : items) {
+                        if (item.getName().equals(selectedName)) {
+                            selectedItem = item;
+                            try {
+                                deleteItem(selectedItem.getId());
+                                System.out.println("Item has been deleted successfully");
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         });
 
@@ -146,10 +206,6 @@ public class UpdateBarang extends JPanel {
         contentPanel.add(titlePanel);
         contentPanel.add(dropdownPanel);
         contentPanel.add(panel);
-
-        // JPanel contentPanel = new JPanel(new BorderLayout());
-        // contentPanel.add(topPanel, BorderLayout.PAGE_START);
-        // contentPanel.add(panel, BorderLayout.CENTER);
 
         this.add(contentPanel);
         setSize(1200, 720);
@@ -184,19 +240,9 @@ public class UpdateBarang extends JPanel {
         System.out.println("Harga: " + price);
     }
 
-    private void deleteItem() {
-        String name = nameField.getText();
-        String category = categoryField.getText();
-        String imageLoc = imageLocField.getText();
-        int stock = (Integer) stockSpinner.getValue();
-        int price = (Integer) priceField.getValue();
-
-        System.out.println("Deleted Data");
-        System.out.println("Nama: " + name);
-        System.out.println("Kategori: " + category);
-        System.out.println("Lokasi Gambar: " + imageLoc);
-        System.out.println("Stok: " + stock);
-        System.out.println("Harga: " + price);
+    private void deleteItem(Integer id) throws IOException {
+        DataStore data = DataStore.getInstance();
+        data.removeItem(id);
     }
 
     public static void main(String[] args) {
