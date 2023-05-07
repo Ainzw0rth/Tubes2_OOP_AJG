@@ -4,22 +4,26 @@ import javax.swing.*;
 import DataStore.DataStore;
 import Entity.Bill;
 import Entity.Item;
+import Utils.Collections.Observer;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class JualBarang extends JPanel {
-    JScrollPane scrollPane;
+    private JScrollPane scrollPane;
+    JPanel stockPanel;
+    private JPanel itemPanel;
+    JScrollPane stockScrollPane;
+    private Bill x;
+    private DataStore d;
 
     public JualBarang() {
         try {
-            Bill x;
-            DataStore d;
-        
             x = new Bill(-1);
             d = DataStore.getInstance();
             d.startNewBill(x);
-    
+
             // FILTER/SORT panel
             JPanel filterPanel = new JPanel();
             filterPanel.setLayout(null);
@@ -63,7 +67,7 @@ public class JualBarang extends JPanel {
             filterPanel.add(kategori);
     
             // STOCK PANEL
-            JPanel stockPanel = new JPanel();
+            stockPanel = new JPanel();
             stockPanel.setLayout(new FlowLayout());
             stockPanel.setBackground(Color.white);
             
@@ -84,28 +88,17 @@ public class JualBarang extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         x.tambah(item);
+                        rerenderBills();
                     }
                 });   
             }
-            
-    
-            // for (int i = 0; i < ctr; i++) {
-            //     ImageIcon image1 = new ImageIcon(getClass().getResource("/images/icon.jpg")); // path nanti diganti dengan image yang sesuai
-            //     Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-            //     image1 = new ImageIcon(scaledImage);
-            //     JButton button1 = new JButton(image1);
-            //     button1.setBackground(new Color(0, 0, 0, 0));
-            //     button1.setOpaque(false);
-            //     button1.setBorderPainted(false);
-            //     stockPanel.add(button1);
-            // }
     
             ctr = ctr / 5;            
     
             Dimension panelSize = new Dimension(802, (ctr+1)*116);
             stockPanel.setPreferredSize(panelSize);
             
-            JScrollPane stockScrollPane = new JScrollPane(stockPanel);
+            this.stockScrollPane = new JScrollPane(stockPanel);
             stockScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             stockScrollPane.setBounds(0, 50, 800, 590);
             stockScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -118,14 +111,16 @@ public class JualBarang extends JPanel {
     
             // daftar belanjaan
             // Item[] itemList = {new Item("Ayam", 12000, "../../../resources/images/icon.jpg", 5), new Item("Bebek", 15000, "../../../resources/images/icon.jpg", 7)};
-            JPanel itemPanel = new JPanel();
+            itemPanel = new JPanel();
             itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
             itemPanel.setBackground(Color.white);
-    
+            
+            ctr = 0;
             for (Item item : x.getItems()) {
+                ctr++;
                 JPanel panelItem = new JPanel();
                 panelItem.setBackground(Color.white);
-                panelItem.setMaximumSize(new Dimension(1000, 30));
+                panelItem.setMaximumSize(new Dimension(1000, 90));
     
                 JPanel itemNames = new JPanel();
                 itemNames.setBounds(15, 0, 120, 20);
@@ -146,12 +141,20 @@ public class JualBarang extends JPanel {
                 priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
                 priceLabel.setBounds(0, 0, 120, 20);
                 itemPrices.add(priceLabel, BorderLayout.EAST);
-    
+
+                JPanel addminPanel = new JPanel();
+                addminPanel.setBounds(210, 30, 71, 19);
+                addminPanel.setBackground(new Color(0xD9D9D9));
+                
                 panelItem.add(itemNames);
                 panelItem.add(itemPrices);
+                panelItem.add(addminPanel);
                 panelItem.setLayout(null);
                 itemPanel.add(panelItem);
             }
+
+            Dimension billPanelSize = new Dimension(350, (ctr)*80);
+            itemPanel.setPreferredSize(billPanelSize);
     
             scrollPane = new JScrollPane(itemPanel);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -246,10 +249,118 @@ public class JualBarang extends JPanel {
             this.add(stockScrollPane);
             // frame.add(backgroundPanel);
             x.tambah(new Item("tes", "tes", 1, 10));
+
+            d.getItems().addObserver(
+                new Observer() {
+                    @Override
+                    public void update() {
+                        rerenderItems();
+                    }   
+                }
+            );
             
         } catch (Exception e) {
             e.printStackTrace();
         }   
+    }
+
+    public void rerenderItems() {
+        this.stockPanel.removeAll();
+        stockPanel = new JPanel();
+        stockPanel.setLayout(new FlowLayout());
+        stockPanel.setBackground(Color.white);
+        
+        // nanti traverse list, terus visualize satu satu
+        int ctr = 0;
+        
+        for (Item item: d.getItems().getElements()) {
+            ctr++;
+            ImageIcon image1 = new ImageIcon(item.getImageUrl()); // path nanti diganti dengan image yang sesuai
+            Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+            image1 = new ImageIcon(scaledImage);
+            JButton button1 = new JButton(image1);
+            button1.setBackground(new Color(0, 0, 0, 0));
+            button1.setOpaque(false);
+            button1.setBorderPainted(false);
+            stockPanel.add(button1);
+            button1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    x.tambah(item);
+                }
+            });   
+        }
+
+        ctr = ctr / 5;            
+
+        Dimension panelSize = new Dimension(802, (ctr+1)*116);
+        stockPanel.setPreferredSize(panelSize);
+        stockScrollPane.setViewportView(stockPanel);
+    }
+
+    public void rerenderBills () {
+        itemPanel = new JPanel();
+        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+        itemPanel.setBackground(Color.white);
+
+        int ctr = 0;
+        for (Item item : x.getItems()) {
+            ctr++;
+            JPanel panelItem = new JPanel();
+            panelItem.setBackground(Color.white);
+            panelItem.setMaximumSize(new Dimension(1000, 90));
+
+            JPanel itemNames = new JPanel();
+            itemNames.setBounds(15, 0, 120, 20);
+            itemNames.setBackground(Color.white);
+            itemNames.setLayout(null);
+            
+            JPanel itemPrices = new JPanel();
+            itemPrices.setBounds(210, 0, 120, 20);
+            itemPrices.setBackground(Color.white);
+            itemPrices.setLayout(null);
+            
+            JLabel nameLabel = new JLabel(item.getName());
+            nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
+            nameLabel.setBounds(0, 0, 120, 20);
+            itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
+
+            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
+            priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
+            priceLabel.setBounds(25, 0, 120, 20);
+            itemPrices.add(priceLabel, BorderLayout.EAST);
+
+            // tombol untuk menambah/mengurangi stok
+            JPanel addminPanel = new JPanel();
+            addminPanel.setLayout(null);
+            addminPanel.setBounds(235, 30, 90, 40);
+            addminPanel.setBackground(new Color(0xD9D9D9));
+
+
+            JButton min = new JButton("");
+            min.setBackground(new Color(0xEDEDED));
+            min.setLayout(null);
+            min.setBounds(0, 0, 25, 25);
+
+            JButton plus = new JButton("+");
+            plus.setFont(new Font("Poppins", Font.PLAIN, 12));
+            plus.setBackground(new Color(0xEDEDED));
+            plus.setLayout(null);
+            plus.setBounds(50, 0, 40, 20);
+
+            addminPanel.add(min);
+            addminPanel.add(plus);
+            
+            panelItem.add(itemNames);
+            panelItem.add(itemPrices);
+            panelItem.add(addminPanel);
+            panelItem.setLayout(null);
+            itemPanel.add(panelItem);
+        }
+
+        Dimension billPanelSize = new Dimension(350, (ctr)*80);
+        itemPanel.setPreferredSize(billPanelSize);
+        scrollPane.setViewportView(itemPanel);
     }
 
     public static void main(String[] args) throws Exception {  
