@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,9 +17,5 @@ public class FixedBill implements Serializable{
     @NotNull private int totalPrice;
     @NotNull private LinkedList<Item> items;
     @NotNull private int idCustomer;
+    @NotNull private String date;
 }
-
-
-
-
-

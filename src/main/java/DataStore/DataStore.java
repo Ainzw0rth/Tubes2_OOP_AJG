@@ -1,10 +1,13 @@
 package DataStore;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import DataStore.Adapter.*;
 import DataStore.Thread.BillWorker;
+import DataStore.Enums.*;
 import Entity.*;
 import lombok.*;
 
@@ -22,7 +25,7 @@ import java.nio.file.Paths;
 
 import Utils.Collections.ObservableCollection;
 
-public class DataStore {
+public class DataStore implements DataService{
     @Getter private ObservableCollection<Customer> customers;
     @Getter private ObservableCollection<Item> items;
     @Getter private ObservableCollection<Member> members;
@@ -38,20 +41,6 @@ public class DataStore {
     final String RESET = "\033[0m";  // Text Reset
 
     private DataStoreAdapter adapter;
-    private String dirPath;
-
-
-    public enum FileStoreExt {
-        JSON, 
-        XML,
-        OBJ
-    } 
-
-    public enum MemberStatus {
-        ACTIVE,
-        INACTIVE,
-        VIP
-    }
     
     private static DataStore instance;
     
@@ -594,7 +583,8 @@ public class DataStore {
             DataStore.billWorker.removeBill(bill);
             
             this.addFixedBill(new FixedBill(
-                bill.getId(), bill.getTotalPrice(), bill.getItems(), bill.getIdCustomer()
+                bill.getId(), bill.getTotalPrice(), bill.getItems(), bill.getIdCustomer(), 
+                LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             ));
 
             this.adapter.writeBills(bills.getElements());

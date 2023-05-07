@@ -68,8 +68,8 @@ public class AppActionListener implements ActionListener {
                 app.addTab("Update Barang", new UpdateBarang());
             } else if (title.equals("Laporan Penjualan")) {
                 app.addTab("Laporan Penjualan", new LaporanPenjualan());
-            } else if (title.equals("Import")) {
-                app.addTab("Import", new Import());
+            } else if (title.equals("Plugins")) {
+                app.addTab("Plugins", new PluginImport());
             } else if (title.equals("Penyimpanan Data")) {
                 app.addTab("Penyimpanan Data", new PenyimpananData());
             } else {

@@ -2,15 +2,14 @@ package UI.Page;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import Entity.Item;
+import Plugins.CustomClassLoader;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import org.jetbrains.annotations.*;
 import java.io.File;
-import java.io.FileFilter;
 
-public class Import extends JPanel {
+public class PluginImport extends JPanel {
     String name = "-";
     String extension = "-";
     String path = "";
@@ -19,7 +18,7 @@ public class Import extends JPanel {
     JFileChooser fileChooser;
     JPanel selectedPanel;
 
-    public Import() {
+    public PluginImport() {
         JLabel label = new JLabel("Plugins");
         label.setBounds(50,40,300,50);
         label.setFont(new Font("Poppins", Font.BOLD, 35));
@@ -103,6 +102,8 @@ public class Import extends JPanel {
                     filename2.setText(name);
                     filepath2.setText(path);
                     selectedPanel.repaint();
+                    CustomClassLoader loader = new CustomClassLoader(path);
+                    loader.load();
                 }
             }  
         });  
@@ -128,9 +129,5 @@ public class Import extends JPanel {
         this.add(scrollPane);
         this.setLayout(null);
         this.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new Import();  
     }
 }

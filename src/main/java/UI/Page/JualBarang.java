@@ -1,107 +1,215 @@
 package UI.Page;
 import javax.swing.*;
-import java.util.*;
 
 import DataStore.DataStore;
 import Entity.Bill;
 import Entity.Item;
-import Entity.Member;
+import Utils.Collections.Observer;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JualBarang extends JPanel {
+    private JScrollPane scrollPane;
+    JPanel stockPanel;
+    private JPanel itemPanel;
+    JScrollPane stockScrollPane;
+    private Bill x;
+    private DataStore d;
+    
+    private JLabel subtotalLabelNumber;
 
-    private ArrayList<Item> listItem;
-    private ArrayList<Member> listMembers;
-
-    private Bill bill;
-    private DataStore data;
-    private Integer idCustomer;
-
-    public JualBarang(){
-        data = DataStore.getInstance();
-        listItem = data.getItems().getElements();
-        listMembers = data.getMembers().getElements();
-        this.idCustomer = 1;
-        this.bill = null;
-        
+    public JualBarang() {
         try {
-            this.bill = new Bill(-1);
-            ArrayList<Bill> bills = data.getBills().getElements(); 
-            System.out.println(bills.size());
-            for (int i=0; i< bills.size(); i++){
-                System.out.println(bills.get(i).getId());
-                if (idCustomer == bills.get(i).getId()){
-                    this.bill = bills.get(i);
-                    break;
+            x = new Bill(-1);
+            d = DataStore.getInstance();
+            d.startNewBill(x);
+
+            // FILTER/SORT panel
+            JPanel filterPanel = new JPanel();
+            filterPanel.setLayout(null);
+            filterPanel.setBackground(Color.white);
+            filterPanel.setBounds(0, 0, 800, 50);
+    
+            // min harga
+            JLabel minPriceLabel = new JLabel("Min. Price");
+            minPriceLabel.setFont(new Font("Poppins", Font.BOLD, 12));
+            minPriceLabel.setBounds(190, 6, 60, 40);
+    
+            // min harga nominal
+            JLabel minPriceLabelNumber = new JLabel("Rp " + "0");
+            minPriceLabelNumber.setFont(new Font("Poppins", Font.BOLD, 12));
+            minPriceLabelNumber.setBounds(260, 6, 130, 40);
+    
+            // max harga
+            JLabel maxPriceLabel = new JLabel("Max. Price");
+            maxPriceLabel.setFont(new Font("Poppins", Font.BOLD, 12));
+            maxPriceLabel.setBounds(400, 6, 70, 40);
+    
+            // max harga nominal
+            JLabel maxPriceLabelNumber = new JLabel("Rp " + "1000000");
+            maxPriceLabelNumber.setFont(new Font("Poppins", Font.BOLD, 12));
+            maxPriceLabelNumber.setBounds(470, 6, 130, 40);
+            
+            // category dropdown
+            String[] categories = {"Category"};
+            JComboBox<String> kategori = new JComboBox<>(categories);
+            kategori.setBounds(620, 10, 150, 30);
+    
+            // input searching
+            JTextField searchField = new JTextField();
+            searchField.setBounds(20, 10, 150, 30);
+    
+            filterPanel.add(searchField);
+            filterPanel.add(minPriceLabel);
+            filterPanel.add(minPriceLabelNumber);
+            filterPanel.add(maxPriceLabel);
+            filterPanel.add(maxPriceLabelNumber);
+            filterPanel.add(kategori);
+            
+            // BILL PANEL
+            // label
+            JLabel billLabel = new JLabel("BILL");
+            billLabel.setFont(new Font("Poppins", Font.BOLD, 24));
+            billLabel.setBounds(15, 10, 50, 40);
+
+            // checkout button
+            JButton checkoutButton = new JButton("CHECKOUT");
+            checkoutButton.setFocusPainted(false);
+            checkoutButton.setFont(new Font("Poppins", Font.BOLD, 32));
+            checkoutButton.setForeground(Color.white);
+            checkoutButton.setBounds(30, 530, 329, 79);
+            checkoutButton.setBackground(new Color(0x36459A));
+    
+            // member dropdown
+            String[] items = {"Pilih nama member"};
+            JComboBox<String> dropdown = new JComboBox<>(items);
+            dropdown.setBounds(15, 420, 150, 30);
+    
+            // subtotal label
+            JLabel subtotalLabel = new JLabel("Subtotal");
+            subtotalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
+            subtotalLabel.setBounds(15, 340, 100, 40);
+            
+            // subtotal nominal
+            subtotalLabelNumber = new JLabel("Rp " + Integer.toString(x.getTotalPrice()));
+            subtotalLabelNumber.setFont(new Font("Poppins", Font.PLAIN, 16));
+            subtotalLabelNumber.setBounds(230, 340, 100, 40);
+    
+            // diskon label
+            JLabel discountLabel = new JLabel("Diskon");
+            discountLabel.setFont(new Font("Poppins", Font.BOLD, 16));
+            discountLabel.setBounds(15, 360, 100, 40);
+    
+            // diskon nominal
+            JLabel discountLabelNumbers = new JLabel("RP 2.700");
+            discountLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
+            discountLabelNumbers.setBounds(230, 360, 100, 40);
+    
+            // total price
+            JLabel totalLabel = new JLabel("Total:");
+            totalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
+            totalLabel.setBounds(230, 400, 70, 40);
+    
+            // nominal total price
+            JLabel totalLabelNumbers = new JLabel("Rp 25.000");
+            totalLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
+            totalLabelNumbers.setBounds(230, 420, 100, 40);
+    
+            // tombol save bill
+            JButton saveBillButton = new JButton("Save Bill");
+            saveBillButton.setFocusPainted(false);
+            saveBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
+            saveBillButton.setForeground(Color.black);
+            saveBillButton.setBounds(1, 470,199, 48);
+            saveBillButton.setBackground(new Color(0xEBEBEB));
+    
+            // tombol print bill
+            JButton printBillButton = new JButton("Print Bill");
+            printBillButton.setFocusPainted(false);
+            printBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
+            printBillButton.setForeground(Color.black);
+            printBillButton.setBounds(199, 470,199, 48);
+            printBillButton.setBackground(new Color(0xEBEBEB));
+            // STOCK PANEL
+            stockPanel = new JPanel();
+            stockPanel.setLayout(new FlowLayout());
+            stockPanel.setBackground(Color.white);
+            
+            stockPanel = new JPanel();
+            this.stockScrollPane = new JScrollPane(stockPanel);
+            stockScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            stockScrollPane.setBounds(0, 50, 800, 590);
+            stockScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+            rerenderItems();
+    
+            // daftar belanjaan
+            itemPanel = new JPanel();
+            scrollPane = new JScrollPane(itemPanel);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            scrollPane.setBounds(15, 60, 370, 270);
+            scrollPane.setBackground(Color.white);
+            scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x36459A)));
+            rerenderBills();
+            
+    
+            JPanel panel = new JPanel();
+            panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+            panel.setBackground(Color.white);
+            panel.setBounds(800, 0, 400, 620);
+            panel.setLayout(null);
+            panel.add(scrollPane);
+            panel.add(totalLabel);
+            panel.add(totalLabelNumbers);
+            panel.add(subtotalLabel);
+            panel.add(subtotalLabelNumber);
+            panel.add(discountLabel);
+            panel.add(discountLabelNumbers);
+            panel.add(checkoutButton);
+            panel.add(saveBillButton);
+            panel.add(printBillButton);
+            panel.add(billLabel);
+            panel.add(dropdown);
+    
+            // frame pagenya
+            // JFrame frame = new JFrame();
+            this.setLayout(null);
+            this.setVisible(true);
+            this.setSize(1200, 720);
+            this.add(filterPanel);
+            this.add(panel);
+            this.add(stockScrollPane);
+            // frame.add(backgroundPanel);
+
+            d.getItems().addObserver(
+                new Observer() {
+                    @Override
+                    public void update() {
+                        rerenderItems();
+                        rerenderBills();
+                    }   
                 }
-            }
-
+            );
+            
         } catch (Exception e) {
-            System.out.println("error: " + e.getMessage());
-        }
-
-        initUI();
+            e.printStackTrace();
+        }   
     }
 
-    public void initUI() {
-
-        // JPanel backgroundPanel = new JPanel();
-        // backgroundPanel.setBackground(Color.black);
-        // backgroundPanel.setBounds(0, 0, 1200, 720);
-
-        // FILTER/SORT panel
-        JPanel filterPanel = new JPanel();
-        filterPanel.setLayout(null);
-        filterPanel.setBackground(Color.white);
-        filterPanel.setBounds(0, 0, 800, 50);
-
-        // min harga
-        JLabel minPriceLabel = new JLabel("Min. Price");
-        minPriceLabel.setFont(new Font("Poppins", Font.BOLD, 12));
-        minPriceLabel.setBounds(190, 6, 60, 40);
-
-        // min harga nominal
-        JLabel minPriceLabelNumber = new JLabel("Rp " + "0");
-        minPriceLabelNumber.setFont(new Font("Poppins", Font.BOLD, 12));
-        minPriceLabelNumber.setBounds(260, 6, 130, 40);
-
-        // max harga
-        JLabel maxPriceLabel = new JLabel("Max. Price");
-        maxPriceLabel.setFont(new Font("Poppins", Font.BOLD, 12));
-        maxPriceLabel.setBounds(400, 6, 70, 40);
-
-        // max harga nominal
-        JLabel maxPriceLabelNumber = new JLabel("Rp " + "1000000");
-        maxPriceLabelNumber.setFont(new Font("Poppins", Font.BOLD, 12));
-        maxPriceLabelNumber.setBounds(470, 6, 130, 40);
-        
-        // category dropdown
-        String[] categories = {"Category"};
-        JComboBox<String> kategori = new JComboBox<>(categories);
-        kategori.setBounds(620, 10, 150, 30);
-
-        // input searching
-        JTextField searchField = new JTextField();
-        searchField.setBounds(20, 10, 150, 30);
-
-        filterPanel.add(searchField);
-        filterPanel.add(minPriceLabel);
-        filterPanel.add(minPriceLabelNumber);
-        filterPanel.add(maxPriceLabel);
-        filterPanel.add(maxPriceLabelNumber);
-        filterPanel.add(kategori);
-
-        // STOCK PANEL
-        JPanel stockPanel = new JPanel();
+    public void rerenderItems() {
+        this.stockPanel.removeAll();
+        stockPanel = new JPanel();
         stockPanel.setLayout(new FlowLayout());
         stockPanel.setBackground(Color.white);
         
         // nanti traverse list, terus visualize satu satu
-        for (int i = 0; i < listItem.size(); i++) {
-            ImageIcon image1 = new ImageIcon(listItem.get(i).getImageUrl()); // path nanti diganti dengan image yang sesuai
+        int ctr = 0;
+        
+        for (Item item: d.getItems().getElements()) {
+            ctr++;
+            ImageIcon image1 = new ImageIcon(item.getImageUrl()); // path nanti diganti dengan image yang sesuai
             Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
             image1 = new ImageIcon(scaledImage);
             JButton button1 = new JButton(image1);
@@ -109,38 +217,32 @@ public class JualBarang extends JPanel {
             button1.setOpaque(false);
             button1.setBorderPainted(false);
             stockPanel.add(button1);
+            button1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    x.tambah(item);
+                }
+            });   
         }
-        
-        Dimension panelSize = new Dimension(802, (listItem.size()+1)*116);
+
+        ctr = ctr / 5;            
+
+        Dimension panelSize = new Dimension(802, (ctr+1)*116);
         stockPanel.setPreferredSize(panelSize);
-        
-        JScrollPane stockScrollPane = new JScrollPane(stockPanel);
-        stockScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        stockScrollPane.setBounds(0, 50, 800, 590);
-        stockScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        stockScrollPane.setViewportView(stockPanel);
+    }
 
-        // BILL PANEL
-        // label
-        JLabel billLabel = new JLabel("BILL");
-        billLabel.setFont(new Font("Poppins", Font.BOLD, 24));
-        billLabel.setBounds(15, 10, 50, 40);
-
-        // daftar belanjaan
-        // Item[] itemList = {new Item("Ayam", 12000, "../../../resources/images/icon.jpg", 5), new Item("Bebek", 15000, "../../../resources/images/icon.jpg", 7)};
-        Item[] itemList ={};
-        if (this.bill != null){
-
-            itemList = bill.getItems().toArray(new Item[0]);
-        }
-
-        JPanel itemPanel = new JPanel();
+    public void rerenderBills () {
+        itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
         itemPanel.setBackground(Color.white);
 
-        for (Item item : itemList) {
+        int ctr = 0;
+        for (Item item : x.getItems()) {
+            ctr++;
             JPanel panelItem = new JPanel();
             panelItem.setBackground(Color.white);
-            panelItem.setMaximumSize(new Dimension(1000, 30));
+            panelItem.setMaximumSize(new Dimension(1000, 90));
 
             JPanel itemNames = new JPanel();
             itemNames.setBounds(15, 0, 120, 20);
@@ -162,125 +264,69 @@ public class JualBarang extends JPanel {
             priceLabel.setBounds(0, 0, 120, 20);
             itemPrices.add(priceLabel, BorderLayout.EAST);
 
+            // tombol untuk menambah/mengurangi stok
+            JPanel addminPanel = new JPanel();
+            addminPanel.setLayout(null);
+            addminPanel.setBounds(200, 30, 130, 20);
+            addminPanel.setBackground(new Color(0xD9D9D9));
+
+            JButton min = new JButton("-");
+            min.setFont(new Font("Poppins", Font.PLAIN, 10));
+            min.setBackground(new Color(0xEDEDED));
+            min.setLayout(null);
+            min.setBounds(0, 0, 40, 20);
+            min.setFocusPainted(false);
+            min.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    x.hapus(item);
+                    rerenderBills();
+                }
+            });
+
+            JButton plus = new JButton("+");
+            plus.setFont(new Font("Poppins", Font.PLAIN, 10));
+            plus.setBackground(new Color(0xEDEDED));
+            plus.setLayout(null);
+            plus.setBounds(90, 0, 40, 20);
+            plus.setFocusPainted(false);
+            plus.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    x.tambah(item);
+                    rerenderBills();
+                }
+            });
+
+            JPanel amountPanel = new JPanel(new GridBagLayout());
+            amountPanel.setBounds(40, 0, 50, 20);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.anchor = GridBagConstraints.CENTER;
+
+            JLabel amountText = new JLabel(Integer.toString(item.getStock()));
+
+            amountPanel.add(amountText, gbc);
+            
+            addminPanel.add(min);
+            addminPanel.add(plus);
+            addminPanel.add(amountPanel);
+            
             panelItem.add(itemNames);
             panelItem.add(itemPrices);
+            panelItem.add(addminPanel);
             panelItem.setLayout(null);
             itemPanel.add(panelItem);
         }
 
-        JScrollPane scrollPane = new JScrollPane(itemPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(15, 60, 370, 270);
-        scrollPane.setBackground(Color.white);
-        scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x36459A)));
+        Dimension billPanelSize = new Dimension(350, (ctr)*70);
+        itemPanel.setPreferredSize(billPanelSize);
+        scrollPane.setViewportView(itemPanel);
 
-        // checkout button
-        JButton checkoutButton = new JButton("CHECKOUT");
-        checkoutButton.setFocusPainted(false);
-        checkoutButton.setFont(new Font("Poppins", Font.BOLD, 32));
-        checkoutButton.setForeground(Color.white);
-        checkoutButton.setBounds(30, 530, 329, 79);
-        checkoutButton.setBackground(new Color(0x36459A));
-
-        // member dropdown
-        String[] members = new String[this.listMembers.size()+1];
-        members[0] = "Pilih nama member";
-
-        for (int i = 0; i < this.listMembers.size(); i++) {
-            members[i + 1] = listMembers.get(i).getName();
-        }
-
-        JComboBox<String> memberDropdown = new JComboBox<>(members);
-        memberDropdown.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String selectedName = (String) memberDropdown.getSelectedItem();
-                if (!selectedName.equals("Pilih nama member")) {
-                    
-                    for (Member member : listMembers) {
-                        if (member.getName().equals(selectedName)) {
-                            idCustomer = member.getId();
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        memberDropdown.setBounds(15, 420, 150, 30);
-
-        // subtotal label
-        JLabel subtotalLabel = new JLabel("Subtotal");
-        subtotalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        subtotalLabel.setBounds(15, 340, 100, 40);
-        
-        // subtotal nominal
-        JLabel subtotalLabelNumber = new JLabel(bill.getTotalPrice().toString());
-        subtotalLabelNumber.setFont(new Font("Poppins", Font.PLAIN, 16));
-        subtotalLabelNumber.setBounds(230, 340, 100, 40);
-
-        // diskon label
-        JLabel discountLabel = new JLabel("Diskon");
-        discountLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        discountLabel.setBounds(15, 360, 100, 40);
-
-        // diskon nominal
-        JLabel discountLabelNumbers = new JLabel("RP 2.700");
-        discountLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
-        discountLabelNumbers.setBounds(230, 360, 100, 40);
-
-        // total price
-        JLabel totalLabel = new JLabel("Total:");
-        totalLabel.setFont(new Font("Poppins", Font.BOLD, 16));
-        totalLabel.setBounds(230, 400, 70, 40);
-
-        // nominal total price
-        JLabel totalLabelNumbers = new JLabel(bill.getTotalPrice().toString());
-        totalLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
-        totalLabelNumbers.setBounds(230, 420, 100, 40);
-
-        // tombol save bill
-        JButton saveBillButton = new JButton("Save Bill");
-        saveBillButton.setFocusPainted(false);
-        saveBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
-        saveBillButton.setForeground(Color.black);
-        saveBillButton.setBounds(1, 470,199, 48);
-        saveBillButton.setBackground(new Color(0xEBEBEB));
-
-        // tombol print bill
-        JButton printBillButton = new JButton("Print Bill");
-        printBillButton.setFocusPainted(false);
-        printBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
-        printBillButton.setForeground(Color.black);
-        printBillButton.setBounds(199, 470,199, 48);
-        printBillButton.setBackground(new Color(0xEBEBEB));
-
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
-        panel.setBackground(Color.white);
-        panel.setBounds(800, 0, 400, 620);
-        panel.setLayout(null);
-        panel.add(scrollPane);
-        panel.add(totalLabel);
-        panel.add(totalLabelNumbers);
-        panel.add(subtotalLabel);
-        panel.add(subtotalLabelNumber);
-        panel.add(discountLabel);
-        panel.add(discountLabelNumbers);
-        panel.add(checkoutButton);
-        panel.add(saveBillButton);
-        panel.add(printBillButton);
-        panel.add(billLabel);
-        panel.add(memberDropdown);
-
-        // frame pagenya
-        // JFrame frame = new JFrame();
-        this.setLayout(null);
-        this.setVisible(true);
-        this.setSize(1200, 720);
-        this.add(filterPanel);
-        this.add(panel);
-        this.add(stockScrollPane);
-        // frame.add(backgroundPanel);
+        subtotalLabelNumber.setText("Rp " + Integer.toString(x.getTotalPrice()));
     }
 
     public static void main(String[] args) throws Exception {  
