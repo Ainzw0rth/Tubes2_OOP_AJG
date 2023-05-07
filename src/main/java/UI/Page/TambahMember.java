@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.*;
 
 import Entity.*;
 import DataStore.DataStore;
@@ -156,19 +157,20 @@ public class TambahMember extends JPanel {
         String phone = phoneField.getText();
 
         DataStore data = DataStore.getInstance();
+        ArrayList<Customer> customers = data.getCustomers().getElements();
+        Integer id = customers.get(customers.size() - 1).getId();
 
         try {
+            Member newMember;
             if (isMember) {
-                Member member = new Member(1, name, phone, true, 0);
-                data.addMember(member);
+                newMember = new Member(id, name, phone, true, 0);
             } else {
-                VIP vip = new VIP(1, name, phone, true, 0);
-                data.addMember(vip);
+                newMember = new VIP(id, name, phone, true, 0);
             }
+            data.addMember(newMember);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {
