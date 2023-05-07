@@ -2,7 +2,10 @@ package UI.Page;
 
 import javax.swing.*;
 
+import com.itextpdf.text.DocumentException;
+
 import DataStore.DataStore;
+import Utils.Printer;
 import Utils.Collections.Observer;
 import Entity.*;
 
@@ -11,6 +14,11 @@ import java.awt.event.*;
 import java.util.*;
 
 public class HistoriTransaksi extends JPanel {
+
+    private String printableString = "";
+    private String tab = "    ";
+    private Printer printer = new Printer();
+
     public HistoriTransaksi() {
         setLayout(new BorderLayout()); // set the layout of the main panel to BorderLayout
 
@@ -101,6 +109,9 @@ public class HistoriTransaksi extends JPanel {
         buttonSubmit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                printableString = "HISTORI TRANSAKSI\n\n";
+
+                historyPanel.removeAll();
                 Integer custId = 0;
                 String selectedName = (String) memberDropdown.getSelectedItem();
                 if (!selectedName.equals("Pilih nama member")) {
@@ -109,6 +120,8 @@ public class HistoriTransaksi extends JPanel {
                         if (member.getName().equals(selectedName)) {
                             selectedMember = member;
                             custId = selectedMember.getId();
+                            printableString += "Nama        : " + member.getName();
+                            printableString += "\nCustomer ID : " + custId + "\n\n";
                             break;
                         }
                     }
@@ -130,6 +143,9 @@ public class HistoriTransaksi extends JPanel {
                         JLabel dateLabel = new JLabel(bill.getDate());
                         dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
                         datePanel.add(dateLabel);
+
+                        printableString += "Tanggal : " + bill.getDate();
+                        printableString += "\nBarang  :\n";
 
                         // create the item panel
                         JPanel itemPanel = new JPanel(new GridBagLayout());
@@ -153,11 +169,15 @@ public class HistoriTransaksi extends JPanel {
                             gbc.gridx = 1;
                             itemPanel.add(qtyLabel, gbc);
 
-                            JLabel priceLabel = new JLabel("$" + item.getPrice());
+                            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
                             priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
                             gbc.gridx = 2;
                             itemPanel.add(priceLabel, gbc);
+
+                            printableString += tab + "- " + item.getName() + " x" + item.getStock() + " (Rp "
+                                    + item.getPrice() + ")\n";
                         }
+                        printableString += "Total   : Rp " + bill.getTotalPrice() + "\n\n";
 
                         // create a panel to hold the date panel and item panel
                         JPanel billPanel = new JPanel();
@@ -170,6 +190,8 @@ public class HistoriTransaksi extends JPanel {
                         JLabel totalLabel = new JLabel("Total: Rp" + total);
                         totalLabel.setFont(new Font("Poppins", Font.BOLD, 14));
                         billPanel.add(totalLabel);
+
+                        // billPanel.setPreferredSize(new Dimension(400, 50));
 
                         // add the bill panel to the history panel
                         historyPanel.add(billPanel);
@@ -184,11 +206,29 @@ public class HistoriTransaksi extends JPanel {
             }
         });
 
+        // BUTTON PRINT
+        JButton buttonPrint = new JButton("Print PDF");
+        buttonPrint.setFocusPainted(false);
+        buttonPrint.setFont(new Font("Poppins", Font.BOLD, 16));
+        buttonPrint.setForeground(Color.white);
+        buttonPrint.setBackground(new Color(0x36459A));
+
+        buttonPrint.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    printer.printComponentToPdf(printableString);
+                } catch (DocumentException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
         // add the components to the left-side panel
         titlePanel.add(titleLabel);
         memberPanel.add(memberLabel);
         memberTextPanel.add(memberDropdown);
         buttonPanel.add(buttonSubmit);
+        buttonPanel.add(buttonPrint);
         leftPanel.add(titlePanel);
         leftPanel.add(memberPanel);
         leftPanel.add(memberTextPanel);
