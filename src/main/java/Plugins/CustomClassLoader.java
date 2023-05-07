@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import javax.swing.JOptionPane;
+
 import java.util.*;
 
 import DataStore.DataStore;
@@ -89,6 +92,7 @@ public class CustomClassLoader extends ClassLoader {
                 DataStore dataService = DataStore.getInstance();
                 
                 method.invoke(pluginInstance, appService, dataService);
+                JOptionPane.showMessageDialog(null, "Plugin loaded successfully!");
             }
 
         } catch (Exception e) {

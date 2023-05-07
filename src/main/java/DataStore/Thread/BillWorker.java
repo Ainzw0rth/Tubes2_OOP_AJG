@@ -28,7 +28,7 @@ public class BillWorker implements Runnable{
             try {
                 Thread.sleep(BILL_AUTOSAVE_TIME * 1000);
                 dataStoreRef.writeBills(billRefs);
-                System.out.println("Bill autosaved!");
+                // System.out.println("Bill autosaved!");
             } catch (InterruptedException e) {
                 System.out.println("Error in BillWorker: " + e.getMessage());
             } catch (Exception e) {
