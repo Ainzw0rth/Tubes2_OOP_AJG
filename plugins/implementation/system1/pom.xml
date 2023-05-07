@@ -46,7 +46,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>BNMOStore_PluginChart2</finalName>
+    <finalName>BNMOStore_PluginSystem1</finalName>
     <plugins>
       <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
       <plugin>

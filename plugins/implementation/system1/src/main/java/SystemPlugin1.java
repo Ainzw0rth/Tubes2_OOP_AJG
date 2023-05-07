@@ -1,48 +1,68 @@
-package Plugins.Example;
-
 import UI.IApp;
 
 import java.util.*;
 import Entity.*;
+import javax.swing.*;
 
 import DataStore.DataStore;
 import Plugins.BasePlugin;
 
 public class SystemPlugin1 implements BasePlugin {
-    private String mataUang;
-    private float kurs;
-    private DataStore data;
+    private HashMap<String, Float> kurs;
+    private String currentKurs = "IDR";
 
-    public SystemPlugin1 (String mu, float kurs, DataStore dataInput) {
-        this.mataUang = mu;
-        this.kurs = kurs;
-        this.data = dataInput;
+    public SystemPlugin1() {
+        this.kurs = new HashMap<String, Float>() {
+            {
+                put("IDR", (float) 1);
+                put("USD", (float) 14675);
+                put("MYR", (float) 3701.1);
+                put("EUR", (float) 16171.1);
+            }
+        };
     }
 
-    public void onLoad(IApp appService, DataStore dataService) {
-        ArrayList<Item> items = this.data.getItems().getElements();
+    private void changeKurs(String newKurs) {
+        this.currentKurs = newKurs;
+
+        ArrayList<Item> items = DataStore.getInstance().getItems().getElements();
         for (Item item : items) {
             try {
-                switch (this.mataUang) {
-                    case "USD":
-                        this.kurs = 14675;
-                    case "MYR":
-                        this.kurs = (float) 3701.1;
-                    case "EUR":
-                        this.kurs = (float) 16171.1;
-                }
-
-
                 // Make New Price, depends on kurs
-                Float newPrice = item.getPrice().floatValue() / (this.kurs);
+                Float newPrice = item.getPrice().floatValue() / (this.kurs.get(this.currentKurs));
 
                 // Update Item
                 Item newItem = new Item(item.getName(), item.getCategory(), newPrice.intValue(), item.getImageUrl(), item.getStock());
-                this.data.updateItem(item.getId(), newItem);
+                DataStore.getInstance().updateItem(item.getId(), newItem);
 
             } catch (Exception e) {
                 System.out.println(e);
             }
         }
+    }
+
+    @Override
+    public void onLoad(IApp appService, DataStore dataService) {
+        JMenu menu = new JMenu("Currency");
+
+        ButtonGroup group = new ButtonGroup();
+
+        for (String key : this.kurs.keySet()) {
+            JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(key);
+
+            menuItem.addActionListener(e -> {
+                this.changeKurs(key);
+            });
+
+            if (key.equals(this.currentKurs)) {
+                menuItem.setSelected(true);
+            }
+
+            group.add(menuItem);
+            menu.add(menuItem);
+        }
+
+        // menu.add(menuItem);
+        appService.addMenu(menu);
     }
 }
