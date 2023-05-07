@@ -59,14 +59,14 @@ public interface IApp {
     */
     public void setVisible(boolean bool);
 
-    /**
-     * Set Panel to a Page
-     * @param JPanel
-     */
-    public void setPanel(JPanel panel);
+    // /**
+    //  * Set Panel to a Page
+    //  * @param JPanel
+    //  */
+    // public void setPanel(JPanel panel);
 
-    /**
-     * Get a certain Panel
-     */
-    public void getPanel(String panelName);
+    // /**
+    //  * Get a certain Panel
+    //  */
+    // public void getPanel(String panelName);
 }

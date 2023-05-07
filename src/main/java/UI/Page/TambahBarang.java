@@ -120,6 +120,7 @@ public class TambahBarang extends JPanel {
                 try {
                     add();
                     System.out.println("Item has been added successfully");
+                    succes();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -134,6 +135,16 @@ public class TambahBarang extends JPanel {
         this.add(contentPanel);
         setSize(1200, 720);
         setVisible(true);
+    }
+
+    private void succes(){
+        nameField.setText("");
+        categoryField.setText("");
+        imageLocField.setText("");
+        stockSpinner.setValue(0);
+        priceField.setValue(0);
+
+        JOptionPane.showMessageDialog(this, "Barang berhasil ditambahkan", "Sukses", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void chooseImage() {

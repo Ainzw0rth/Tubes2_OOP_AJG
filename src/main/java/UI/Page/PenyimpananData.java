@@ -52,7 +52,7 @@ public class PenyimpananData extends JPanel {
         String[] extList = { FileStoreExt.JSON.toString(), FileStoreExt.XML.toString(), FileStoreExt.OBJ.toString() };
         
         JComboBox<String> extDropdown = new JComboBox<>(extList);
-        extDropdown.setSelectedItem(data.getExt());
+        extDropdown.setSelectedItem(data.getExt().toString());
         extDropdown.setPreferredSize(new Dimension(200, 30));
         extDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
         extDropdown.setBounds(0,0,300,50);
@@ -61,6 +61,7 @@ public class PenyimpananData extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String selectedExt = (String) extDropdown.getSelectedItem();
                 onHandleChangeExt(selectedExt);
+                extDropdown.setSelectedItem(data.getExt().toString());
             }
         });
 
@@ -70,9 +71,11 @@ public class PenyimpananData extends JPanel {
     }
 
     private void onHandleChangeExt(String selectedExt){
+        
         try {
             data.changeExt(FileStoreExt.valueOf(selectedExt));
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("extension gagal diubah");
         }
     }
@@ -126,7 +129,7 @@ public class PenyimpananData extends JPanel {
             try {
                 data.changeDir(selectedFile.getAbsolutePath());
             } catch (Exception e) {
-                
+
             }
         }
     }

@@ -35,24 +35,24 @@ public class DataStore implements DataService{
     
     
     private DataStore() {
-        this.adapter = new AdapterJSON();   
         Config config = new Config();
-
+        
         this.dirPath = config.getDirPath();
         this.ext = config.getExt();
-
+        
+        this.adapter = new AdapterJSON(this.dirPath);   
         switch (this.getExt()) {
             case JSON:
-                this.adapter = new AdapterJSON();   
+                this.adapter = new AdapterJSON(this.dirPath);   
                 break;
             case XML:
-                this.adapter = new AdapterJSON();   
+                this.adapter = new AdapterXML(this.dirPath);   
                 break;
             case OBJ:
-                this.adapter = new AdapterJSON();   
+                this.adapter = new AdapterOBJ(this.dirPath);   
                 break;
             default:
-                this.adapter = new AdapterJSON();  
+                this.adapter = new AdapterJSON(this.dirPath);  
                 break;
         }
 
@@ -100,18 +100,18 @@ public class DataStore implements DataService{
         this.fixedBills.setElements(fixedBills);
     }
 
-    /**
-     * Read all datastore from file. Most likely will be deprecated
-     * @throws Exception
-     */
-    public void loadData() throws Exception{
-        try {
-            this.adapter.read(this);
-        } catch (Exception e) {
-            printError("Fail to load data", e);
-            throw e;
-        }
-    }
+    // /**
+    //  * Read all datastore from file. Most likely will be deprecated
+    //  * @throws Exception
+    //  */
+    // public void loadData() throws Exception{
+    //     try {
+    //         this.adapter.read(this);
+    //     } catch (Exception e) {
+    //         printError("Fail to load data", e);
+    //         throw e;
+    //     }
+    // }
 
     /**
      * Change file extension to write/read
@@ -122,43 +122,45 @@ public class DataStore implements DataService{
 
         switch (ext) {
             case JSON:
-                this.adapter = new AdapterJSON();
+                this.adapter = new AdapterJSON(this.dirPath);
                 break;
             case XML:
-                this.adapter = new AdapterXML();
+                this.adapter = new AdapterXML(this.dirPath);
                 break;
             case OBJ:
-                this.adapter = new AdapterOBJ();
+                this.adapter = new AdapterOBJ(this.dirPath);
                 break;
             default:
-                this.adapter = new AdapterJSON();
+                this.adapter = new AdapterJSON(this.dirPath);
                 break;
         }
 
         try {
-            // change database extension
+            // // change database extension
             this.adapter.writeBills(this.bills.getElements());
             this.adapter.writeCustomers(this.customers.getElements());
             this.adapter.writeFixedBills(this.fixedBills.getElements());
             this.adapter.writeItems(this.items.getElements());
             this.adapter.writeMembers(this.members.getElements());
-
             // change config
             config.changeConfig(config.getDirPath(), ext);
-
+            this.ext = ext;
+            System.out.println("halo halo");
         } catch (Exception e) {
-            printError("Fail to change file extension", e);
+            e.printStackTrace();;
             throw e;
         }
     }
 
     public void changeDir(String dir) throws Exception{
         Config config = new Config();
+
         try {
             // change database
 
             // change directory
             config.changeConfig(dir, config.getExt());
+            this.dirPath = dir;
         } catch (Exception e){
             throw e;
         }
@@ -609,6 +611,10 @@ public class DataStore implements DataService{
 
     public static void main(String[] args) {
         DataStore ds = new DataStore();
-        
+        try {
+            ds.changeExt(FileStoreExt.XML);;
+        } catch (Exception e) {
+            System.out.println("belum bisa");
+        }
     }
 }
