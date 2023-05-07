@@ -18,7 +18,7 @@ public class SettingMenu extends JMenu {
         item.addActionListener(actionListener);
         add(item);
 
-        JMenuItem item2 = new JMenuItem("Import");
+        JMenuItem item2 = new JMenuItem("Plugins");
         item2.addActionListener(actionListener);
         add(item2);
         
