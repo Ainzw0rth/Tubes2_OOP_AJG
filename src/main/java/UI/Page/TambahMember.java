@@ -20,22 +20,22 @@ public class TambahMember extends JPanel {
         initUtilitesPanel();
     }
 
-    private void initImagePanel(){
+    private void initImagePanel() {
         JPanel leftPanel = new JPanel(null);
         leftPanel.setBounds(452, 0, 767, 665);
-        
+
         ImageIcon elon = new ImageIcon(getClass().getResource("/images/tambah-member/elon.png"));
         JLabel elonImage = new JLabel(elon);
-        
+
         elonImage.setHorizontalAlignment(JLabel.LEFT);
-        elonImage.setVerticalAlignment(JLabel.BOTTOM);  
-        elonImage.setBounds(0, 0, 767, 665);    
-        
+        elonImage.setVerticalAlignment(JLabel.BOTTOM);
+        elonImage.setBounds(0, 0, 767, 665);
+
         leftPanel.add(elonImage);
         this.add(leftPanel);
     }
 
-    private void initTitlePanel(){
+    private void initTitlePanel() {
         JPanel titlePanel = new JPanel(null);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.PAGE_AXIS));
         titlePanel.setBounds(0, 0, 600, 190);
@@ -63,7 +63,6 @@ public class TambahMember extends JPanel {
         JLabel statusLabel = new JLabel("Status");
         statusLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
         statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 7, 260));
-        
 
         // dropdown
         JPanel dropdownPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -73,7 +72,7 @@ public class TambahMember extends JPanel {
         statusDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
         dropdownPanel.add(Box.createRigidArea(new Dimension(70, 0)));
         dropdownPanel.add(statusDropdown);
-        
+
         statusPanel.add(statusLabel);
         statusPanel.add(dropdownPanel);
 
@@ -85,25 +84,25 @@ public class TambahMember extends JPanel {
         JLabel nameLabel = new JLabel("Nama");
         nameLabel.setBorder(BorderFactory.createEmptyBorder(0, 38, 0, 0));
         nameLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
-        
+
         // text field
         JPanel fieldPanel = new JPanel();
         nameField.setToolTipText("Enter your name");
         nameField.setFont(new Font("Poppins", Font.PLAIN, 14));
         fieldPanel.add(nameField);
-        
+
         namePanel.add(nameLabel);
         namePanel.add(fieldPanel);
-        
+
         // *** PHONE PANEL *** /
         JPanel phonePanel = new JPanel();
         phonePanel.setLayout(new BoxLayout(phonePanel, BoxLayout.PAGE_AXIS));
-        
+
         // phone label
         JLabel phoneLabel = new JLabel("Nomor Telepon");
         phoneLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
         phoneLabel.setBorder(BorderFactory.createEmptyBorder(0, 60, 0, 0));
-        
+
         // Text Field
         JPanel phoneFieldPanel = new JPanel();
         // JTextField phoneField = new JTextField(25);
@@ -160,16 +159,16 @@ public class TambahMember extends JPanel {
 
         try {
             if (isMember) {
-                Member member = new Member(1, name, phone, true, null);
+                Member member = new Member(1, name, phone, true, 0);
                 data.addMember(member);
             } else {
-                VIP vip = new VIP(1, name, phone, true, null);
+                VIP vip = new VIP(1, name, phone, true, 0);
                 data.addMember(vip);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 
     public static void main(String[] args) {

@@ -3,6 +3,14 @@
     "id": 1,
     "name": "salomo",
     "phoneNumber": "123123",
-    "status": "Active"
+    "status": "Active",
+    "point": 0
+  },
+  {
+    "id": 1,
+    "name": "tes",
+    "phoneNumber": "321",
+    "status": "Active",
+    "point": 0
   }
 ]
