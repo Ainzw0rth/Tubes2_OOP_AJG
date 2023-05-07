@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Setter;
 
 // import DataStore.DataStore;
 import Entity.*;
@@ -18,7 +19,7 @@ public class AdapterJSON implements DataStoreAdapter {
     final String RED = "\033[0;31m";     // RED
     final String RESET = "\033[0m";  // Text Reset
 
-    private String dirPath;
+    @Setter private String dirPath;
 
     public AdapterJSON(String dirPath) {
         this.dirPath = dirPath;
@@ -40,7 +41,7 @@ public class AdapterJSON implements DataStoreAdapter {
     //     // d.setPluginPaths(this.readPluginPaths());
     // }
     
-    public void delete(String className) {
+    public void deleteOther(String className) {
         String filePath = dirPath + "/" + className;
         try {
             // Check if the file exists
@@ -65,7 +66,6 @@ public class AdapterJSON implements DataStoreAdapter {
         } 
     }
 
-
     public ArrayList<Customer> readCustomers() throws IOException{
         try {
             isValid(dirPath + "/customers.json");
@@ -86,7 +86,7 @@ public class AdapterJSON implements DataStoreAdapter {
             String json = this.gson.toJson(customers);
             writer.write(json);
             writer.close();
-            delete("customers");
+            deleteOther("customers");
         } catch (IOException e) {
             printError("Fail to write to customers.json", e);
             throw e;
@@ -112,7 +112,7 @@ public class AdapterJSON implements DataStoreAdapter {
             String json = this.gson.toJson(items);
             writer.write(json);
             writer.close();
-            delete("items");
+            deleteOther("items");
         } catch (IOException e) {
             printError("Fail to write to items.json", e);
             throw e;
@@ -138,7 +138,7 @@ public class AdapterJSON implements DataStoreAdapter {
             String json = this.gson.toJson(members);
             writer.write(json);
             writer.close();
-            delete("members");
+            deleteOther("members");
         } catch (IOException e) {
             printError("Fail to write to members.json", e);
             throw e;
@@ -164,7 +164,7 @@ public class AdapterJSON implements DataStoreAdapter {
             String json = this.gson.toJson(bills);
             writer.write(json);
             writer.close();
-            delete("bills");
+            deleteOther("bills");
         } catch (IOException e) {
             printError("Fail to write to bills.json", e);
             throw e;
@@ -190,7 +190,7 @@ public class AdapterJSON implements DataStoreAdapter {
             String json = this.gson.toJson(fixedBills);
             writer.write(json);
             writer.close();
-            delete("fixed_bills");
+            deleteOther("fixed_bills");
         } catch (IOException e) {
             printError("Fail to write to fixed_bills.json", e);
             throw e;

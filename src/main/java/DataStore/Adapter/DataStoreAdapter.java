@@ -12,7 +12,15 @@ public interface DataStoreAdapter {
     //  * @param d DataStore instance
     //  */
     // public void read(DataStore d) throws Exception;
+
+    /**
+     * delete file 
+     * @param className 
+     */
+    public void deleteOther(String className);
     
+    public void setDirPath(String dir);
+
     /**
      * Read customers data from file
      * @return ArrayList of Customer

@@ -7,12 +7,13 @@ import java.nio.file.Paths;
 // import DataStore.DataStore;
 import Entity.*;
 import java.io.*;
+import lombok.Setter;
 
 public class AdapterOBJ implements DataStoreAdapter {
 
     final String RED = "\033[0;31m";     // RED
     final String RESET = "\033[0m";  // Text Reset
-    private String dirPath;
+    @Setter private String dirPath;
     // public void read(DataStore d) throws Exception {
     //     d.setCustomers(this.readCustomers());
     //     d.setItems(this.readItems());
@@ -28,7 +29,9 @@ public class AdapterOBJ implements DataStoreAdapter {
         this.dirPath = dirPath;
     }
 
-    public void delete(String className) {
+    
+
+    public void deleteOther(String className) {
         String filePath = dirPath + "/" + className;
         try {
             // Check if the file exists
@@ -67,7 +70,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/customers.ser"));
             out.writeObject(customers);
             out.close();
-            delete("customers");
+            deleteOther("customers");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write customers to file: " + e.getMessage() + "\n");
             printError("Fail to write to customers.ser", _err);
@@ -96,7 +99,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/items.ser"));
             out.writeObject(items);
             out.close();
-            delete("items");
+            deleteOther("items");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write items to file: " + e.getMessage() + "\n");
             printError("Fail to write to items.ser", _err);
@@ -145,7 +148,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             }
 
             out.close();
-            delete("members");
+            deleteOther("members");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write members to file: " + e.getMessage() + "\n");
             printError("Fail to write to members.ser", _err);
@@ -174,7 +177,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/bills.ser"));
             out.writeObject(bills);
             out.close();
-            delete("bills");
+            deleteOther("bills");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write bills to file: " + e.getMessage() + "\n");
             printError("Fail to write to bills.ser", _err);
@@ -203,7 +206,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/fixed_bills.ser"));
             out.writeObject(fixedBills);
             out.close();
-            delete("fixed_bills");
+            deleteOther("fixed_bills");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write fixedBills to file: " + e.getMessage() + "\n");
             printError("Fail to write to fixedBills.ser", _err);
@@ -215,5 +218,14 @@ public class AdapterOBJ implements DataStoreAdapter {
         System.out.println(new StringBuilder().append(RED)
             .append(prompt).append(RESET).append(": ")
             .append(e.getMessage()).append("\n").toString());
+    }
+
+
+    public void deleteAll() {
+        deleteOther("customers");
+    //     delete("items");
+    //     delete("members");
+    //     delete("bills");
+    //     delete("fixed_bills");
     }
 }

@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Setter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -21,7 +22,7 @@ import Entity.*;
 public class AdapterXML implements DataStoreAdapter {
     
     private XStream xstream;
-    private String dirPath;
+    @Setter private String dirPath;
 
     public AdapterXML(String dirPath) {
         this.dirPath = dirPath;
@@ -49,7 +50,8 @@ public class AdapterXML implements DataStoreAdapter {
         xstream.addImplicitCollection(FixedBillList.class, "fixedBills");
     }
 
-    public void delete(String className) {
+    
+    public void deleteOther(String className) {
         String filePath = dirPath + "/" + className;
         try {
             // Check if the file exists
@@ -112,7 +114,7 @@ public class AdapterXML implements DataStoreAdapter {
             fw.write(xml);
             fw.close();
             
-            delete("customers");
+            deleteOther("customers");
             
             System.out.println("File written successfully.");
         } catch (IOException e) {
@@ -165,7 +167,7 @@ public class AdapterXML implements DataStoreAdapter {
             FileWriter fw = new FileWriter(dirPath + "/items.xml");
             fw.write(xml);
             fw.close();
-            delete("items");
+            deleteOther("items");
             System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to items.xml");
@@ -216,7 +218,7 @@ public class AdapterXML implements DataStoreAdapter {
             FileWriter fw = new FileWriter(dirPath + "/members.xml");
             fw.write(xml);
             fw.close();
-            delete("members");
+            deleteOther("members");
             System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to members.xml");
@@ -267,7 +269,7 @@ public class AdapterXML implements DataStoreAdapter {
             FileWriter fw = new FileWriter(dirPath + "/bills.xml");
             fw.write(xml);
             fw.close();
-            delete("bills");
+            deleteOther("bills");
             System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to bills.xml");
@@ -318,7 +320,7 @@ public class AdapterXML implements DataStoreAdapter {
             FileWriter fw = new FileWriter(dirPath + "/fixed_bills.xml");
             fw.write(xml);
             fw.close();
-            delete("fixed_bills");
+            deleteOther("fixed_bills");
             System.out.println(xml);
         } catch (IOException e) {
             Throwable rootCause = e.getCause();

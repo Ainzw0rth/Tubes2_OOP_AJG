@@ -155,8 +155,15 @@ public class DataStore implements DataService{
     public void changeDir(String dir) throws Exception{
         Config config = new Config();
 
+
         try {
             // change database
+            this.adapter.setDirPath(dir);
+            this.adapter.writeBills(this.bills.getElements());
+            this.adapter.writeCustomers(this.customers.getElements());
+            this.adapter.writeFixedBills(this.fixedBills.getElements());
+            this.adapter.writeItems(this.items.getElements());
+            this.adapter.writeMembers(this.members.getElements());
 
             // change directory
             config.changeConfig(dir, config.getExt());
