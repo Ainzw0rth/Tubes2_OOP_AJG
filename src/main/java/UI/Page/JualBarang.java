@@ -1,23 +1,52 @@
 package UI.Page;
 import javax.swing.*;
+import java.util.*;
 
 import DataStore.DataStore;
 import Entity.Bill;
 import Entity.Item;
+import Entity.Member;
+
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JualBarang extends JPanel {
-    public JualBarang() {
-        Bill x;
-        DataStore d;
+
+    private ArrayList<Item> listItem;
+    private ArrayList<Member> listMembers;
+
+    private Bill bill;
+    private DataStore data;
+    private Integer idCustomer;
+
+    public JualBarang(){
+        data = DataStore.getInstance();
+        listItem = data.getItems().getElements();
+        listMembers = data.getMembers().getElements();
+        this.idCustomer = 1;
+        this.bill = null;
         
         try {
-            d = DataStore.getInstance();
-            x = new Bill(-1);
-            d.startNewBill(x);
-        } catch (Exception e) {
+            this.bill = new Bill(-1);
+            ArrayList<Bill> bills = data.getBills().getElements(); 
+            System.out.println(bills.size());
+            for (int i=0; i< bills.size(); i++){
+                System.out.println(bills.get(i).getId());
+                if (idCustomer == bills.get(i).getId()){
+                    this.bill = bills.get(i);
+                    break;
+                }
+            }
 
+        } catch (Exception e) {
+            System.out.println("error: " + e.getMessage());
         }
+
+        initUI();
+    }
+
+    public void initUI() {
 
         // JPanel backgroundPanel = new JPanel();
         // backgroundPanel.setBackground(Color.black);
@@ -71,9 +100,8 @@ public class JualBarang extends JPanel {
         stockPanel.setBackground(Color.white);
         
         // nanti traverse list, terus visualize satu satu
-        int ctr = 102;
-        for (int i = 0; i < ctr; i++) {
-            ImageIcon image1 = new ImageIcon(getClass().getResource("/images/icon.jpg")); // path nanti diganti dengan image yang sesuai
+        for (int i = 0; i < listItem.size(); i++) {
+            ImageIcon image1 = new ImageIcon(listItem.get(i).getImageUrl()); // path nanti diganti dengan image yang sesuai
             Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
             image1 = new ImageIcon(scaledImage);
             JButton button1 = new JButton(image1);
@@ -82,12 +110,8 @@ public class JualBarang extends JPanel {
             button1.setBorderPainted(false);
             stockPanel.add(button1);
         }
-
-        ctr = ctr / 5;
-
         
-
-        Dimension panelSize = new Dimension(802, (ctr+1)*116);
+        Dimension panelSize = new Dimension(802, (listItem.size()+1)*116);
         stockPanel.setPreferredSize(panelSize);
         
         JScrollPane stockScrollPane = new JScrollPane(stockPanel);
@@ -103,7 +127,12 @@ public class JualBarang extends JPanel {
 
         // daftar belanjaan
         // Item[] itemList = {new Item("Ayam", 12000, "../../../resources/images/icon.jpg", 5), new Item("Bebek", 15000, "../../../resources/images/icon.jpg", 7)};
-        Item[] itemList = {};
+        Item[] itemList ={};
+        if (this.bill != null){
+
+            itemList = bill.getItems().toArray(new Item[0]);
+        }
+
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
         itemPanel.setBackground(Color.white);
@@ -154,9 +183,30 @@ public class JualBarang extends JPanel {
         checkoutButton.setBackground(new Color(0x36459A));
 
         // member dropdown
-        String[] items = {"Pilih nama member"};
-        JComboBox<String> dropdown = new JComboBox<>(items);
-        dropdown.setBounds(15, 420, 150, 30);
+        String[] members = new String[this.listMembers.size()+1];
+        members[0] = "Pilih nama member";
+
+        for (int i = 0; i < this.listMembers.size(); i++) {
+            members[i + 1] = listMembers.get(i).getName();
+        }
+
+        JComboBox<String> memberDropdown = new JComboBox<>(members);
+        memberDropdown.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedName = (String) memberDropdown.getSelectedItem();
+                if (!selectedName.equals("Pilih nama member")) {
+                    
+                    for (Member member : listMembers) {
+                        if (member.getName().equals(selectedName)) {
+                            idCustomer = member.getId();
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        memberDropdown.setBounds(15, 420, 150, 30);
 
         // subtotal label
         JLabel subtotalLabel = new JLabel("Subtotal");
@@ -164,7 +214,7 @@ public class JualBarang extends JPanel {
         subtotalLabel.setBounds(15, 340, 100, 40);
         
         // subtotal nominal
-        JLabel subtotalLabelNumber = new JLabel("RP 27.000");
+        JLabel subtotalLabelNumber = new JLabel(bill.getTotalPrice().toString());
         subtotalLabelNumber.setFont(new Font("Poppins", Font.PLAIN, 16));
         subtotalLabelNumber.setBounds(230, 340, 100, 40);
 
@@ -184,7 +234,7 @@ public class JualBarang extends JPanel {
         totalLabel.setBounds(230, 400, 70, 40);
 
         // nominal total price
-        JLabel totalLabelNumbers = new JLabel("Rp 25.000");
+        JLabel totalLabelNumbers = new JLabel(bill.getTotalPrice().toString());
         totalLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
         totalLabelNumbers.setBounds(230, 420, 100, 40);
 
@@ -220,7 +270,7 @@ public class JualBarang extends JPanel {
         panel.add(saveBillButton);
         panel.add(printBillButton);
         panel.add(billLabel);
-        panel.add(dropdown);
+        panel.add(memberDropdown);
 
         // frame pagenya
         // JFrame frame = new JFrame();

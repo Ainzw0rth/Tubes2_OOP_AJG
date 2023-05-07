@@ -10,17 +10,17 @@ public class HistoriTransaksi extends JPanel {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(null);
         // titlePanel.setBackground(Color.white);
-        titlePanel.setBounds(80, 80, 510, 50);
+        titlePanel.setBounds(80, 20, 510, 50);
 
         // TITLE LABEL
-        JLabel titleLabel = new JLabel("Riwayat Transaksi");
+        JLabel titleLabel = new JLabel("Riwayat Transaksi Member");
         titleLabel.setFont(new Font("Poppins", Font.BOLD, 24));
         titleLabel.setBounds(0, 6, 600, 30);
 
         // MEMBER PANEL
         JPanel memberPanel = new JPanel();
         memberPanel.setLayout(null);
-        memberPanel.setBounds(80,120,510,30);
+        memberPanel.setBounds(80,60,510,30);
 
         // MEMBER LABEL
         JLabel memberLabel = new JLabel("Member");
@@ -30,7 +30,7 @@ public class HistoriTransaksi extends JPanel {
         // MEMBER TEXT PANEL
         JPanel memberTextPanel = new JPanel();
         memberTextPanel.setLayout(null);
-        memberTextPanel.setBounds(80,170,510,30);
+        memberTextPanel.setBounds(80,90,510,30);
 
         // MEMBER TEXT FIELD
         JTextField memberTextArea = new JTextField();
@@ -38,8 +38,8 @@ public class HistoriTransaksi extends JPanel {
 
         // BUTTON PANEL
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBounds(-132,220,600,80);
-
+        buttonPanel.setBounds(-132,140,600,80);
+        
         // BUTTON SUBMIT
         JButton buttonSubmit = new JButton("Tampilkan Riwayat");
         buttonSubmit.setFocusPainted(false);
@@ -47,12 +47,22 @@ public class HistoriTransaksi extends JPanel {
         buttonSubmit.setForeground(Color.white);
         buttonSubmit.setBounds(80, 6,201, 60);
         buttonSubmit.setBackground(new Color(0x36459A));
+        
+        JPanel imagePanel = new JPanel();
+        imagePanel.setBounds(0,220,600,396);
+        
+        ImageIcon mrbeast = new ImageIcon(getClass().getResource("/images/riwayat/mrBeast.png"));
+        JLabel mrbeastImage = new JLabel(mrbeast);
+        mrbeastImage.setHorizontalAlignment(JLabel.LEFT);
+        mrbeastImage.setVerticalAlignment(JLabel.BOTTOM);  
+        mrbeastImage.setBounds(0, 0, 511, 396);  
 
         // ADDING TO ITS PANEL
         titlePanel.add(titleLabel);
         memberPanel.add(memberLabel);
         memberTextPanel.add(memberTextArea);
         buttonPanel.add(buttonSubmit);
+        imagePanel.add(mrbeastImage);
 
         // HISTORY PANEL
         JPanel panel = new JPanel();
@@ -126,6 +136,7 @@ public class HistoriTransaksi extends JPanel {
         this.add(memberPanel);
         this.add(memberTextPanel);
         this.add(buttonPanel);
+        this.add(imagePanel);
         this.add(historyScrollPane);
     }
 

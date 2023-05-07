@@ -1,8 +1,15 @@
 [
   {
-    "id": 2,
-    "totalPrice": 0,
-    "items": [],
+    "id": 1,
+    "totalPrice": 18900,
+    "items": [
+      {
+        "id": 1,
+        "name": "laptop gaming",
+        "price": 10000000,
+        "quantity": 1
+      }
+    ],
     "idCustomer": 1
   }
 ]
