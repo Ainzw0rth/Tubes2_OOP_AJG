@@ -109,84 +109,67 @@ public class HistoriTransaksi extends JPanel {
         panel.setBounds(600, 0, 600, 720);
         panel.setLayout(null);
 
-        buttonSubmit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        Item barang1 = new Item(1, "lala", "kskakaks", 10000, "asjjsadjajd", 10);
+        Item barang2 = new Item(1, "lala", "kskakaks", 10000, "asjjsadjajd", 10);
+        LinkedList<Item> listBar = new LinkedList<Item>();
+        listBar.add(barang1);
+        listBar.add(barang2);
+        FixedBill fix1 = new FixedBill(1, 40000, listBar, 1, "10 April 2023");
+        FixedBill fix2 = new FixedBill(1, 40000, listBar, 1, "11 April 2025");
+        ArrayList<FixedBill> bills = new ArrayList<>();
+        bills.add(fix1);
+        bills.add(fix2);
 
-                Integer custId = 0;
+        for (int i = 0; i < bills.size(); i++) {
 
-                String selectedName = (String) memberDropdown.getSelectedItem();
-                if (!selectedName.equals("Pilih nama member")) {
-                    Member selectedMember = null;
-                    for (Member member : members) {
-                        if (member.getName().equals(selectedName)) {
-                            selectedMember = member;
-                            custId = selectedMember.getId();
-                            break;
-                        }
-                    }
-                }
+            // DATE PANEL
+            JPanel datePanel = new JPanel();
+            datePanel.setBounds(20, i*50, 400, 100);
 
-                DataStore data = DataStore.getInstance();
+            // DATE LABEL
+            JLabel dateLabel = new JLabel(bills.get(i).getDate());
+            dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+            datePanel.add(dateLabel);
 
-                try {
-                    ArrayList<FixedBill> fixedBills = data.getFixedBillsByCustId(custId);
-                    JPanel fixedBillPanel = new JPanel();
-                    fixedBillPanel.setBackground(Color.white);
+            System.out.println("a");
 
-                    for (int i = 0; i < fixedBills.size(); i++) {
+            // ITEM PANEL
+            JPanel itemPanel = new JPanel();
+            itemPanel.setLayout(new GridBagLayout());
 
-                        // DATE PANEL
-                        JPanel datePanel = new JPanel();
-                        datePanel.setBounds(20, i*50, 400, 100);
+            // LOOP ALL ITEM
+            for (int j = 0; j < bills.get(i).getItems().size(); j++) {
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = j;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.weightx = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
 
-                        // DATE LABEL
-                        JLabel dateLabel = new JLabel(fixedBills.get(i).getDate());
-                        dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
-                        datePanel.add(dateLabel);
+                // ITEM NAME LABEL
+                JLabel nameLabel = new JLabel(bills.get(i).getItems().get(j).getName());
+                nameLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                itemPanel.add(nameLabel, gbc);
 
-                        // ITEM PANEL
-                        JPanel itemPanel = new JPanel();
-                        itemPanel.setLayout(new GridBagLayout());
+                System.out.println(bills.get(i).getItems().get(j).getName());
 
-                        // LOOP ALL ITEM
-                        for (int j = 0; j < fixedBills.get(i).getItems().size(); j++) {
-                            GridBagConstraints gbc = new GridBagConstraints();
-                            gbc.gridx = 0;
-                            gbc.gridy = j;
-                            gbc.anchor = GridBagConstraints.WEST;
-                            gbc.weightx = 1;
-                            gbc.insets = new Insets(5, 5, 5, 5);
+                gbc.gridx = 1;
 
-                            // ITEM NAME LABEL
-                            JLabel nameLabel = new JLabel(fixedBills.get(i).getItems().get(j).getName());
-                            nameLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
-                            itemPanel.add(nameLabel, gbc);
+                // ITEM QTY LABEL
+                JLabel qtyLabel = new JLabel(bills.get(i).getItems().get(j).getStock() + "x");
+                qtyLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                itemPanel.add(qtyLabel, gbc);
 
-                            System.out.println(fixedBills.get(i).getItems().get(j).getName());
+                gbc.gridx = 2;
 
-                            gbc.gridx = 1;
-
-                            // ITEM QTY LABEL
-                            JLabel qtyLabel = new JLabel(fixedBills.get(i).getItems().get(j).getStock() + "x");
-                            qtyLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
-                            itemPanel.add(qtyLabel, gbc);
-
-                            gbc.gridx = 2;
-
-                            // ITEM PRICE LABEL
-                            JLabel priceLabel = new JLabel(fixedBills.get(i).getItems().get(j).getPrice() + "");
-                            priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
-                            itemPanel.add(priceLabel, gbc);
-                        }
-
-                        panel.add(datePanel);
-                        panel.add(itemPanel);
-                    }
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                // ITEM PRICE LABEL
+                JLabel priceLabel = new JLabel(bills.get(i).getItems().get(j).getPrice() + "");
+                priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                itemPanel.add(priceLabel, gbc);
             }
-        });
+            panel.add(datePanel);
+            panel.add(itemPanel);
+        }
 
         JPanel imagePanel = new JPanel();
         imagePanel.setBounds(0, 220, 600, 396);
@@ -204,14 +187,15 @@ public class HistoriTransaksi extends JPanel {
         buttonPanel.add(buttonSubmit);
         imagePanel.add(mrbeastImage);
 
+
         // HISTORY SCROLL
         JScrollPane historyScrollPane = new JScrollPane(panel);
-        // historyScrollPane.setBackground(Color.white);
+        historyScrollPane.setBackground(Color.white);
         historyScrollPane.setLayout(null);
         historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         historyScrollPane.setBounds(600, 0, 600, 720);
         historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
-        historyScrollPane.add(panel);
+        // historyScrollPane.add(panel);
 
         // FRAME
         this.setLayout(null);
@@ -222,6 +206,7 @@ public class HistoriTransaksi extends JPanel {
         this.add(memberTextPanel);
         this.add(buttonPanel);
         this.add(imagePanel);
+        this.add(panel);
         this.add(historyScrollPane);
     }
 
