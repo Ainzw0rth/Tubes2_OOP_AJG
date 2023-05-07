@@ -214,6 +214,36 @@ public class AdapterOBJ implements DataStoreAdapter {
         }
     }
 
+    public ArrayList<String> readPluginPaths() throws Exception {
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/plugins.ser"));
+            
+            @SuppressWarnings("unchecked")
+            ArrayList<String> pluginPaths = (ArrayList<String>) in.readObject();
+            
+            in.close();
+            return pluginPaths;
+        } catch (Exception e) {
+            Exception _err = new Exception("Cannot read pluginPaths from file: " + e.getMessage() + "\n");
+            printError("Fail to read from pluginPaths.ser", _err);
+            throw _err;
+        }
+    }
+
+
+    public void writePluginPaths(ArrayList<String> pluginPaths) throws Exception {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/plugins.ser"));
+            out.writeObject(pluginPaths);
+            out.close();
+            deleteOther("plugins");
+        } catch (Exception e) {
+            Exception _err = new Exception("Cannot write pluginPaths to file: " + e.getMessage() + "\n");
+            printError("Fail to write to pluginPaths.ser", _err);
+            throw _err;
+        }
+    }
+
     private void printError(String prompt, Exception e) {
         System.out.println(new StringBuilder().append(RED)
             .append(prompt).append(RESET).append(": ")

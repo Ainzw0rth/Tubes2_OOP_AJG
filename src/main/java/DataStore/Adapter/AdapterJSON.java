@@ -197,6 +197,33 @@ public class AdapterJSON implements DataStoreAdapter {
         }
     }
 
+    public ArrayList<String> readPluginPaths() throws IOException {
+        try {
+            isValid(dirPath + "/plugins.json");
+            FileReader reader = new FileReader(dirPath + "/plugins.json");
+            ArrayList<String> pluginPaths = this.gson.fromJson(reader, new TypeToken<ArrayList<String>>(){}.getType());
+            reader.close();
+            return pluginPaths == null ? new ArrayList<String>() : pluginPaths;
+        } catch (IOException e) {
+            printError("Fail to read from plugins.json", e);
+            return new ArrayList<String>();
+        }
+    }
+
+    public void writePluginPaths(ArrayList<String> pluginPaths)  throws IOException {
+        try {
+            FileWriter writer = new FileWriter(dirPath + "/plugins.json");
+            String json = this.gson.toJson(pluginPaths);
+            writer.write(json);
+            writer.close();
+            deleteOther("plugins");
+        } catch (IOException e) {
+            printError("Fail to write to plugins.json", e);
+            throw e;
+        }
+    } 
+
+
     private void printError(String prompt, Exception e) {
         System.out.println(new StringBuilder().append(RED)
             .append(prompt).append(RESET).append(": ")
