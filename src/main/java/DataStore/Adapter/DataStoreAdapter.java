@@ -82,6 +82,18 @@ public interface DataStoreAdapter {
      */
     public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws Exception;
 
+        /**
+     * Read fixed bills data from file
+     * @return ArrayList of PluginPaths
+     */
+    public ArrayList<String> readPluginPaths() throws Exception;
+
+    /**
+     * Write fixed bills data to file
+     * @param pluginPaths ArrayList of FixedBill
+     */
+    public void writePluginPaths(ArrayList<String> pluginPaths) throws Exception;
+
     // @WaitForImplement
     /**
      * Write Base Plugin path to file

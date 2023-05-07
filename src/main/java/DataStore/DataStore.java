@@ -19,6 +19,7 @@ public class DataStore implements DataService{
     @Getter private ObservableCollection<Member> members;
     @Getter private ObservableCollection<Bill> bills;
     @Getter private ObservableCollection<FixedBill> fixedBills;
+    @Getter private ArrayList<String> pluginPaths;
     @Getter @Setter private String dirPath;
     @Getter @Setter private FileStoreExt ext;
     // @WaitForImplement
@@ -62,6 +63,7 @@ public class DataStore implements DataService{
             this.members = new ObservableCollection<Member>(this.adapter.readMembers());
             this.bills = new ObservableCollection<Bill>(this.adapter.readBills());
             this.fixedBills = new ObservableCollection<FixedBill>(this.adapter.readFixedBills());
+            this.pluginPaths = new ArrayList<String>(this.adapter.readPluginPaths());
         } catch (Exception e) {
             printError("Fail to load data", e);
         }
@@ -604,6 +606,32 @@ public class DataStore implements DataService{
 
         return this.fixedBills.get(this.fixedBills.size() - 1).getId() + activeBillsLen + 1;
     }
+
+    public void addPluginPath(String pluginPath) throws Exception {
+        try {
+            this.pluginPaths.add(pluginPath);
+            this.adapter.writePluginPaths(pluginPaths);
+        } catch (Exception e) {
+            printError("Fail to add plugin paths", e);
+            throw e;
+        }
+    }
+
+    public void removePluginPath(String pluginPath) throws Exception {
+        try {
+            for (String item : this.pluginPaths) {
+                if (item == pluginPath) {
+                    this.pluginPaths.remove(item);
+                    break;
+                }
+            }
+            this.adapter.writePluginPaths(this.pluginPaths);
+        } catch (Exception e) {
+            printError("Fail to remove item", e);
+            throw e;
+        }
+    }
+    
 
     /**
      * Print error with format

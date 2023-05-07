@@ -16,7 +16,6 @@ import com.thoughtworks.xstream.security.*;
 import org.xml.sax.SAXParseException;
 
 import DataStore.Adapter.TypeAdapter.XmlList.*;
-import DataStore.DataStore;
 import Entity.*;
 
 public class AdapterXML implements DataStoreAdapter {
@@ -39,6 +38,7 @@ public class AdapterXML implements DataStoreAdapter {
         
         xstream.alias("members", MemberList.class);
         xstream.alias("member", Member.class);
+        xstream.alias("vip", VIP.class);
         xstream.addImplicitCollection(MemberList.class, "members");
         
         xstream.alias("bills", BillList.class);
@@ -48,6 +48,10 @@ public class AdapterXML implements DataStoreAdapter {
         xstream.alias("fixedBills", FixedBillList.class);
         xstream.alias("fixedBill", FixedBill.class);
         xstream.addImplicitCollection(FixedBillList.class, "fixedBills");
+
+        xstream.alias("plugIns", PluginList.class);
+        xstream.alias("plugIn", String.class);
+        // xstream.addImplicitCollection(PluginList.class, "plugIns");
     }
 
     
@@ -189,6 +193,16 @@ public class AdapterXML implements DataStoreAdapter {
 
             // deserialize XML data into array of Customer objects
             MemberList mem = (MemberList) xstream.fromXML(xml);
+            // ArrayList<Member> listMember = new ArrayList<Member>();
+            // while (true) {
+            //     String className = (String) mem.members;
+            //     if (className == null) break;
+            //     if (className.equals(Member.class.getName())) {
+            //         members.add((Member) in.readObject());
+            //     } else if (className.equals(VIP.class.getName())) {
+            //         members.add((VIP) in.readObject());
+            //     }
+            // }
 
             // ArrayList<Customer> temp = new ArrayList<>();
             return mem.members; 
@@ -212,7 +226,7 @@ public class AdapterXML implements DataStoreAdapter {
 
     public void writeMembers(ArrayList<Member> members) throws IOException {
         // TODO: implement
-        try {
+        try {        
             MemberList listMember = new MemberList(members);
             String xml = xstream.toXML(listMember);
             FileWriter fw = new FileWriter(dirPath + "/members.xml");
@@ -290,10 +304,10 @@ public class AdapterXML implements DataStoreAdapter {
             xml = new String(data);
 
             // deserialize XML data into array of Customer objects
-            FixedBillList fixedBilll = (FixedBillList) xstream.fromXML(xml);
+            FixedBillList listFixedBill = (FixedBillList) xstream.fromXML(xml);
 
             // ArrayList<Customer> temp = new ArrayList<>();
-            return fixedBilll.fixedBills; 
+            return listFixedBill.fixedBills; 
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
@@ -331,6 +345,57 @@ public class AdapterXML implements DataStoreAdapter {
                 // Handle other XStream exceptions
                 System.out.println("Error reading file: " + e.getMessage());
             }
+            throw e;
+        }
+    }
+
+    public ArrayList<String> readPluginPaths() throws IOException {
+        // TODO: implement
+        // please implement according to read customers
+        String filename = dirPath + "/plugins.xml";
+        String xml = "";
+        try {
+            FileInputStream file = new FileInputStream(filename);
+            byte[] data = new byte[file.available()];
+            file.read(data);
+            file.close();
+            xml = new String(data);
+
+            // deserialize XML data into array of Customer objects
+            PluginList listPluginPath = (PluginList) xstream.fromXML(xml);
+
+            // ArrayList<Customer> temp = new ArrayList<>();
+            return listPluginPath.pluginPaths; 
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+            return new ArrayList<String>();
+            
+        } catch (Exception e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
+                // Handle the premature end of file error
+                System.out.println("File is empty");
+            } else {
+                // Handle other XStream exceptions
+                System.out.println("Error reading file: " + e.getMessage());
+            }
+            return new ArrayList<String>();
+        }
+    }
+
+    public void writePluginPaths (ArrayList<String> pluginPaths) throws IOException {
+        // TODO: implement
+        try {
+            PluginList plugins = new PluginList(pluginPaths);
+            String xml = xstream.toXML(plugins);
+            FileWriter fw = new FileWriter(dirPath + "/plugins.xml");
+            fw.write(xml);
+            fw.close();
+            deleteOther("plugins");
+            System.out.println(xml);
+        } catch (IOException e) {
+            System.out.println("Fail to write to plugins.xml");
             throw e;
         }
     }

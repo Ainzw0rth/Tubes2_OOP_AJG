@@ -17,7 +17,7 @@ import javax.swing.*;
 import UI.Page.*;
 
 public class App extends JFrame implements IApp {
-    
+
     /* Constants */
     private final int WIDTH = 1200;
     private final int HEIGHT = 720;
@@ -37,14 +37,14 @@ public class App extends JFrame implements IApp {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+
         /* Set icon */
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/icon.jpg"));
         setIconImage(icon.getImage());
 
         /* Set action listener */
         this.actionListener = new AppActionListener(this);
-        
+
         /* Initialize window with its components */
         init();
     }
@@ -60,7 +60,7 @@ public class App extends JFrame implements IApp {
     private void init() {
     /* Initialize window with its components */
         System.out.println("Initializing window...");
-    
+
         /* Menubar */
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -103,8 +103,8 @@ public class App extends JFrame implements IApp {
         /* Open a new tab */
         this.tabbedPane.addTab(title, component);
         int index = this.tabbedPane.indexOfComponent(component);
-        
-        /* Customize panel for tab bar, 
+
+        /* Customize panel for tab bar,
          * Swing default tab bar doesn't provide close button
         */
         JPanel pnlTab = new JPanel();
@@ -167,5 +167,23 @@ public class App extends JFrame implements IApp {
     @Override
     public void addMenuItem(int index, JMenuItem item) {
         getJMenuBar().getMenu(index).add(item);
+    }
+
+    public void setPanel(String panelName, Component component) {
+        int index = this.tabbedPane.indexOfTab(panelName);
+        if (index >= 0) {
+            this.tabbedPane.setComponentAt(index, component);
+        }
+    }
+
+    public JPanel getPanel(String panelName) {
+        int index = this.tabbedPane.indexOfTab(panelName);
+        if (index != -1) {
+            Component component = this.tabbedPane.getComponentAt(index);
+            if (component instanceof JPanel) {
+                return (JPanel) component;
+            }
+        }
+        return null;
     }
 }

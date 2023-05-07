@@ -2,7 +2,10 @@ package UI.Page;
 
 import javax.swing.*;
 
+import com.itextpdf.text.DocumentException;
+
 import DataStore.DataStore;
+import Utils.Printer;
 import Utils.Collections.Observer;
 import Entity.*;
 
@@ -11,32 +14,44 @@ import java.awt.event.*;
 import java.util.*;
 
 public class HistoriTransaksi extends JPanel {
+
+    private String printableString = "";
+    private String tab = "    ";
+    private Printer printer = new Printer();
+
     public HistoriTransaksi() {
+        setLayout(new BorderLayout()); // set the layout of the main panel to BorderLayout
+
+        // create a panel to hold the left-side components
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setPreferredSize(new Dimension(500, 720));
+        leftPanel.setBackground(Color.white);
+
         // TITLE PANEL
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(null);
-        // titlePanel.setBackground(Color.white);
-        titlePanel.setBounds(80, 20, 510, 50);
+        titlePanel.setPreferredSize(new Dimension(510, 50));
 
         // TITLE LABEL
         JLabel titleLabel = new JLabel("Riwayat Transaksi Member");
         titleLabel.setFont(new Font("Poppins", Font.BOLD, 24));
-        titleLabel.setBounds(0, 6, 600, 30);
+        titleLabel.setBounds(0, 6, 510, 30);
 
         // MEMBER PANEL
         JPanel memberPanel = new JPanel();
         memberPanel.setLayout(null);
-        memberPanel.setBounds(80, 60, 510, 30);
+        memberPanel.setPreferredSize(new Dimension(510, 30));
 
         // MEMBER LABEL
         JLabel memberLabel = new JLabel("Member");
         memberLabel.setFont(new Font("Poppins", Font.BOLD, 14));
-        memberLabel.setBounds(0, 6, 600, 30);
+        memberLabel.setBounds(0, 6, 510, 30);
 
         // MEMBER TEXT PANEL
         JPanel memberTextPanel = new JPanel();
         memberTextPanel.setLayout(null);
-        memberTextPanel.setBounds(80, 90, 510, 30);
+        memberTextPanel.setPreferredSize(new Dimension(510, 30));
 
         JPanel memberDropdownPanel = new JPanel();
 
@@ -70,29 +85,18 @@ public class HistoriTransaksi extends JPanel {
 
         JComboBox<String> memberDropdown = new JComboBox<>(memberList);
 
-        memberDropdown.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-                    boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (index == 0) {
-                    setEnabled(false);
-                    setFont(getFont().deriveFont(Font.ITALIC));
-                } else {
-                    setEnabled(true);
-                    setFont(getFont().deriveFont(Font.PLAIN));
-                }
-                return this;
-            }
-        });
-
         // MEMBER TEXT FIELD
-        // JTextField memberTextArea = new JTextField();
         memberDropdown.setBounds(0, 6, 300, 30);
+
+        // create the history panel
+        JPanel historyPanel = new JPanel();
+        historyPanel.setLayout(new BoxLayout(historyPanel, BoxLayout.Y_AXIS)); // use a vertical box layout
+        historyPanel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+        historyPanel.setBackground(Color.white);
 
         // BUTTON PANEL
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBounds(-132, 140, 600, 80);
+        buttonPanel.setPreferredSize(new Dimension(600, 80));
 
         // BUTTON SUBMIT
         JButton buttonSubmit = new JButton("Tampilkan Riwayat");
@@ -102,112 +106,154 @@ public class HistoriTransaksi extends JPanel {
         buttonSubmit.setBounds(80, 6, 201, 60);
         buttonSubmit.setBackground(new Color(0x36459A));
 
-        // HISTORY PANEL
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
-        panel.setBackground(Color.white);
-        panel.setBounds(600, 0, 600, 720);
-        panel.setLayout(null);
+        buttonSubmit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
-        Item barang1 = new Item(1, "lala", "kskakaks", 10000, "asjjsadjajd", 10);
-        Item barang2 = new Item(1, "lala", "kskakaks", 10000, "asjjsadjajd", 10);
-        LinkedList<Item> listBar = new LinkedList<Item>();
-        listBar.add(barang1);
-        listBar.add(barang2);
-        FixedBill fix1 = new FixedBill(1, 40000, listBar, 1, "10 April 2023");
-        FixedBill fix2 = new FixedBill(1, 40000, listBar, 1, "11 April 2025");
-        ArrayList<FixedBill> bills = new ArrayList<>();
-        bills.add(fix1);
-        bills.add(fix2);
+                printableString = "HISTORI TRANSAKSI\n\n";
 
-        for (int i = 0; i < bills.size(); i++) {
+                historyPanel.removeAll();
+                Integer custId = 0;
+                String selectedName = (String) memberDropdown.getSelectedItem();
+                if (!selectedName.equals("Pilih nama member")) {
+                    Member selectedMember = null;
+                    for (Member member : members) {
+                        if (member.getName().equals(selectedName)) {
+                            selectedMember = member;
+                            custId = selectedMember.getId();
+                            printableString += "Nama        : " + member.getName();
+                            printableString += "\nCustomer ID : " + custId + "\n\n";
+                            break;
+                        }
+                    }
+                }
 
-            // DATE PANEL
-            JPanel datePanel = new JPanel();
-            datePanel.setBounds(20, i*50, 400, 100);
+                DataStore data = DataStore.getInstance();
 
-            // DATE LABEL
-            JLabel dateLabel = new JLabel(bills.get(i).getDate());
-            dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
-            datePanel.add(dateLabel);
+                try {
+                    ArrayList<FixedBill> fixedBills = data.getFixedBillsByCustId(custId);
 
-            System.out.println("a");
+                    for (FixedBill bill : fixedBills) {
 
-            // ITEM PANEL
-            JPanel itemPanel = new JPanel();
-            itemPanel.setLayout(new GridBagLayout());
+                        // create the date panel
+                        JPanel datePanel = new JPanel();
+                        datePanel.setPreferredSize(new Dimension(400, 30));
+                        datePanel.setBackground(Color.lightGray);
 
-            // LOOP ALL ITEM
-            for (int j = 0; j < bills.get(i).getItems().size(); j++) {
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = j;
-                gbc.anchor = GridBagConstraints.WEST;
-                gbc.weightx = 1;
-                gbc.insets = new Insets(5, 5, 5, 5);
+                        // add the date label to the date panel
+                        JLabel dateLabel = new JLabel(bill.getDate());
+                        dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+                        datePanel.add(dateLabel);
 
-                // ITEM NAME LABEL
-                JLabel nameLabel = new JLabel(bills.get(i).getItems().get(j).getName());
-                nameLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
-                itemPanel.add(nameLabel, gbc);
+                        printableString += "Tanggal : " + bill.getDate();
+                        printableString += "\nBarang  :\n";
 
-                System.out.println(bills.get(i).getItems().get(j).getName());
+                        // create the item panel
+                        JPanel itemPanel = new JPanel(new GridBagLayout());
+                        itemPanel.setBackground(Color.white);
 
-                gbc.gridx = 1;
+                        // add the item name, quantity and price labels to the item panel
+                        for (Item item : bill.getItems()) {
+                            GridBagConstraints gbc = new GridBagConstraints();
+                            gbc.gridx = 0;
+                            gbc.gridy = GridBagConstraints.RELATIVE;
+                            gbc.anchor = GridBagConstraints.WEST;
+                            gbc.weightx = 1;
+                            gbc.insets = new Insets(5, 5, 5, 5);
 
-                // ITEM QTY LABEL
-                JLabel qtyLabel = new JLabel(bills.get(i).getItems().get(j).getStock() + "x");
-                qtyLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
-                itemPanel.add(qtyLabel, gbc);
+                            JLabel nameLabel = new JLabel(item.getName());
+                            nameLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                            itemPanel.add(nameLabel, gbc);
 
-                gbc.gridx = 2;
+                            JLabel qtyLabel = new JLabel(item.getStock() + "x");
+                            qtyLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                            gbc.gridx = 1;
+                            itemPanel.add(qtyLabel, gbc);
 
-                // ITEM PRICE LABEL
-                JLabel priceLabel = new JLabel(bills.get(i).getItems().get(j).getPrice() + "");
-                priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
-                itemPanel.add(priceLabel, gbc);
+                            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
+                            priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                            gbc.gridx = 2;
+                            itemPanel.add(priceLabel, gbc);
+
+                            printableString += tab + "- " + item.getName() + " x" + item.getStock() + " (Rp "
+                                    + item.getPrice() + ")\n";
+                        }
+                        printableString += "Total   : Rp " + bill.getTotalPrice() + "\n\n";
+
+                        // create a panel to hold the date panel and item panel
+                        JPanel billPanel = new JPanel();
+                        billPanel.setLayout(new BoxLayout(billPanel, BoxLayout.Y_AXIS));
+                        billPanel.add(datePanel);
+                        billPanel.add(itemPanel);
+
+                        // calculate the total price of the bill
+                        double total = bill.getItems().stream().mapToDouble(Item::getPrice).sum();
+                        JLabel totalLabel = new JLabel("Total: Rp" + total);
+                        totalLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+                        billPanel.add(totalLabel);
+
+                        // billPanel.setPreferredSize(new Dimension(400, 50));
+
+                        // add the bill panel to the history panel
+                        historyPanel.add(billPanel);
+
+                        // add some spacing between the bills
+                        historyPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    }
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
-            panel.add(datePanel);
-            panel.add(itemPanel);
-        }
+        });
+
+        // BUTTON PRINT
+        JButton buttonPrint = new JButton("Print PDF");
+        buttonPrint.setFocusPainted(false);
+        buttonPrint.setFont(new Font("Poppins", Font.BOLD, 16));
+        buttonPrint.setForeground(Color.white);
+        buttonPrint.setBackground(new Color(0x36459A));
+
+        buttonPrint.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    printer.printComponentToPdf(printableString);
+                } catch (DocumentException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        // add the components to the left-side panel
+        titlePanel.add(titleLabel);
+        memberPanel.add(memberLabel);
+        memberTextPanel.add(memberDropdown);
+        buttonPanel.add(buttonSubmit);
+        buttonPanel.add(buttonPrint);
+        leftPanel.add(titlePanel);
+        leftPanel.add(memberPanel);
+        leftPanel.add(memberTextPanel);
+        leftPanel.add(buttonPanel);
 
         JPanel imagePanel = new JPanel();
-        imagePanel.setBounds(0, 220, 600, 396);
+        imagePanel.setPreferredSize(new Dimension(600, 396));
 
         ImageIcon mrbeast = new ImageIcon(getClass().getResource("/images/riwayat/mrBeast.png"));
         JLabel mrbeastImage = new JLabel(mrbeast);
         mrbeastImage.setHorizontalAlignment(JLabel.LEFT);
         mrbeastImage.setVerticalAlignment(JLabel.BOTTOM);
-        mrbeastImage.setBounds(0, 0, 511, 396);
-
-        // ADDING TO ITS PANEL
-        titlePanel.add(titleLabel);
-        memberPanel.add(memberLabel);
-        memberTextPanel.add(memberDropdown);
-        buttonPanel.add(buttonSubmit);
+        mrbeastImage.setPreferredSize(new Dimension(511, 396));
         imagePanel.add(mrbeastImage);
+        leftPanel.add(imagePanel);
 
+        // create a scroll pane for the history panel
+        JScrollPane scrollPane = new JScrollPane(historyPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        // HISTORY SCROLL
-        JScrollPane historyScrollPane = new JScrollPane(panel);
-        historyScrollPane.setBackground(Color.white);
-        historyScrollPane.setLayout(null);
-        historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        historyScrollPane.setBounds(600, 0, 600, 720);
-        historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
-        // historyScrollPane.add(panel);
+        // set the preferred size of the scroll pane
+        scrollPane.setPreferredSize(new Dimension(600, 600));
 
-        // FRAME
-        this.setLayout(null);
-        this.setVisible(true);
-        this.setSize(1200, 720);
-        this.add(titlePanel);
-        this.add(memberPanel);
-        this.add(memberTextPanel);
-        this.add(buttonPanel);
-        this.add(imagePanel);
-        this.add(panel);
-        this.add(historyScrollPane);
+        add(leftPanel, BorderLayout.WEST);
+        add(scrollPane, BorderLayout.EAST);
     }
 
     public static void main(String[] args) {

@@ -5,7 +5,7 @@ import DataStore.DataStore;
 import Entity.*;
 
 public class BillWorker implements Runnable{
-    final static int BILL_AUTOSAVE_TIME = 30; // in seconds
+    final static int BILL_AUTOSAVE_TIME = 5; // in seconds
     private ArrayList<Bill> billRefs;
     private DataStore dataStoreRef;
     
