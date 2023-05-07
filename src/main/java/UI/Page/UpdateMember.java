@@ -27,7 +27,7 @@ public class UpdateMember extends JPanel {
         statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.PAGE_AXIS));
 
         // status label
-        JLabel statusLabel = new JLabel("Status");
+        JLabel statusLabel = new JLabel("Membership");
         statusLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
 
         // dropdown
@@ -40,6 +40,25 @@ public class UpdateMember extends JPanel {
 
         statusPanel.add(statusLabel);
         statusPanel.add(dropdownPanel);
+
+        // ACTIVITY PANEL
+        JPanel activityPanel = new JPanel();
+        activityPanel.setLayout(new BoxLayout(activityPanel, BoxLayout.PAGE_AXIS));
+
+        // activity label
+        JLabel activityLabel = new JLabel("Status");
+        activityLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
+
+        // dropdown
+        JPanel activityDropdownPanel = new JPanel();
+        String[] activityList = { "Active", "Inactive" };
+        JComboBox<String> activityDropdown = new JComboBox<>(activityList);
+        activityDropdown.setPreferredSize(new Dimension(300, 20));
+        activityDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
+        activityDropdownPanel.add(activityDropdown);
+
+        activityPanel.add(activityLabel);
+        activityPanel.add(activityDropdownPanel);
 
         // MEMBER PANEL
         JPanel memberPanel = new JPanel();
@@ -99,6 +118,11 @@ public class UpdateMember extends JPanel {
                     } else {
                         statusDropdown.setSelectedItem("Member (Reguler)");
                     }
+                    if (selectedMember.getIsActive()) {
+                        activityDropdown.setSelectedItem("Active");
+                    } else {
+                        activityDropdown.setSelectedItem("Inactive");
+                    }
                 }
             }
         });
@@ -131,6 +155,7 @@ public class UpdateMember extends JPanel {
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
         wrapper.add(memberPanel);
         wrapper.add(statusPanel);
+        wrapper.add(activityPanel);
 
         // NAME PANEL
         JPanel namePanel = new JPanel();
@@ -180,16 +205,22 @@ public class UpdateMember extends JPanel {
                         if (member.getName().equals(selectedName)) {
                             selectedMember = member;
                             String selectedStatus = (String) statusDropdown.getSelectedItem();
+                            String selectedActivity = (String) activityDropdown.getSelectedItem();
                             try {
-                                Boolean isMember;
+                                Boolean isMember, isActive;
                                 if (selectedStatus.equals("Member (Reguler)")) {
                                     isMember = true;
                                 } else {
                                     isMember = false;
                                 }
-                                System.out.println(isMember);
 
-                                updateMember(selectedMember.getId(), isMember, selectedMember.getPoint());
+                                if (selectedActivity.equals("Active")) {
+                                    isActive = true;
+                                } else {
+                                    isActive = false;
+                                }
+
+                                updateMember(selectedMember.getId(), isMember, isActive, selectedMember.getPoint());
                                 System.out.println("Member has been updated successfully");
                             } catch (Exception e1) {
                                 e1.printStackTrace();
@@ -215,15 +246,15 @@ public class UpdateMember extends JPanel {
         setVisible(true);
     }
 
-    private void updateMember(Integer id, Boolean isMember, Integer point) {
+    private void updateMember(Integer id, Boolean isMember, Boolean isActive, Integer point) {
         String name = nameField.getText();
         String phone = phoneField.getText();
 
         Member updatedMember;
         if (isMember) {
-            updatedMember = new Member(id, name, phone, true, point);
+            updatedMember = new Member(id, name, phone, isActive, point);
         } else {
-            updatedMember = new VIP(id, name, phone, true, point);
+            updatedMember = new VIP(id, name, phone, isActive, point);
         }
 
         DataStore data = DataStore.getInstance();
