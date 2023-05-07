@@ -8,7 +8,7 @@ import Entity.*;
 import DataStore.DataStore;
 import Plugins.BasePlugin;
 
-class SystemPlugin1 implements BasePlugin {
+public class SystemPlugin1 implements BasePlugin {
     private String mataUang;
     private float kurs;
     private DataStore data;
