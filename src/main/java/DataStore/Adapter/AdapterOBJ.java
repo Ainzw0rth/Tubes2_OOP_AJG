@@ -1,8 +1,10 @@
 package DataStore.Adapter;
 
 import java.util.*;
-
-import DataStore.DataStore;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+// import DataStore.DataStore;
 import Entity.*;
 import java.io.*;
 
@@ -10,21 +12,43 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     final String RED = "\033[0;31m";     // RED
     final String RESET = "\033[0m";  // Text Reset
+    private String dirPath;
+    // public void read(DataStore d) throws Exception {
+    //     d.setCustomers(this.readCustomers());
+    //     d.setItems(this.readItems());
+    //     d.setMembers(this.readMembers());
+    //     d.setBills(this.readBills());
+    //     d.setFixedBills(this.readFixedBills());
 
-    public void read(DataStore d) throws Exception {
-        d.setCustomers(this.readCustomers());
-        d.setItems(this.readItems());
-        d.setMembers(this.readMembers());
-        d.setBills(this.readBills());
-        d.setFixedBills(this.readFixedBills());
+    //     // @WaitForImplement
+    //     // d.setPluginPaths(this.readPluginPaths());
+    // }
 
-        // @WaitForImplement
-        // d.setPluginPaths(this.readPluginPaths());
+    public AdapterOBJ(String dirPath){
+        this.dirPath = dirPath;
+    }
+
+    public void delete(String className) {
+        String filePath = dirPath + "/" + className;
+        try {
+            // Check if the file exists
+            Path path = Paths.get(filePath + ".xml");
+            if (Files.exists(path)) {
+                // Delete the file
+                Files.delete(path);   
+            } 
+            path = Paths.get(filePath + ".json");
+            if (Files.exists(path)){
+                Files.delete(path);
+            }
+        } catch (Exception e) {
+            System.out.println("Error deleting file: " + e.getMessage());
+        }
     }
     
     public ArrayList<Customer> readCustomers() throws Exception {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("database/OBJ/customers.ser"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/customers.ser"));
             
             @SuppressWarnings("unchecked")
             ArrayList<Customer> customers = (ArrayList<Customer>) in.readObject();
@@ -40,9 +64,10 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public void writeCustomers(ArrayList<Customer> customers) throws Exception {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("database/OBJ/customers.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/customers.ser"));
             out.writeObject(customers);
             out.close();
+            delete("customers");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write customers to file: " + e.getMessage() + "\n");
             printError("Fail to write to customers.ser", _err);
@@ -52,7 +77,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<Item> readItems() throws Exception {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("database/OBJ/items.ser"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/items.ser"));
             
             @SuppressWarnings("unchecked")
             ArrayList<Item> items = (ArrayList<Item>) in.readObject();
@@ -68,9 +93,10 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public void writeItems(ArrayList<Item> items) throws Exception {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("database/OBJ/items.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/items.ser"));
             out.writeObject(items);
             out.close();
+            delete("items");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write items to file: " + e.getMessage() + "\n");
             printError("Fail to write to items.ser", _err);
@@ -81,7 +107,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<Member> readMembers() throws Exception {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("database/OBJ/members.ser"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/members.ser"));
             
             ArrayList<Member> members = new ArrayList<Member>();
             while (true) {
@@ -106,7 +132,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public void writeMembers(ArrayList<Member> members) throws Exception {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("database/OBJ/members.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/members.ser"));
         
             for (Member member : members) {
                 if (member instanceof VIP) {
@@ -119,6 +145,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             }
 
             out.close();
+            delete("members");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write members to file: " + e.getMessage() + "\n");
             printError("Fail to write to members.ser", _err);
@@ -128,7 +155,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<Bill> readBills() throws Exception {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("database/OBJ/bills.ser"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/bills.ser"));
             
             @SuppressWarnings("unchecked")
             ArrayList<Bill> bills = (ArrayList<Bill>) in.readObject();
@@ -144,9 +171,10 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public void writeBills(ArrayList<Bill> bills) throws Exception {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("database/OBJ/bills.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/bills.ser"));
             out.writeObject(bills);
             out.close();
+            delete("bills");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write bills to file: " + e.getMessage() + "\n");
             printError("Fail to write to bills.ser", _err);
@@ -156,7 +184,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<FixedBill> readFixedBills() throws Exception {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("database/OBJ/fixedBills.ser"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/fixedBills.ser"));
             
             @SuppressWarnings("unchecked")
             ArrayList<FixedBill> fixedBills = (ArrayList<FixedBill>) in.readObject();
@@ -172,9 +200,10 @@ public class AdapterOBJ implements DataStoreAdapter {
     
     public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws Exception {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("database/OBJ/fixedBills.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/fixedBills.ser"));
             out.writeObject(fixedBills);
             out.close();
+            delete("fixed_bills");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write fixedBills to file: " + e.getMessage() + "\n");
             printError("Fail to write to fixedBills.ser", _err);
