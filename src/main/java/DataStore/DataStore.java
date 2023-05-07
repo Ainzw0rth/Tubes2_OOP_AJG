@@ -11,14 +11,6 @@ import DataStore.Enums.*;
 import Entity.*;
 import lombok.*;
 
-import java.io.*;
-
-import com.google.gson.GsonBuilder;
-import com.google.gson.Gson;
-import java.io.FileReader;
-import java.io.FileWriter;
-import org.json.*;
-
 import Utils.Collections.ObservableCollection;
 
 public class DataStore implements DataService{
@@ -27,6 +19,8 @@ public class DataStore implements DataService{
     @Getter private ObservableCollection<Member> members;
     @Getter private ObservableCollection<Bill> bills;
     @Getter private ObservableCollection<FixedBill> fixedBills;
+    @Getter @Setter private String dirPath;
+    @Getter @Setter private FileStoreExt ext;
     // @WaitForImplement
     // @Setter private ArrayList<String> pluginPaths;
 
@@ -37,11 +31,30 @@ public class DataStore implements DataService{
     final String RESET = "\033[0m";  // Text Reset
 
     private DataStoreAdapter adapter;
-    
     private static DataStore instance;
+    
     
     private DataStore() {
         this.adapter = new AdapterJSON();   
+        Config config = new Config();
+
+        this.dirPath = config.getDirPath();
+        this.ext = config.getExt();
+
+        switch (this.getExt()) {
+            case JSON:
+                this.adapter = new AdapterJSON();   
+                break;
+            case XML:
+                this.adapter = new AdapterJSON();   
+                break;
+            case OBJ:
+                this.adapter = new AdapterJSON();   
+                break;
+            default:
+                this.adapter = new AdapterJSON();  
+                break;
+        }
 
         try {
             this.customers = new ObservableCollection<Customer>(this.adapter.readCustomers());
@@ -105,6 +118,8 @@ public class DataStore implements DataService{
      * @param ext
      */
     public void changeExt(FileStoreExt ext) throws Exception{
+        Config config = new Config();
+
         switch (ext) {
             case JSON:
                 this.adapter = new AdapterJSON();
@@ -120,65 +135,34 @@ public class DataStore implements DataService{
                 break;
         }
 
-        try {            
+        try {
+            // change database extension
             this.adapter.writeBills(this.bills.getElements());
             this.adapter.writeCustomers(this.customers.getElements());
             this.adapter.writeFixedBills(this.fixedBills.getElements());
             this.adapter.writeItems(this.items.getElements());
             this.adapter.writeMembers(this.members.getElements());
+
+            // change config
+            config.changeConfig(config.getDirPath(), ext);
+
         } catch (Exception e) {
             printError("Fail to change file extension", e);
             throw e;
         }
     }
 
-    public void changeConfig(String dirPath, String ext) {
+    public void changeDir(String dir) throws Exception{
+        Config config = new Config();
         try {
-            // create a Gson object
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            
-            // create a map representing the new JSON structure
-            Map<String, String> myMap = new HashMap<>();
-            myMap.put("dirPath", dirPath);
-            myMap.put("ext", ext);
-            
+            // change database
 
-            // serialize the map into JSON format
-            String jsonString = gson.toJson(myMap);
-            
-            // write the JSON string to a file
-            FileWriter writer = new FileWriter("src/main/config/config.json");
-            writer.write(jsonString);
-            writer.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
+            // change directory
+            config.changeConfig(dir, config.getExt());
+        } catch (Exception e){
+            throw e;
         }
     }
-
-    public Map<String, String> getConfig() {
-        Map<String, String> config = new HashMap<>();
-        try {
-            String jsonStr = "";
-            BufferedReader reader = new BufferedReader(new FileReader("src/main/config/config.json"));
-            String line = reader.readLine();
-            while (line != null) {
-                jsonStr += line;
-                line = reader.readLine();
-            }
-            reader.close();
-    
-            JSONObject jsonObj = new JSONObject(jsonStr);
-            config.put("ext", jsonObj.getString("ext"));
-            config.put("dirPath", jsonObj.getString("dirPath"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return config;
-    }
-
 
     
     // /**
@@ -625,6 +609,6 @@ public class DataStore implements DataService{
 
     public static void main(String[] args) {
         DataStore ds = new DataStore();
-        ds.getConfig();
+        
     }
 }
