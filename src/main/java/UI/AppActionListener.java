@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.util.*;
 
 import UI.Page.*;
-import UI.Page.Customers.TambahMember;
-import UI.Page.Customers.UpdateMember;
 
 public class AppActionListener implements ActionListener {
     private List<JButton> tabCloseButtons = new ArrayList<JButton>();
@@ -70,8 +68,10 @@ public class AppActionListener implements ActionListener {
                 app.addTab("Update Barang", new UpdateBarang());
             } else if (title.equals("Laporan Penjualan")) {
                 app.addTab("Laporan Penjualan", new LaporanPenjualan());
-            } else if (title.equals("Import")) {
-                app.addTab("Import", new Import());
+            } else if (title.equals("Plugins")) {
+                app.addTab("Plugins", new PluginImport());
+            } else if (title.equals("Penyimpanan Data")) {
+                app.addTab("Penyimpanan Data", new PenyimpananData());
             } else {
                 System.out.println("Menu tidak dikenali");
             }

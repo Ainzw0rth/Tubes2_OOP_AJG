@@ -110,6 +110,7 @@ public class UpdateBarang extends JPanel {
 
         DataStore data = DataStore.getInstance();
         
+        
         data.getItems().addObserver(
             new Observer() {
                 @Override

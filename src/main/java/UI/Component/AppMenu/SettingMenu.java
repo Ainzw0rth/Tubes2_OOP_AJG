@@ -15,10 +15,15 @@ public class SettingMenu extends JMenu {
 
     private void initMenuItems() {
         JMenuItem item = new JMenuItem("Main Menu");
-        JMenuItem item2 = new JMenuItem("Import");
         item.addActionListener(actionListener);
-        item2.addActionListener(actionListener);
         add(item);
+
+        JMenuItem item2 = new JMenuItem("Plugins");
+        item2.addActionListener(actionListener);
         add(item2);
+        
+        JMenuItem dataStore = new JMenuItem("Penyimpanan Data");
+        dataStore.addActionListener(actionListener);
+        add(dataStore);
     }
 }
