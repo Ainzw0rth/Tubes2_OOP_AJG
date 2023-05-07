@@ -28,4 +28,8 @@ public class Member extends Customer {
     public void onTransaction(Integer transaction) {
         this.point += transaction/100;
     }
+
+    public float getDiscount(Integer price) {
+        return (float) 0;
+    }
 }

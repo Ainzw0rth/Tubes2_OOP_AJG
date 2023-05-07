@@ -5,6 +5,9 @@ import UI.Interface.IRefreshable;
 import UI.Component.AppMenu.*;
 import org.jetbrains.annotations.*;
 
+import DataStore.DataStore;
+import Entity.Bill;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -74,8 +77,15 @@ public class App extends JFrame implements IApp {
         this.tabbedPane = new JTabbedPane();
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         add(this.tabbedPane);
-
+        
         addTab("Main Menu", new MainMenu());
+
+        try {
+            DataStore d = DataStore.getInstance();
+            for (Bill bill: d.getBills().getElements()) {
+                addTab("Saved Bill", new JualBarang(bill));
+            }
+        } catch (Exception e1) {}
     }
 
     @Override

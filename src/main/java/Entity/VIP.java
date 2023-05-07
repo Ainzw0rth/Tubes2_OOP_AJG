@@ -9,7 +9,8 @@ public class VIP extends Member {
         super(id, name, phoneNumber, isActive, point);
     }
 
-    public Integer getDiscount(Integer price){
-        return price/10;
+    @Override
+    public float getDiscount(Integer price){
+        return (float) (price.floatValue()/10);
     }
 }

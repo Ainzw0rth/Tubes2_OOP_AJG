@@ -19,8 +19,6 @@ import java.util.LinkedList;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
@@ -36,8 +34,14 @@ public class JualBarang extends JPanel {
     private int maxprice = 999999999;
     private String itemName = "";
 
+    private LinkedList <String> categories;
     
     private JLabel subtotalLabelNumber;
+    private JLabel discountLabelNumbers;
+    private JLabel totalLabelNumbers;
+
+    private float subtotal;
+    private float discountTotal;
 
     private JComboBox<String> memberDropdown;
     private JComboBox<String> kategori;
@@ -45,9 +49,9 @@ public class JualBarang extends JPanel {
     private String printableBill = "";
     private Printer printer = new Printer();
 
-    public JualBarang() {
+    public JualBarang(Bill savedBill) {
         try {
-            x = new Bill(-1);
+            x = savedBill;
             d = DataStore.getInstance();
             d.startNewBill(x);
             
@@ -79,7 +83,7 @@ public class JualBarang extends JPanel {
                         }
 
                         minprice = price;
-                        rerenderItems();
+                        rerender();
                     } catch (Exception a) {
                     }
                 }
@@ -106,33 +110,14 @@ public class JualBarang extends JPanel {
                             price = Integer.parseInt(inp);
                         }
                         maxprice = price;
-                        rerenderItems();
+                        rerender();
                     } catch (Exception a) {
                     }
                 }
             });
             
-            // category dropdown
-            
-            LinkedList <String> categories = new LinkedList<String>();
-            categories.add("Category");
-
-            for (Item x: d.getItems().getElements()) {
-                if (!categories.contains(x.getCategory())) {
-                    categories.add(x.getCategory());
-                }
-            }
-            
-            DefaultComboBoxModel<String> basecategoriesmodel = new DefaultComboBoxModel<>(categories.toArray(new String[0]));
-            kategori = new JComboBox<>(basecategoriesmodel);
-            kategori.setBounds(620, 10, 150, 30);
-            kategori.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    rerenderItems();
-                }
-                
-            });
+            kategori = new JComboBox<String>();
+            rerenderCategory();
     
             // input searching
             JTextField searchField = new JTextField();
@@ -142,7 +127,7 @@ public class JualBarang extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     String inp = searchField.getText();
                     itemName = inp;
-                    rerenderItems();
+                    rerender();
                 }
             });
     
@@ -172,20 +157,9 @@ public class JualBarang extends JPanel {
                     checkoutItems();
                 }
             });
-    
-            // member dropdown
-            // String[] items = {"Pilih nama member"};
-
-            LinkedList <String> members = new LinkedList<String>();
-            members.add("Pilih nama member");
-
-            for (Member x: d.getActiveMembers()) {
-                members.add(x.getName());
-            }
-
-            DefaultComboBoxModel<String> basemembermodel = new DefaultComboBoxModel<>(members.toArray(new String[0]));
-            memberDropdown = new JComboBox<>(basemembermodel);
-            memberDropdown.setBounds(15, 420, 150, 30);
+            
+            memberDropdown = new JComboBox<String>();
+            rerenderMember();
     
             // subtotal label
             JLabel subtotalLabel = new JLabel("Subtotal");
@@ -203,7 +177,7 @@ public class JualBarang extends JPanel {
             discountLabel.setBounds(15, 360, 100, 40);
     
             // diskon nominal
-            JLabel discountLabelNumbers = new JLabel("RP 2.700");
+            discountLabelNumbers = new JLabel("RP 0");
             discountLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
             discountLabelNumbers.setBounds(230, 360, 100, 40);
     
@@ -213,24 +187,16 @@ public class JualBarang extends JPanel {
             totalLabel.setBounds(230, 400, 70, 40);
     
             // nominal total price
-            JLabel totalLabelNumbers = new JLabel("Rp 25.000");
+            totalLabelNumbers = new JLabel("Rp 0");
             totalLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
             totalLabelNumbers.setBounds(230, 420, 100, 40);
-    
-            // tombol save bill
-            JButton saveBillButton = new JButton("Save Bill");
-            saveBillButton.setFocusPainted(false);
-            saveBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
-            saveBillButton.setForeground(Color.black);
-            saveBillButton.setBounds(1, 470,199, 48);
-            saveBillButton.setBackground(new Color(0xEBEBEB));
     
             // tombol print bill
             JButton printBillButton = new JButton("Print Bill");
             printBillButton.setFocusPainted(false);
             printBillButton.setFont(new Font("Poppins", Font.BOLD, 16));
             printBillButton.setForeground(Color.black);
-            printBillButton.setBounds(199, 470,199, 48);
+            printBillButton.setBounds(1, 470,380, 48);
             printBillButton.setBackground(new Color(0xEBEBEB));
             printBillButton.addActionListener(new ActionListener() {
                 @Override
@@ -248,7 +214,7 @@ public class JualBarang extends JPanel {
             stockPanel.setBackground(Color.white);
             
             stockPanel = new JPanel();
-            this.stockScrollPane = new JScrollPane(stockPanel);
+            stockScrollPane = new JScrollPane(stockPanel);
             stockScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             stockScrollPane.setBounds(0, 50, 800, 590);
             stockScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -278,7 +244,6 @@ public class JualBarang extends JPanel {
             panel.add(discountLabel);
             panel.add(discountLabelNumbers);
             panel.add(checkoutButton);
-            panel.add(saveBillButton);
             panel.add(printBillButton);
             panel.add(billLabel);
             panel.add(memberDropdown);
@@ -297,8 +262,7 @@ public class JualBarang extends JPanel {
                 new Observer() {
                     @Override
                     public void update() {
-                        rerenderItems();
-                        rerenderBills();
+                        rerender();
                     }   
                 }
             );
@@ -306,6 +270,53 @@ public class JualBarang extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }   
+    }
+    
+    public void rerender() {
+        rerenderItems();
+        rerenderBills();
+        rerenderCategory();
+        rerenderMember();
+
+
+    }
+
+    public void rerenderCategory() {
+        // category dropdown
+        categories = new LinkedList<String>();
+        categories.add("Category");
+
+        for (Item x: d.getItems().getElements()) {
+            if (!categories.contains(x.getCategory())) {
+                categories.add(x.getCategory());
+            }
+        }
+        
+        DefaultComboBoxModel<String> basecategoriesmodel = new DefaultComboBoxModel<>(categories.toArray(new String[0]));
+        kategori.setModel(basecategoriesmodel);
+        kategori.setBounds(620, 10, 150, 30);
+        kategori.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rerender();
+            } 
+        });
+    }
+
+    public void rerenderMember() {
+        try {
+            LinkedList <String> members = new LinkedList<String>();
+            members.add("Pilih nama member");
+            for (Member x: d.getActiveMembers()) {
+                members.add(x.getName());
+            }
+            DefaultComboBoxModel<String> basemembermodel = new DefaultComboBoxModel<>(members.toArray(new String[0]));
+            memberDropdown.setModel(basemembermodel);
+            memberDropdown.setBounds(15, 420, 150, 30);
+        } catch (Exception e) {
+            
+        }
+
     }
 
     public void rerenderItems() {
@@ -340,7 +351,7 @@ public class JualBarang extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         x.tambah(item);
-                        rerenderBills();
+                        rerender();
                     }
                 });   
             }
@@ -354,6 +365,8 @@ public class JualBarang extends JPanel {
     }
 
     public void rerenderBills () {
+        revalidateBill();
+
         // keperluan print
         String tab = "    ";
 
@@ -406,7 +419,7 @@ public class JualBarang extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     x.hapus(item);
-                    rerenderBills();
+                    rerender();
                 }
             });
 
@@ -420,7 +433,7 @@ public class JualBarang extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     x.tambah(item);
-                    rerenderBills();
+                    rerender();
                 }
             });
 
@@ -450,20 +463,82 @@ public class JualBarang extends JPanel {
             // PRINT
             printableBill += tab + "- " + item.getName() + " x" + item.getStock() + " (Rp " + item.getPrice() + ")\n";
         }
-        printableBill += "Subtotal: Rp " + Integer.toString(x.getTotalPrice());
+        printableBill += "\nSubtotal: Rp " + Integer.toString(x.getTotalPrice()) + "\n";
         
 
         Dimension billPanelSize = new Dimension(350, (ctr)*70);
         itemPanel.setPreferredSize(billPanelSize);
         scrollPane.setViewportView(itemPanel);
 
-        subtotalLabelNumber.setText("Rp " + Integer.toString(x.getTotalPrice()));
+        subtotal = x.getTotalPrice().floatValue();
+        discountTotal = (float) 0;
+        
+        String selectedMember = (String) memberDropdown.getSelectedItem();
+        if (selectedMember.equals("Pilih nama member")) {
+            discountTotal = (float) 0;
+        } else {
+            try {
+                for (Member member: d.getActiveMembers()) {
+                    discountTotal = member.getDiscount(x.getTotalPrice());
+                }
+            } catch (Exception e) {
+                
+            }
+        }
+
+        printableBill += "Discount Total: Rp " + Float.toString(subtotal) + "\n";
+        printableBill += "Total Price: Rp " + Float.toString(subtotal-discountTotal) + "\n";
+
+        subtotalLabelNumber.setText("Rp " + Float.toString(subtotal));
+        discountLabelNumbers.setText("Rp " + Float.toString(discountTotal));
+        totalLabelNumbers.setText("Rp " + Float.toString(subtotal-discountTotal));
+    }
+
+    public void revalidateBill() {
+        for (int i = 0; i < x.getItems().size(); i++) {
+            boolean exist = false;
+            for (Item item: d.getItems().getElements()) {
+                if (x.getItems().get(i).getId() == item.getId()) {
+                    // update valuenya
+                    int quantity = 0;
+                    if (item.getStock() >= x.getItems().get(i).getStock()) {
+                        quantity = x.getItems().get(i).getStock();
+                        x.setTotalPrice(x.getTotalPrice() - x.getItems().get(i).getStock() * x.getItems().get(i).getPrice() + x.getItems().get(i).getStock() * item.getPrice());
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Stok barang yang dipilih tidak cukup", "Stok Tidak Cukup", JOptionPane.INFORMATION_MESSAGE);
+                        quantity = item.getStock();
+                        
+                        // handle penambahan price disini 
+                        x.setTotalPrice(x.getTotalPrice() - (x.getItems().get(i).getStock()+1) * x.getItems().get(i).getPrice() + x.getItems().get(i).getStock() * item.getPrice());
+                    }
+
+                    x.getItems().set(i, new Item(item.getId(), item.getName(), item.getCategory(), item.getPrice(), item.getImageUrl(), quantity));
+                    exist = true;
+                }
+            }
+
+            if (!exist) {
+                x.setTotalPrice(x.getTotalPrice() - x.getItems().get(i).getStock() * x.getItems().get(i).getPrice());
+                x.getItems().remove(x.getItems().get(i));
+            }
+        }
     }
 
     public void checkoutItems() {
         try {
             Integer custID = d.generateCustomerId();
             String selectedMember = (String) memberDropdown.getSelectedItem();
+            
+            if (!selectedMember.equals("Pilih nama member")) {
+                // ganti customer id pada bill
+                for (Member member: d.getMembers().getElements()) {
+                    if (member.getName().equals(selectedMember)) {
+                        x.setIdCustomer(member.getId());
+                    }
+                }
+            }
+
+            d.finishBill(x);
             IApp app = App.getInstance();
             app.addTab("Transaksi Berhasil", new PembayaranBerhasil(selectedMember));
         } catch (Exception e) {
@@ -471,6 +546,7 @@ public class JualBarang extends JPanel {
     }
 
     public static void main(String[] args) throws Exception {  
-        new JualBarang();  
+        Bill tes = new Bill(-1);
+        new JualBarang(tes);  
     } 
 }   

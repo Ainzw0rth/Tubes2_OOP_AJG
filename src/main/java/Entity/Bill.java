@@ -1,6 +1,7 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,10 @@ public class Bill implements Serializable{
 
     public Bill(int idCustomer) throws Exception {
         DataStore d = DataStore.getInstance();
+        
+        this.id = -1;
+        this.idCustomer = idCustomer;
+
         try {
             this.id = d.generateBillId();
             this.idCustomer = d.generateCustomerId();
@@ -68,6 +73,10 @@ public class Bill implements Serializable{
                 }
             }
         }
+    }
+
+    public void validateBill (ArrayList<Item> storage) {
+
     }
 }
 
