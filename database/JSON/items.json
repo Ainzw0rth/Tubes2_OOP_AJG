@@ -1,82 +1,18 @@
 [
   {
-    "id": 1,
-    "name": "Aqua",
-    "category": "Minuman",
-    "price": 6000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\windah.jpg",
-    "stock": 20
-  },
-  {
-    "id": 2,
-    "name": "Milp",
-    "category": "Minuman",
-    "price": 6000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\windah.jpg",
-    "stock": 20
-  },
-  {
-    "id": 3,
-    "name": "Kopi Item",
-    "category": "Minuman",
-    "price": 8000,
-    "imageUrl": "C:\\Users\\Moonawar\\Downloads\\draft.png",
-    "stock": 7
-  },
-  {
-    "id": 4,
-    "name": "Sprite",
-    "category": "Minuman",
-    "price": 8000,
-    "imageUrl": "C:\\Users\\Moonawar\\Downloads\\draft.png",
-    "stock": 7
-  },
-  {
-    "id": 5,
-    "name": "X",
-    "category": "X",
-    "price": 1000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\0a6b1810658fc8fea23038f961435151sssssssssssssssssssssssssssssssss.jpg",
-    "stock": 1
-  },
-  {
-    "id": 6,
-    "name": "Y",
-    "category": "X",
-    "price": 1000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Pictures\\0a6b1810658fc8fea23038f961435151sssssssssssssssssssssssssssssssss.jpg",
-    "stock": 1
-  },
-  {
-    "id": 7,
-    "name": "R",
-    "category": "T",
-    "price": 2000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Documents\\Ereh-in-his-30s.png",
-    "stock": 90
-  },
-  {
-    "id": 8,
-    "name": "T",
-    "category": "Y",
-    "price": 9000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Documents\\Ereh-in-his-30s.png",
+    "id": 11,
+    "name": "laptop gaming",
+    "category": "laptop",
+    "price": 5000000,
+    "imageUrl": "C:\\Users\\mrsya\\Pictures\\Blue-ish natura.png",
     "stock": 10
   },
   {
-    "id": 9,
-    "name": "SAVPDJASP",
-    "category": "ASJXIDA",
-    "price": 2000,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Documents\\Ereh-in-his-30s.png",
-    "stock": 9
-  },
-  {
-    "id": 10,
-    "name": "asDCSsdcas",
-    "category": "sacdas",
-    "price": 213907217,
-    "imageUrl": "C:\\Users\\Moonawar\\OneDrive\\Documents\\Ereh-in-his-30s.png",
-    "stock": 123
+    "id": 12,
+    "name": "hape gaming",
+    "category": "gaming",
+    "price": 5000,
+    "imageUrl": "C:\\Users\\mrsya\\Pictures\\foto himpunan.JPG",
+    "stock": 10
   }
 ]

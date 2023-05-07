@@ -1,8 +1,10 @@
 [
-  {
-    "id": 2,
-    "totalPrice": 0,
-    "items": [],
-    "idCustomer": 1
-  }
-]
+    {
+      "id": 1,
+      "totalPrice": "laptop gaming",
+      "category": "laptop",
+      "price": 5000000,
+      "imageUrl": "C:\\Users\\mrsya\\Pictures\\Blue-ish natura.png",
+      "stock": 10
+    }
+  ]
