@@ -61,7 +61,16 @@ public class PenyimpananData extends JPanel {
         extDropdown.setPreferredSize(new Dimension(200, 30));
         extDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
         extDropdown.setBounds(0,0,300,50);
+        extDropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedExt = (String) extDropdown.getSelectedItem();
+                setConfig();
+            }
+        });
         this.selectedExt = (String) extDropdown.getSelectedItem();
+        setConfig();
+
         extensionPanel.add(extPanel);
 
         extPanel.add(extDropdown);
@@ -96,13 +105,14 @@ public class PenyimpananData extends JPanel {
         chooseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chooseLoc();
+                dbLocField.setText(selectedDir);
             }
         });
         chooseButton.setBounds(330,0,120,30);
         choosePanel.add(chooseButton);
 
         locPanel.add(choosePanel);
-        setConfig();
+        
     }
 
     private void setConfig() {
@@ -118,6 +128,7 @@ public class PenyimpananData extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             this.selectedDir = selectedFile.getAbsolutePath();
+            setConfig();
         }
     }
 
