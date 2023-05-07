@@ -21,6 +21,8 @@ public class ChartPlugin1 implements BasePlugin {
     @Override
     public void onLoad(IApp appService, DataStore dataService) {
         JPanel page = new JPanel();
+        page.setLayout(null);
+        page.setSize(1200, 720);
 
         // TITLE PANEL
         JPanel titlePanel = new JPanel();
@@ -43,7 +45,7 @@ public class ChartPlugin1 implements BasePlugin {
         for (int i = 0; i < 12; i++) {
             monthValue[i] = 0;
         }
-        
+
         ArrayList<FixedBill> bills = dataService.getFixedBills().getElements();
         for (FixedBill bill : bills) {
             String[] date = bill.getDate().split("-");
@@ -58,7 +60,7 @@ public class ChartPlugin1 implements BasePlugin {
         JFreeChart chart = ChartFactory.createLineChart("Line Chart", "Bulan", "Total Pemasukan", dataset);
 
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setBounds(20, 100, 560, 520);
+        chartPanel.setBounds(10, 100, 560, 520);
         chartPanel.setBackground(Color.white);
 
         // BAR CHART
@@ -72,7 +74,7 @@ public class ChartPlugin1 implements BasePlugin {
         JFreeChart barChart = ChartFactory.createBarChart("Bar Chart", "Nama Barang", "Stock", barDataset);
 
         ChartPanel barChartPanel = new ChartPanel(barChart);
-        barChartPanel.setBounds(20, 600, 560, 520);
+        barChartPanel.setBounds(580, 100, 560, 520);
         barChartPanel.setBackground(Color.white);
 
         page.add(titlePanel);
@@ -82,12 +84,10 @@ public class ChartPlugin1 implements BasePlugin {
         JMenu menu = new JMenu("ChartPlugin1");
         JMenuItem menuItem = new JMenuItem("Statistik Toko");
 
-        JScrollPane scrollPane = new JScrollPane(page);
-
         menuItem.addActionListener(e -> {
-            appService.addTab("Statistik Toko", scrollPane);
+            appService.addTab("Statistik Toko", page);
         });
-        
+
         menu.add(menuItem);
         appService.addMenu(menu);
     }
