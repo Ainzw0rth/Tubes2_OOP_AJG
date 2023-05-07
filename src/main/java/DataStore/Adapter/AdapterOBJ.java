@@ -184,7 +184,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<FixedBill> readFixedBills() throws Exception {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/fixedBills.ser"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/fixed_bills.ser"));
             
             @SuppressWarnings("unchecked")
             ArrayList<FixedBill> fixedBills = (ArrayList<FixedBill>) in.readObject();
@@ -200,7 +200,7 @@ public class AdapterOBJ implements DataStoreAdapter {
     
     public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws Exception {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/fixedBills.ser"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/fixed_bills.ser"));
             out.writeObject(fixedBills);
             out.close();
             delete("fixed_bills");
