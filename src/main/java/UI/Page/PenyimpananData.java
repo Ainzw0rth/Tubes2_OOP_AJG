@@ -6,21 +6,19 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.*;
 
-import DataStore.DataStore;
+import DataStore.Config;
 
 
 public class PenyimpananData extends JPanel {
     private String selectedExt;
     private String selectedDir;
+    private Config config;
 
     public PenyimpananData(){
-        DataStore data = DataStore.getInstance();
-        Map<String, String> config = new HashMap<>(data.getConfig());
-        
-        this.selectedExt = config.get("ext");
-        this.selectedDir = config.get("dirPath");
+        this.config = new Config();
+        this.selectedExt = config.getExtAsString();
+        this.selectedDir = config.getDirPath();
         init();
     }
 
@@ -65,11 +63,11 @@ public class PenyimpananData extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedExt = (String) extDropdown.getSelectedItem();
-                setConfig();
+                config.changeConfig(selectedDir, selectedExt);
             }
         });
         this.selectedExt = (String) extDropdown.getSelectedItem();
-        setConfig();
+        config.changeConfig(selectedDir, selectedExt);
 
         extensionPanel.add(extPanel);
 
@@ -115,10 +113,6 @@ public class PenyimpananData extends JPanel {
         
     }
 
-    private void setConfig() {
-        DataStore data = DataStore.getInstance();
-        data.changeConfig(selectedDir, selectedExt);
-    }
 
     private void chooseLoc() {
         JFileChooser fileChooser = new JFileChooser();
@@ -128,7 +122,7 @@ public class PenyimpananData extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             this.selectedDir = selectedFile.getAbsolutePath();
-            setConfig();
+            config.changeConfig(selectedDir, selectedExt);
         }
     }
 

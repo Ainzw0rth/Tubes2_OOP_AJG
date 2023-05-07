@@ -11,14 +11,6 @@ import DataStore.Enums.*;
 import Entity.*;
 import lombok.*;
 
-import java.io.*;
-
-import com.google.gson.GsonBuilder;
-import com.google.gson.Gson;
-import java.io.FileReader;
-import java.io.FileWriter;
-import org.json.*;
-
 import Utils.Collections.ObservableCollection;
 
 public class DataStore implements DataService{
@@ -27,6 +19,7 @@ public class DataStore implements DataService{
     @Getter private ObservableCollection<Member> members;
     @Getter private ObservableCollection<Bill> bills;
     @Getter private ObservableCollection<FixedBill> fixedBills;
+    @Getter private Config config;
     // @WaitForImplement
     // @Setter private ArrayList<String> pluginPaths;
 
@@ -37,11 +30,24 @@ public class DataStore implements DataService{
     final String RESET = "\033[0m";  // Text Reset
 
     private DataStoreAdapter adapter;
-    
     private static DataStore instance;
     
     private DataStore() {
         this.adapter = new AdapterJSON();   
+        switch (this.config.getExt()) {
+            case JSON:
+                this.adapter = new AdapterJSON();   
+                break;
+            case XML:
+                this.adapter = new AdapterJSON();   
+                break;
+            case OBJ:
+                this.adapter = new AdapterJSON();   
+                break;
+            default:
+                this.adapter = new AdapterJSON();  
+                break;
+        }
 
         try {
             this.customers = new ObservableCollection<Customer>(this.adapter.readCustomers());
@@ -100,84 +106,45 @@ public class DataStore implements DataService{
         }
     }
 
-    /**
-     * Change file extension to write/read
-     * @param ext
-     */
-    public void changeExt(FileStoreExt ext) throws Exception{
-        switch (ext) {
-            case JSON:
-                this.adapter = new AdapterJSON();
-                break;
-            case XML:
-                this.adapter = new AdapterXML();
-                break;
-            case OBJ:
-                this.adapter = new AdapterOBJ();
-                break;
-            default:
-                this.adapter = new AdapterJSON();
-                break;
-        }
+    // /**
+    //  * Change file extension to write/read
+    //  * @param ext
+    //  */
+    // public void changeExt(FileStoreExt ext) throws Exception{
+    //     Map<String, String> config = new HashMap<>(this.getConfig());
+    //     String extString = config.get("ext");
 
-        try {            
-            this.adapter.writeBills(this.bills.getElements());
-            this.adapter.writeCustomers(this.customers.getElements());
-            this.adapter.writeFixedBills(this.fixedBills.getElements());
-            this.adapter.writeItems(this.items.getElements());
-            this.adapter.writeMembers(this.members.getElements());
-        } catch (Exception e) {
-            printError("Fail to change file extension", e);
-            throw e;
-        }
-    }
+    //     switch (ext) {
+    //         case JSON:
+    //             this.adapter = new AdapterJSON();
+    //             extString = "JSON";
+    //             break;
+    //         case XML:
+    //             this.adapter = new AdapterXML();
+    //             extString = "XML";
+    //             break;
+    //         case OBJ:
+    //             this.adapter = new AdapterOBJ();
+    //             extString = "OBJ";
+    //             break;
+    //         default:
+    //             this.adapter = new AdapterJSON();
+    //             extString = "JSON";
+    //             break;
+    //     }
 
-    public void changeConfig(String dirPath, String ext) {
-        try {
-            // create a Gson object
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            
-            // create a map representing the new JSON structure
-            Map<String, String> myMap = new HashMap<>();
-            myMap.put("dirPath", dirPath);
-            myMap.put("ext", ext);
-            
-
-            // serialize the map into JSON format
-            String jsonString = gson.toJson(myMap);
-            
-            // write the JSON string to a file
-            FileWriter writer = new FileWriter("src/main/config/config.json");
-            writer.write(jsonString);
-            writer.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Map<String, String> getConfig() {
-        Map<String, String> config = new HashMap<>();
-        try {
-            String jsonStr = "";
-            BufferedReader reader = new BufferedReader(new FileReader("src/main/config/config.json"));
-            String line = reader.readLine();
-            while (line != null) {
-                jsonStr += line;
-                line = reader.readLine();
-            }
-            reader.close();
-    
-            JSONObject jsonObj = new JSONObject(jsonStr);
-            config.put("ext", jsonObj.getString("ext"));
-            config.put("dirPath", jsonObj.getString("dirPath"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return config;
-    }
+    //     try {
+    //         this.adapter.writeBills(this.bills.getElements());
+    //         this.adapter.writeCustomers(this.customers.getElements());
+    //         this.adapter.writeFixedBills(this.fixedBills.getElements());
+    //         this.adapter.writeItems(this.items.getElements());
+    //         this.adapter.writeMembers(this.members.getElements());
+    //         this.changeConfig(config.get("dirPath"), extString);
+    //     } catch (Exception e) {
+    //         printError("Fail to change file extension", e);
+    //         throw e;
+    //     }
+    // }
 
 
     
@@ -625,6 +592,6 @@ public class DataStore implements DataService{
 
     public static void main(String[] args) {
         DataStore ds = new DataStore();
-        ds.getConfig();
+        
     }
 }

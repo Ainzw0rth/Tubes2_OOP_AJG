@@ -6,6 +6,7 @@ import DataStore.DataStore;
 import Entity.*;
 
 public interface DataStoreAdapter {
+
     /**
      * Read all datastore from file
      * @param d DataStore instance

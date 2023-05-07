@@ -14,6 +14,9 @@ public class AdapterJSON implements DataStoreAdapter {
     private Gson gson;
     final String RED = "\033[0;31m";     // RED
     final String RESET = "\033[0m";  // Text Reset
+    private String dirPath;
+
+
 
     public AdapterJSON() {
         this.gson = new GsonBuilder().setPrettyPrinting()
