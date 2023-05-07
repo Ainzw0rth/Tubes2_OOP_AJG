@@ -1,15 +1,22 @@
 [
   {
-    "id": 1,
-    "name": "salomo",
-    "phoneNumber": "123123",
+    "id": 3,
+    "name": "vippp",
+    "phoneNumber": "322",
     "status": "Active",
     "point": 0
   },
   {
     "id": 1,
-    "name": "tes",
+    "name": "tesedit",
     "phoneNumber": "321",
+    "status": "VIP",
+    "point": 0
+  },
+  {
+    "id": 2,
+    "name": "abcdef",
+    "phoneNumber": "7567",
     "status": "Active",
     "point": 0
   }
