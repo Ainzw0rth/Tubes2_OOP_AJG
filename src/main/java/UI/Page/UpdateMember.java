@@ -22,6 +22,24 @@ public class UpdateMember extends JPanel {
         JLabel titleLabel = new JLabel("Update Membership BNMOStore");
         titleLabel.setFont(new Font("Poppins", Font.BOLD, 32));
 
+        // STATUS PANEL
+        JPanel statusPanel = new JPanel();
+        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.PAGE_AXIS));
+
+        // status label
+        JLabel statusLabel = new JLabel("Status");
+        statusLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
+
+        // dropdown
+        JPanel dropdownPanel = new JPanel();
+        String[] statusList = { "Member (Reguler) ", "VIP" };
+        JComboBox<String> statusDropdown = new JComboBox<>(statusList);
+        statusDropdown.setPreferredSize(new Dimension(300, 20));
+        statusDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
+        dropdownPanel.add(statusDropdown);
+
+        statusPanel.add(statusLabel);
+        statusPanel.add(dropdownPanel);
 
         // MEMBER PANEL
         JPanel memberPanel = new JPanel();
@@ -36,28 +54,27 @@ public class UpdateMember extends JPanel {
         DataStore data = DataStore.getInstance();
 
         data.getMembers().addObserver(
-            new Observer() {
-                @Override
-                public void update() {
-                    ArrayList<Member> members = data.getMembers().getElements();
+                new Observer() {
+                    @Override
+                    public void update() {
+                        ArrayList<Member> members = data.getMembers().getElements();
 
-                    String[] memberList = new String[members.size() + 1];
-                    memberList[0] = "Pilih nama member";
-                    for (int i = 0; i < members.size(); i++) {
-                        memberList[i + 1] = members.get(i).getName();
+                        String[] memberList = new String[members.size() + 1];
+                        memberList[0] = "Pilih nama member";
+                        for (int i = 0; i < members.size(); i++) {
+                            memberList[i + 1] = members.get(i).getName();
+                        }
+
+                        @SuppressWarnings("unchecked")
+                        JComboBox<String> memberDropdown = (JComboBox<String>) memberDropdownPanel.getComponent(0);
+                        memberDropdown.setModel(new DefaultComboBoxModel<>(memberList));
                     }
-            
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> memberDropdown = (JComboBox<String>) memberDropdownPanel.getComponent(0);
-                    memberDropdown.setModel(new DefaultComboBoxModel<>(memberList));
-                }
-            }
-        );
+                });
 
         ArrayList<Member> members = data.getMembers().getElements();
 
         String[] memberList = new String[members.size() + 1];
-        memberList[0] = "Pilih nama barang";
+        memberList[0] = "Pilih nama member";
         for (int i = 0; i < members.size(); i++) {
             memberList[i + 1] = members.get(i).getName();
         }
@@ -67,7 +84,7 @@ public class UpdateMember extends JPanel {
         memberDropdown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedName = (String) memberDropdown.getSelectedItem();
-                if (!selectedName.equals("Pilih nama barang")) {
+                if (!selectedName.equals("Pilih nama member")) {
                     Member selectedMember = null;
                     for (Member member : members) {
                         if (member.getName().equals(selectedName)) {
@@ -77,6 +94,11 @@ public class UpdateMember extends JPanel {
                     }
                     nameField.setText(selectedMember.getName());
                     phoneField.setText(selectedMember.getPhoneNumber());
+                    if (selectedMember instanceof Member) {
+                        statusDropdown.setSelectedItem("Member (Reguler)");
+                    } else if (selectedMember instanceof VIP) {
+                        statusDropdown.setSelectedItem("VIP");
+                    }
                 }
             }
         });
@@ -96,37 +118,13 @@ public class UpdateMember extends JPanel {
                 return this;
             }
         });
-        
+
         memberDropdown.setPreferredSize(new Dimension(300, 20));
         memberDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
         memberDropdownPanel.add(memberDropdown);
 
-
-            // String[] memberList = {"Pilih nama member"};
-            // JComboBox<String> memberDropdown = new JComboBox<>(memberList);
-
-
         memberPanel.add(memberLabel);
         memberPanel.add(memberDropdownPanel);
-
-        // STATUS PANEL
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.PAGE_AXIS));
-
-            // status label
-            JLabel statusLabel = new JLabel("Status");
-            statusLabel.setFont(new Font("Poppins", Font.PLAIN, 16));
-
-            // dropdown
-            JPanel dropdownPanel = new JPanel();
-            String[] statusList = {"Member (Reguler) ", "VIP"};
-            JComboBox<String> statusDropdown = new JComboBox<>(statusList);
-            statusDropdown.setPreferredSize(new Dimension(300, 20));
-            statusDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
-            dropdownPanel.add(statusDropdown);
-
-        statusPanel.add(statusLabel);
-        statusPanel.add(dropdownPanel);
 
         // wrap status and member panel to
         JPanel wrapper = new JPanel();
