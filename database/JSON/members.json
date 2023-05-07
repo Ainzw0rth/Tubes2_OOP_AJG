@@ -5,5 +5,19 @@
     "phoneNumber": "2423",
     "status": "VIP",
     "point": 0
+  },
+  {
+    "id": 3,
+    "name": "asdas",
+    "phoneNumber": "677",
+    "status": "Inactive",
+    "point": 0
+  },
+  {
+    "id": 1,
+    "name": "abc",
+    "phoneNumber": "432",
+    "status": "VIP",
+    "point": 0
   }
 ]
