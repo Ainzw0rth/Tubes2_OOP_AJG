@@ -32,7 +32,7 @@ public class UpdateMember extends JPanel {
 
         // dropdown
         JPanel dropdownPanel = new JPanel();
-        String[] statusList = { "Member (Reguler) ", "VIP" };
+        String[] statusList = { "Member (Reguler)", "VIP" };
         JComboBox<String> statusDropdown = new JComboBox<>(statusList);
         statusDropdown.setPreferredSize(new Dimension(300, 20));
         statusDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
@@ -94,10 +94,10 @@ public class UpdateMember extends JPanel {
                     }
                     nameField.setText(selectedMember.getName());
                     phoneField.setText(selectedMember.getPhoneNumber());
-                    if (selectedMember instanceof Member) {
-                        statusDropdown.setSelectedItem("Member (Reguler)");
-                    } else if (selectedMember instanceof VIP) {
+                    if (selectedMember instanceof VIP) {
                         statusDropdown.setSelectedItem("VIP");
+                    } else {
+                        statusDropdown.setSelectedItem("Member (Reguler)");
                     }
                 }
             }
@@ -166,11 +166,40 @@ public class UpdateMember extends JPanel {
         phonePanel.add(phoneLabel);
         phonePanel.add(phoneFieldPanel);
 
-        // REGIS BUTTON
-        JButton regisButton = new JButton("Update");
-        regisButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        regisButton.setForeground(Color.white);
-        regisButton.setBackground(new Color(0x36459A));
+        // UPDATE BUTTON
+        JButton updateButton = new JButton("Update");
+        updateButton.setFont(new Font("Poppins", Font.BOLD, 14));
+        updateButton.setForeground(Color.white);
+        updateButton.setBackground(new Color(0x36459A));
+        updateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedName = (String) memberDropdown.getSelectedItem();
+                if (!selectedName.equals("Pilih nama member")) {
+                    Member selectedMember = null;
+                    for (Member member : members) {
+                        if (member.getName().equals(selectedName)) {
+                            selectedMember = member;
+                            String selectedStatus = (String) statusDropdown.getSelectedItem();
+                            try {
+                                Boolean isMember;
+                                if (selectedStatus.equals("Member (Reguler)")) {
+                                    isMember = true;
+                                } else {
+                                    isMember = false;
+                                }
+                                System.out.println(isMember);
+
+                                updateMember(selectedMember.getId(), isMember, selectedMember.getPoint());
+                                System.out.println("Member has been updated successfully");
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
 
         // ADD COMPONENTS TO PANEL
         panel.add(Box.createVerticalGlue());
@@ -178,14 +207,31 @@ public class UpdateMember extends JPanel {
         panel.add(wrapper);
         panel.add(namePanel);
         panel.add(phonePanel);
-        panel.add(regisButton);
+        panel.add(updateButton);
         panel.add(Box.createVerticalGlue());
 
         this.add(panel);
         setSize(1200, 720);
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void updateMember(Integer id, Boolean isMember, Integer point) {
+        String name = nameField.getText();
+        String phone = phoneField.getText();
+
+        Member updatedMember;
+        if (isMember) {
+            updatedMember = new Member(id, name, phone, true, point);
+        } else {
+            updatedMember = new VIP(id, name, phone, true, point);
+        }
+
+        DataStore data = DataStore.getInstance();
+        try {
+            data.updateMember(id, updatedMember);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

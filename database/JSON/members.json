@@ -1,16 +1,9 @@
 [
   {
-    "id": 1,
-    "name": "salomo",
-    "phoneNumber": "123123",
-    "status": "Active",
-    "point": 0
-  },
-  {
-    "id": 1,
-    "name": "tes",
-    "phoneNumber": "321",
-    "status": "Active",
+    "id": 2,
+    "name": "qwerty",
+    "phoneNumber": "2423",
+    "status": "VIP",
     "point": 0
   }
 ]
