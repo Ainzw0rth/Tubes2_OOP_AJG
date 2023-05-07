@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.*;
 
 import Entity.*;
-import Utils.Collections.Observer;
 import DataStore.DataStore;
 
 public class TambahMember extends JPanel {
