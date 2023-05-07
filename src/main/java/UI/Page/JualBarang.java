@@ -4,6 +4,9 @@ import javax.swing.*;
 import DataStore.DataStore;
 import Entity.Bill;
 import Entity.Item;
+import Entity.Member;
+import UI.App;
+import UI.IApp;
 import Utils.Collections.Observer;
 
 import java.awt.*;
@@ -14,9 +17,13 @@ public class JualBarang extends JPanel {
     private JScrollPane scrollPane;
     JPanel stockPanel;
     private JPanel itemPanel;
-    JScrollPane stockScrollPane;
+    private JScrollPane stockScrollPane;
     private Bill x;
     private DataStore d;
+
+    private int minprice = 0;
+    private int maxprice = 999999999;
+
     
     private JLabel subtotalLabelNumber;
 
@@ -25,7 +32,7 @@ public class JualBarang extends JPanel {
             x = new Bill(-1);
             d = DataStore.getInstance();
             d.startNewBill(x);
-
+            
             // FILTER/SORT panel
             JPanel filterPanel = new JPanel();
             filterPanel.setLayout(null);
@@ -36,21 +43,45 @@ public class JualBarang extends JPanel {
             JLabel minPriceLabel = new JLabel("Min. Price");
             minPriceLabel.setFont(new Font("Poppins", Font.BOLD, 12));
             minPriceLabel.setBounds(190, 6, 60, 40);
-    
+            
             // min harga nominal
-            JLabel minPriceLabelNumber = new JLabel("Rp " + "0");
+            JTextField minPriceLabelNumber = new JTextField();
             minPriceLabelNumber.setFont(new Font("Poppins", Font.BOLD, 12));
-            minPriceLabelNumber.setBounds(260, 6, 130, 40);
-    
+            minPriceLabelNumber.setBounds(260, 10, 130, 30);
+            minPriceLabelNumber.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String inp = minPriceLabelNumber.getText();
+                    try {
+                        int price = Integer.parseInt(inp);
+                        minprice = price;
+                        rerenderItems();
+                    } catch (Exception a) {
+                    }
+                }
+            });
+            
             // max harga
             JLabel maxPriceLabel = new JLabel("Max. Price");
             maxPriceLabel.setFont(new Font("Poppins", Font.BOLD, 12));
             maxPriceLabel.setBounds(400, 6, 70, 40);
     
             // max harga nominal
-            JLabel maxPriceLabelNumber = new JLabel("Rp " + "1000000");
+            JTextField maxPriceLabelNumber = new JTextField();
             maxPriceLabelNumber.setFont(new Font("Poppins", Font.BOLD, 12));
-            maxPriceLabelNumber.setBounds(470, 6, 130, 40);
+            maxPriceLabelNumber.setBounds(470, 10, 130, 30);
+            maxPriceLabelNumber.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String inp = maxPriceLabelNumber.getText();
+                    try {
+                        int price = Integer.parseInt(inp);
+                        maxprice = price;
+                        rerenderItems();
+                    } catch (Exception a) {
+                    }
+                }
+            });
             
             // category dropdown
             String[] categories = {"Category"};
@@ -81,6 +112,12 @@ public class JualBarang extends JPanel {
             checkoutButton.setForeground(Color.white);
             checkoutButton.setBounds(30, 530, 329, 79);
             checkoutButton.setBackground(new Color(0x36459A));
+            checkoutButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    checkoutItems();
+                }
+            });
     
             // member dropdown
             String[] items = {"Pilih nama member"};
@@ -208,21 +245,24 @@ public class JualBarang extends JPanel {
         int ctr = 0;
         
         for (Item item: d.getItems().getElements()) {
-            ctr++;
-            ImageIcon image1 = new ImageIcon(item.getImageUrl()); // path nanti diganti dengan image yang sesuai
-            Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-            image1 = new ImageIcon(scaledImage);
-            JButton button1 = new JButton(image1);
-            button1.setBackground(new Color(0, 0, 0, 0));
-            button1.setOpaque(false);
-            button1.setBorderPainted(false);
-            stockPanel.add(button1);
-            button1.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    x.tambah(item);
-                }
-            });   
+            if (item.getPrice() <= maxprice && item.getPrice() >= minprice) {
+                ctr++;
+                ImageIcon image1 = new ImageIcon(item.getImageUrl()); // path nanti diganti dengan image yang sesuai
+                Image scaledImage = image1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                image1 = new ImageIcon(scaledImage);
+                JButton button1 = new JButton(image1);
+                button1.setBackground(new Color(0, 0, 0, 0));
+                button1.setOpaque(false);
+                button1.setBorderPainted(false);
+                stockPanel.add(button1);
+                button1.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        x.tambah(item);
+                        rerenderBills();
+                    }
+                });   
+            }
         }
 
         ctr = ctr / 5;            
@@ -239,87 +279,89 @@ public class JualBarang extends JPanel {
 
         int ctr = 0;
         for (Item item : x.getItems()) {
-            ctr++;
-            JPanel panelItem = new JPanel();
-            panelItem.setBackground(Color.white);
-            panelItem.setMaximumSize(new Dimension(1000, 90));
-
-            JPanel itemNames = new JPanel();
-            itemNames.setBounds(15, 0, 120, 20);
-            itemNames.setBackground(Color.white);
-            itemNames.setLayout(null);
-            
-            JPanel itemPrices = new JPanel();
-            itemPrices.setBounds(210, 0, 120, 20);
-            itemPrices.setBackground(Color.white);
-            itemPrices.setLayout(null);
-            
-            JLabel nameLabel = new JLabel(item.getName());
-            nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
-            nameLabel.setBounds(0, 0, 120, 20);
-            itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
-
-            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
-            priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
-            priceLabel.setBounds(0, 0, 120, 20);
-            itemPrices.add(priceLabel, BorderLayout.EAST);
-
-            // tombol untuk menambah/mengurangi stok
-            JPanel addminPanel = new JPanel();
-            addminPanel.setLayout(null);
-            addminPanel.setBounds(200, 30, 130, 20);
-            addminPanel.setBackground(new Color(0xD9D9D9));
-
-            JButton min = new JButton("-");
-            min.setFont(new Font("Poppins", Font.PLAIN, 10));
-            min.setBackground(new Color(0xEDEDED));
-            min.setLayout(null);
-            min.setBounds(0, 0, 40, 20);
-            min.setFocusPainted(false);
-            min.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    x.hapus(item);
-                    rerenderBills();
-                }
-            });
-
-            JButton plus = new JButton("+");
-            plus.setFont(new Font("Poppins", Font.PLAIN, 10));
-            plus.setBackground(new Color(0xEDEDED));
-            plus.setLayout(null);
-            plus.setBounds(90, 0, 40, 20);
-            plus.setFocusPainted(false);
-            plus.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    x.tambah(item);
-                    rerenderBills();
-                }
-            });
-
-            JPanel amountPanel = new JPanel(new GridBagLayout());
-            amountPanel.setBounds(40, 0, 50, 20);
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.anchor = GridBagConstraints.CENTER;
-
-            JLabel amountText = new JLabel(Integer.toString(item.getStock()));
-
-            amountPanel.add(amountText, gbc);
-            
-            addminPanel.add(min);
-            addminPanel.add(plus);
-            addminPanel.add(amountPanel);
-            
-            panelItem.add(itemNames);
-            panelItem.add(itemPrices);
-            panelItem.add(addminPanel);
-            panelItem.setLayout(null);
-            itemPanel.add(panelItem);
+            if (item.getPrice() <= maxprice && item.getPrice() >= minprice) { 
+                ctr++;
+                JPanel panelItem = new JPanel();
+                panelItem.setBackground(Color.white);
+                panelItem.setMaximumSize(new Dimension(1000, 90));
+    
+                JPanel itemNames = new JPanel();
+                itemNames.setBounds(15, 0, 120, 20);
+                itemNames.setBackground(Color.white);
+                itemNames.setLayout(null);
+                
+                JPanel itemPrices = new JPanel();
+                itemPrices.setBounds(210, 0, 120, 20);
+                itemPrices.setBackground(Color.white);
+                itemPrices.setLayout(null);
+                
+                JLabel nameLabel = new JLabel(item.getName());
+                nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
+                nameLabel.setBounds(0, 0, 120, 20);
+                itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
+    
+                JLabel priceLabel = new JLabel("Rp " + item.getPrice());
+                priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
+                priceLabel.setBounds(0, 0, 120, 20);
+                itemPrices.add(priceLabel, BorderLayout.EAST);
+    
+                // tombol untuk menambah/mengurangi stok
+                JPanel addminPanel = new JPanel();
+                addminPanel.setLayout(null);
+                addminPanel.setBounds(200, 30, 130, 20);
+                addminPanel.setBackground(new Color(0xD9D9D9));
+    
+                JButton min = new JButton("-");
+                min.setFont(new Font("Poppins", Font.PLAIN, 10));
+                min.setBackground(new Color(0xEDEDED));
+                min.setLayout(null);
+                min.setBounds(0, 0, 40, 20);
+                min.setFocusPainted(false);
+                min.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        x.hapus(item);
+                        rerenderBills();
+                    }
+                });
+    
+                JButton plus = new JButton("+");
+                plus.setFont(new Font("Poppins", Font.PLAIN, 10));
+                plus.setBackground(new Color(0xEDEDED));
+                plus.setLayout(null);
+                plus.setBounds(90, 0, 40, 20);
+                plus.setFocusPainted(false);
+                plus.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        x.tambah(item);
+                        rerenderBills();
+                    }
+                });
+    
+                JPanel amountPanel = new JPanel(new GridBagLayout());
+                amountPanel.setBounds(40, 0, 50, 20);
+    
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.anchor = GridBagConstraints.CENTER;
+    
+                JLabel amountText = new JLabel(Integer.toString(item.getStock()));
+    
+                amountPanel.add(amountText, gbc);
+                
+                addminPanel.add(min);
+                addminPanel.add(plus);
+                addminPanel.add(amountPanel);
+                
+                panelItem.add(itemNames);
+                panelItem.add(itemPrices);
+                panelItem.add(addminPanel);
+                panelItem.setLayout(null);
+                itemPanel.add(panelItem);
+            }
         }
 
         Dimension billPanelSize = new Dimension(350, (ctr)*70);
@@ -327,6 +369,12 @@ public class JualBarang extends JPanel {
         scrollPane.setViewportView(itemPanel);
 
         subtotalLabelNumber.setText("Rp " + Integer.toString(x.getTotalPrice()));
+    }
+
+    public void checkoutItems() {
+        // TODO : bikin page transaksi berhasil
+        IApp app = App.getInstance();
+        app.addTab("Transaksi Berhasil", new JualBarang());
     }
 
     public static void main(String[] args) throws Exception {  
