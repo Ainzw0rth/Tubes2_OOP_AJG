@@ -60,7 +60,7 @@ public class AdapterJSON implements DataStoreAdapter {
 
     public void isValid(String pathString) throws IOException {
         Path path = Paths.get(pathString);
-        if (Files.exists(path)){
+        if (!Files.exists(path)){
             throw new IOException("File not found!", null);
         } 
     }
