@@ -56,15 +56,15 @@ public class Config {
         }
     }
 
-    public void changeConfig(String dirPath, String ext) {
+    public void changeConfig(String dirPath, FileStoreExt ext) {
+        this.setExt(ext);
         try {
             // create a Gson object
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            
             // create a map representing the new JSON structure
             Map<String, String> myMap = new HashMap<>();
             myMap.put("dirPath", dirPath);
-            myMap.put("ext", ext);
+            myMap.put("ext", getExtAsString());
             
 
             // serialize the map into JSON format

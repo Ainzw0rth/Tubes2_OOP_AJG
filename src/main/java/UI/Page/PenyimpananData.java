@@ -7,18 +7,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-import DataStore.Config;
+import DataStore.DataStore;
+import DataStore.Enums.FileStoreExt;;
 
 
 public class PenyimpananData extends JPanel {
-    private String selectedExt;
-    private String selectedDir;
-    private Config config;
+    private DataStore data;
 
     public PenyimpananData(){
-        this.config = new Config();
-        this.selectedExt = config.getExtAsString();
-        this.selectedDir = config.getDirPath();
+        this.data = DataStore.getInstance();
         init();
     }
 
@@ -52,26 +49,32 @@ public class PenyimpananData extends JPanel {
         // Dropdown
         JPanel extPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         extPanel.setBounds(0,50,300,50);
-        String[] extList = { "JSON", "XML", "OBJ" };
+        String[] extList = { FileStoreExt.JSON.toString(), FileStoreExt.XML.toString(), FileStoreExt.OBJ.toString() };
         
         JComboBox<String> extDropdown = new JComboBox<>(extList);
-        extDropdown.setSelectedItem(this.selectedExt);
+        extDropdown.setSelectedItem(data.getExt());
         extDropdown.setPreferredSize(new Dimension(200, 30));
         extDropdown.setFont(new Font("Poppins", Font.PLAIN, 14));
         extDropdown.setBounds(0,0,300,50);
         extDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedExt = (String) extDropdown.getSelectedItem();
-                config.changeConfig(selectedDir, selectedExt);
+                String selectedExt = (String) extDropdown.getSelectedItem();
+                onHandleChangeExt(selectedExt);
             }
         });
-        this.selectedExt = (String) extDropdown.getSelectedItem();
-        config.changeConfig(selectedDir, selectedExt);
 
         extensionPanel.add(extPanel);
 
         extPanel.add(extDropdown);
+    }
+
+    private void onHandleChangeExt(String selectedExt){
+        try {
+            data.changeExt(FileStoreExt.valueOf(selectedExt));
+        } catch (Exception e) {
+            System.out.println("extension gagal diubah");
+        }
     }
 
     private void initLocation(){
@@ -94,7 +97,7 @@ public class PenyimpananData extends JPanel {
         JTextField dbLocField = new JTextField(15);
         dbLocField.setFont(new Font("Poppins", Font.PLAIN, 14));
         dbLocField.setEditable(false); // disable direct text editing
-        dbLocField.setText(this.selectedDir);
+        dbLocField.setText(data.getDirPath());
         dbLocField.setBounds(0,0,300,30);
         choosePanel.add(dbLocField);
         
@@ -103,7 +106,7 @@ public class PenyimpananData extends JPanel {
         chooseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chooseLoc();
-                dbLocField.setText(selectedDir);
+                dbLocField.setText(data.getDirPath());
             }
         });
         chooseButton.setBounds(330,0,120,30);
@@ -113,7 +116,6 @@ public class PenyimpananData extends JPanel {
         
     }
 
-
     private void chooseLoc() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose Database Location");
@@ -121,8 +123,11 @@ public class PenyimpananData extends JPanel {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            this.selectedDir = selectedFile.getAbsolutePath();
-            config.changeConfig(selectedDir, selectedExt);
+            try {
+                data.changeDir(selectedFile.getAbsolutePath());
+            } catch (Exception e) {
+                
+            }
         }
     }
 

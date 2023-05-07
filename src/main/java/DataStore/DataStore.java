@@ -19,7 +19,8 @@ public class DataStore implements DataService{
     @Getter private ObservableCollection<Member> members;
     @Getter private ObservableCollection<Bill> bills;
     @Getter private ObservableCollection<FixedBill> fixedBills;
-    @Getter private Config config;
+    @Getter @Setter private String dirPath;
+    @Getter @Setter private FileStoreExt ext;
     // @WaitForImplement
     // @Setter private ArrayList<String> pluginPaths;
 
@@ -32,9 +33,15 @@ public class DataStore implements DataService{
     private DataStoreAdapter adapter;
     private static DataStore instance;
     
+    
     private DataStore() {
         this.adapter = new AdapterJSON();   
-        switch (this.config.getExt()) {
+        Config config = new Config();
+
+        this.dirPath = config.getDirPath();
+        this.ext = config.getExt();
+
+        switch (this.getExt()) {
             case JSON:
                 this.adapter = new AdapterJSON();   
                 break;
@@ -106,46 +113,56 @@ public class DataStore implements DataService{
         }
     }
 
-    // /**
-    //  * Change file extension to write/read
-    //  * @param ext
-    //  */
-    // public void changeExt(FileStoreExt ext) throws Exception{
-    //     Map<String, String> config = new HashMap<>(this.getConfig());
-    //     String extString = config.get("ext");
+    /**
+     * Change file extension to write/read
+     * @param ext
+     */
+    public void changeExt(FileStoreExt ext) throws Exception{
+        Config config = new Config();
 
-    //     switch (ext) {
-    //         case JSON:
-    //             this.adapter = new AdapterJSON();
-    //             extString = "JSON";
-    //             break;
-    //         case XML:
-    //             this.adapter = new AdapterXML();
-    //             extString = "XML";
-    //             break;
-    //         case OBJ:
-    //             this.adapter = new AdapterOBJ();
-    //             extString = "OBJ";
-    //             break;
-    //         default:
-    //             this.adapter = new AdapterJSON();
-    //             extString = "JSON";
-    //             break;
-    //     }
+        switch (ext) {
+            case JSON:
+                this.adapter = new AdapterJSON();
+                break;
+            case XML:
+                this.adapter = new AdapterXML();
+                break;
+            case OBJ:
+                this.adapter = new AdapterOBJ();
+                break;
+            default:
+                this.adapter = new AdapterJSON();
+                break;
+        }
 
-    //     try {
-    //         this.adapter.writeBills(this.bills.getElements());
-    //         this.adapter.writeCustomers(this.customers.getElements());
-    //         this.adapter.writeFixedBills(this.fixedBills.getElements());
-    //         this.adapter.writeItems(this.items.getElements());
-    //         this.adapter.writeMembers(this.members.getElements());
-    //         this.changeConfig(config.get("dirPath"), extString);
-    //     } catch (Exception e) {
-    //         printError("Fail to change file extension", e);
-    //         throw e;
-    //     }
-    // }
+        try {
+            // change database extension
+            this.adapter.writeBills(this.bills.getElements());
+            this.adapter.writeCustomers(this.customers.getElements());
+            this.adapter.writeFixedBills(this.fixedBills.getElements());
+            this.adapter.writeItems(this.items.getElements());
+            this.adapter.writeMembers(this.members.getElements());
 
+            // change config
+            config.changeConfig(config.getDirPath(), ext);
+
+        } catch (Exception e) {
+            printError("Fail to change file extension", e);
+            throw e;
+        }
+    }
+
+    public void changeDir(String dir) throws Exception{
+        Config config = new Config();
+        try {
+            // change database
+
+            // change directory
+            config.changeConfig(dir, config.getExt());
+        } catch (Exception e){
+            throw e;
+        }
+    }
 
     
     // /**
