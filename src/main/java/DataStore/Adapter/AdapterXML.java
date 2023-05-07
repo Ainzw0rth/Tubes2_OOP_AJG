@@ -27,21 +27,26 @@ public class AdapterXML implements DataStoreAdapter {
         this.dirPath = dirPath;
         xstream = new XStream(new DomDriver());
         xstream.addPermission(AnyTypePermission.ANY);
-        xstream.alias("list", CustomerList.class);
+
+        xstream.alias("customers", CustomerList.class);
         xstream.alias("customer", Customer.class);
         xstream.addImplicitCollection(CustomerList.class, "customers");
         
+        xstream.alias("items", ItemList.class);
         xstream.alias("item", Item.class);
         xstream.addImplicitCollection(ItemList.class, "items");
         
+        xstream.alias("members", MemberList.class);
         xstream.alias("member", Member.class);
         xstream.addImplicitCollection(MemberList.class, "members");
         
+        xstream.alias("bills", BillList.class);
         xstream.alias("bill", Bill.class);
         xstream.addImplicitCollection(BillList.class, "bills");
         
-        xstream.alias("fixed_bill", FixedBill.class);
-        // xstream.addImplicitCollection(FixedBillList.class, "fixed_bills");
+        xstream.alias("fixedBills", FixedBillList.class);
+        xstream.alias("fixedBill", FixedBill.class);
+        xstream.addImplicitCollection(FixedBillList.class, "fixedBills");
     }
 
     public void delete(String className) {
@@ -100,9 +105,9 @@ public class AdapterXML implements DataStoreAdapter {
 
     public void writeCustomers(ArrayList<Customer> customers) throws IOException {
         // TODO: implement
-        System.out.println("klajflkjaflka");
         try {
-            String xml = xstream.toXML(customers);
+            CustomerList listCustomer = new CustomerList(customers);
+            String xml = xstream.toXML(listCustomer);
             FileWriter fw = new FileWriter(dirPath + "/customers.xml");
             fw.write(xml);
             fw.close();
@@ -155,7 +160,8 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeItems(ArrayList<Item> items) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(items);
+            ItemList listItem = new ItemList(items);
+            String xml = xstream.toXML(listItem);
             FileWriter fw = new FileWriter(dirPath + "/items.xml");
             fw.write(xml);
             fw.close();
@@ -205,7 +211,8 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeMembers(ArrayList<Member> members) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(members);
+            MemberList listMember = new MemberList(members);
+            String xml = xstream.toXML(listMember);
             FileWriter fw = new FileWriter(dirPath + "/members.xml");
             fw.write(xml);
             fw.close();
@@ -255,7 +262,8 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeBills(ArrayList<Bill> bills) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(bills);
+            BillList listBill = new BillList(bills);
+            String xml = xstream.toXML(listBill);
             FileWriter fw = new FileWriter(dirPath + "/bills.xml");
             fw.write(xml);
             fw.close();
@@ -305,7 +313,8 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(fixedBills);
+            FixedBillList listFixedBill = new FixedBillList(fixedBills);
+            String xml = xstream.toXML(listFixedBill);
             FileWriter fw = new FileWriter(dirPath + "/fixed_bills.xml");
             fw.write(xml);
             fw.close();
