@@ -63,10 +63,10 @@ public interface IApp {
     //  * Set Panel to a Page
     //  * @param JPanel
     //  */
-    // public void setPanel(JPanel panel);
+    public void setPanel(String panelName, Component component);
 
     // /**
     //  * Get a certain Panel
     //  */
-    // public void getPanel(String panelName);
+    public JPanel getPanel(String panelName);
 }
