@@ -101,6 +101,14 @@ public class HistoriTransaksi extends JPanel {
         buttonSubmit.setForeground(Color.white);
         buttonSubmit.setBounds(80, 6, 201, 60);
         buttonSubmit.setBackground(new Color(0x36459A));
+
+        // HISTORY PANEL
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+        panel.setBackground(Color.white);
+        panel.setBounds(600, 0, 600, 720);
+        panel.setLayout(null);
+
         buttonSubmit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -122,6 +130,58 @@ public class HistoriTransaksi extends JPanel {
 
                 try {
                     ArrayList<FixedBill> fixedBills = data.getFixedBillsByCustId(custId);
+                    JPanel fixedBillPanel = new JPanel();
+                    fixedBillPanel.setBackground(Color.white);
+
+                    for (int i = 0; i < fixedBills.size(); i++) {
+
+                        // DATE PANEL
+                        JPanel datePanel = new JPanel();
+                        datePanel.setBounds(20, i*50, 400, 100);
+
+                        // DATE LABEL
+                        JLabel dateLabel = new JLabel(fixedBills.get(i).getDate());
+                        dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+                        datePanel.add(dateLabel);
+
+                        // ITEM PANEL
+                        JPanel itemPanel = new JPanel();
+                        itemPanel.setLayout(new GridBagLayout());
+
+                        // LOOP ALL ITEM
+                        for (int j = 0; j < fixedBills.get(i).getItems().size(); j++) {
+                            GridBagConstraints gbc = new GridBagConstraints();
+                            gbc.gridx = 0;
+                            gbc.gridy = j;
+                            gbc.anchor = GridBagConstraints.WEST;
+                            gbc.weightx = 1;
+                            gbc.insets = new Insets(5, 5, 5, 5);
+
+                            // ITEM NAME LABEL
+                            JLabel nameLabel = new JLabel(fixedBills.get(i).getItems().get(j).getName());
+                            nameLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                            itemPanel.add(nameLabel, gbc);
+
+                            System.out.println(fixedBills.get(i).getItems().get(j).getName());
+
+                            gbc.gridx = 1;
+
+                            // ITEM QTY LABEL
+                            JLabel qtyLabel = new JLabel(fixedBills.get(i).getItems().get(j).getStock() + "x");
+                            qtyLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                            itemPanel.add(qtyLabel, gbc);
+
+                            gbc.gridx = 2;
+
+                            // ITEM PRICE LABEL
+                            JLabel priceLabel = new JLabel(fixedBills.get(i).getItems().get(j).getPrice() + "");
+                            priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                            itemPanel.add(priceLabel, gbc);
+                        }
+
+                        panel.add(datePanel);
+                        panel.add(itemPanel);
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -144,69 +204,14 @@ public class HistoriTransaksi extends JPanel {
         buttonPanel.add(buttonSubmit);
         imagePanel.add(mrbeastImage);
 
-        // HISTORY PANEL
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
-        panel.setBackground(Color.white);
-        panel.setBounds(600, 0, 600, 720);
-        panel.setLayout(null);
-
-        // FOR LOOP ALL ITEMS IN HISTORY
-        Item[] itemList = {};
-        JPanel itemPanel = new JPanel();
-        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-        itemPanel.setBackground(Color.white);
-
-        for (Item item : itemList) {
-            JPanel panelItem = new JPanel();
-            panelItem.setBackground(Color.white);
-            panelItem.setMaximumSize(new Dimension(1000, 30));
-
-            JPanel itemNames = new JPanel();
-            itemNames.setBounds(15, 0, 120, 20);
-            itemNames.setBackground(Color.white);
-            itemNames.setLayout(null);
-
-            JPanel itemQuantity = new JPanel();
-            itemQuantity.setBounds(110, 0, 120, 20);
-            itemQuantity.setBackground(Color.white);
-            itemQuantity.setLayout(null);
-
-            JPanel itemPrices = new JPanel();
-            itemPrices.setBounds(210, 0, 120, 20);
-            itemPrices.setBackground(Color.white);
-            itemPrices.setLayout(null);
-
-            JLabel nameLabel = new JLabel(item.getName());
-            nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
-            nameLabel.setBounds(0, 0, 120, 20);
-            itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
-
-            JLabel quantityLabel = new JLabel(item.getName());
-            quantityLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
-            quantityLabel.setBounds(0, 0, 120, 20);
-            itemQuantity.add(quantityLabel, BorderLayout.WEST); // add name label to left side of panel
-
-            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
-            priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
-            priceLabel.setBounds(0, 0, 120, 20);
-            itemPrices.add(priceLabel, BorderLayout.EAST);
-
-            panelItem.add(itemNames);
-            panelItem.add(itemPrices);
-            panelItem.setLayout(null);
-            itemPanel.add(panelItem);
-        }
-
-        panel.add(itemPanel);
-
         // HISTORY SCROLL
         JScrollPane historyScrollPane = new JScrollPane(panel);
-        historyScrollPane.setBackground(Color.white);
+        // historyScrollPane.setBackground(Color.white);
         historyScrollPane.setLayout(null);
         historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         historyScrollPane.setBounds(600, 0, 600, 720);
         historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+        historyScrollPane.add(panel);
 
         // FRAME
         this.setLayout(null);
