@@ -19,10 +19,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import org.json.*;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import Utils.Collections.ObservableCollection;
 
 public class DataStore implements DataService{
@@ -415,9 +411,7 @@ public class DataStore implements DataService{
             for (Member m : this.members.getElements()) {
                 if (m.getId() == member_id) {
                     this.members.remove(m);
-                    this.members.add(new Member(
-                        m.getId(), m.getName(), m.getPhoneNumber(), m.getIsActive(), m.getPoint()
-                    ));
+                    this.members.add(member);
                     found = true;
                     break;
                 }

@@ -1,47 +1,19 @@
 package DataStore.Adapter;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.security.*;
-
-import org.xml.sax.SAXParseException;
-
-// importimport java.io.Serializable; org.w3c.dom.*;
-// import org.xml.sax.SAXException;
-// import javax.xml.parsers.*;
-// import java.io.*;
-
 import java.util.*;
-// import java.util.Locale.Category;
-
-import DataStore.DataStore;
-import Entity.*;
-
 import java.io.FileWriter;
-// import java.io.BufferedReader;
-// import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.*;
+import org.xml.sax.SAXParseException;
 
-
-class CustomerList {
-    public ArrayList<Customer> customers;
-}
-class ItemLIst {
-    public ArrayList<Item> items;
-}
-class BillList {
-    public ArrayList<Bill> bills;
-}
-class Members {
-    public ArrayList<Member> members;
-}
-class FixedBillList {
-    public ArrayList<FixedBill> fixedBills;
-}
-
+import DataStore.Adapter.TypeAdapter.XmlList.*;
+import DataStore.DataStore;
+import Entity.*;
 
 public class AdapterXML implements DataStoreAdapter {
     
@@ -132,7 +104,7 @@ public class AdapterXML implements DataStoreAdapter {
             xml = new String(data);
 
             // deserialize XML data into array of Customer objects
-            ItemLIst itemmm = (ItemLIst) xstream.fromXML(xml);
+            ItemList itemmm = (ItemList) xstream.fromXML(xml);
 
             // ArrayList<Customer> temp = new ArrayList<>();
             return itemmm.items; 
@@ -182,7 +154,7 @@ public class AdapterXML implements DataStoreAdapter {
             xml = new String(data);
 
             // deserialize XML data into array of Customer objects
-            Members mem = (Members) xstream.fromXML(xml);
+            MemberList mem = (MemberList) xstream.fromXML(xml);
 
             // ArrayList<Customer> temp = new ArrayList<>();
             return mem.members; 

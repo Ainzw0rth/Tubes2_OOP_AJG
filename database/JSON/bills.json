@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": 1,
+    "totalPrice": 0,
+    "items": [],
+    "idCustomer": 1
+  },
+  {
+    "id": 2,
+    "totalPrice": 0,
+    "items": [],
+    "idCustomer": 1
+  }
+]
