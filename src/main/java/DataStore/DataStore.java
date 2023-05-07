@@ -8,6 +8,18 @@ import DataStore.Thread.BillWorker;
 import Entity.*;
 import lombok.*;
 
+import java.io.*;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+import java.io.FileReader;
+import java.io.FileWriter;
+import org.json.*;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import Utils.Collections.ObservableCollection;
 
 public class DataStore {
@@ -26,6 +38,8 @@ public class DataStore {
     final String RESET = "\033[0m";  // Text Reset
 
     private DataStoreAdapter adapter;
+    private String dirPath;
+
 
     public enum FileStoreExt {
         JSON, 
@@ -42,7 +56,7 @@ public class DataStore {
     private static DataStore instance;
     
     private DataStore() {
-        this.adapter = new AdapterJSON();
+        this.adapter = new AdapterJSON();   
 
         try {
             this.customers = new ObservableCollection<Customer>(this.adapter.readCustomers());
@@ -133,6 +147,55 @@ public class DataStore {
         }
     }
 
+    public void changeConfig(String dirPath, String ext) {
+        try {
+            // create a Gson object
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            
+            // create a map representing the new JSON structure
+            Map<String, String> myMap = new HashMap<>();
+            myMap.put("dirPath", dirPath);
+            myMap.put("ext", ext);
+            
+
+            // serialize the map into JSON format
+            String jsonString = gson.toJson(myMap);
+            
+            // write the JSON string to a file
+            FileWriter writer = new FileWriter("src/main/config/config.json");
+            writer.write(jsonString);
+            writer.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Map<String, String> getConfig() {
+        Map<String, String> config = new HashMap<>();
+        try {
+            String jsonStr = "";
+            BufferedReader reader = new BufferedReader(new FileReader("src/main/config/config.json"));
+            String line = reader.readLine();
+            while (line != null) {
+                jsonStr += line;
+                line = reader.readLine();
+            }
+            reader.close();
+    
+            JSONObject jsonObj = new JSONObject(jsonStr);
+            config.put("ext", jsonObj.getString("ext"));
+            config.put("dirPath", jsonObj.getString("dirPath"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return config;
+    }
+
+
+    
     // /**
     //  * Get customers from file
     //  * @return ArrayList of Customer
@@ -574,5 +637,10 @@ public class DataStore {
         System.out.println(new StringBuilder().append(RED)
             .append(prompt).append(RESET).append(": ")
             .append(e.getMessage()).append("\n").toString());
+    }
+
+    public static void main(String[] args) {
+        DataStore ds = new DataStore();
+        ds.getConfig();
     }
 }
