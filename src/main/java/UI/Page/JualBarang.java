@@ -24,20 +24,23 @@ public class JualBarang extends JPanel {
         data = DataStore.getInstance();
         listItem = data.getItems().getElements();
         listMembers = data.getMembers().getElements();
-
+        this.idCustomer = 1;
         this.bill = null;
         
         try {
+            this.bill = new Bill(-1);
             ArrayList<Bill> bills = data.getBills().getElements(); 
+            System.out.println(bills.size());
             for (int i=0; i< bills.size(); i++){
+                System.out.println(bills.get(i).getId());
                 if (idCustomer == bills.get(i).getId()){
-                    bill = bills.get(i);
+                    this.bill = bills.get(i);
                     break;
                 }
             }
-            
-        } catch (Exception e) {
 
+        } catch (Exception e) {
+            System.out.println("error: " + e.getMessage());
         }
 
         initUI();
@@ -124,7 +127,12 @@ public class JualBarang extends JPanel {
 
         // daftar belanjaan
         // Item[] itemList = {new Item("Ayam", 12000, "../../../resources/images/icon.jpg", 5), new Item("Bebek", 15000, "../../../resources/images/icon.jpg", 7)};
-        Item[] itemList = bill.getItems().toArray(new Item[0]);
+        Item[] itemList ={};
+        if (this.bill != null){
+
+            itemList = bill.getItems().toArray(new Item[0]);
+        }
+
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
         itemPanel.setBackground(Color.white);
