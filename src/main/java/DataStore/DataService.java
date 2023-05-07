@@ -13,11 +13,11 @@ public interface DataService {
 
     public void setFixedBills(ArrayList<FixedBill> fixedBills);
 
-    /**
-     * Read all datastore from file. Most likely will be deprecated
-     * @throws Exception
-     */
-    public void loadData() throws Exception;
+    // /**
+    //  * Read all datastore from file. Most likely will be deprecated
+    //  * @throws Exception
+    //  */
+    // public void loadData() throws Exception;
 
     /**
      * Add customer to customers and write to file

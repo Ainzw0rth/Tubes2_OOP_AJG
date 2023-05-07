@@ -1,8 +1,14 @@
 package UI.Page;
-import javax.swing.*;
-import java.awt.*;
 
-import Entity.Item;
+import javax.swing.*;
+
+import DataStore.DataStore;
+import Utils.Collections.Observer;
+import Entity.*;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 public class HistoriTransaksi extends JPanel {
     public HistoriTransaksi() {
@@ -20,7 +26,7 @@ public class HistoriTransaksi extends JPanel {
         // MEMBER PANEL
         JPanel memberPanel = new JPanel();
         memberPanel.setLayout(null);
-        memberPanel.setBounds(80,60,510,30);
+        memberPanel.setBounds(80, 60, 510, 30);
 
         // MEMBER LABEL
         JLabel memberLabel = new JLabel("Member");
@@ -30,39 +36,71 @@ public class HistoriTransaksi extends JPanel {
         // MEMBER TEXT PANEL
         JPanel memberTextPanel = new JPanel();
         memberTextPanel.setLayout(null);
-        memberTextPanel.setBounds(80,90,510,30);
+        memberTextPanel.setBounds(80, 90, 510, 30);
+
+        JPanel memberDropdownPanel = new JPanel();
+
+        DataStore data = DataStore.getInstance();
+
+        data.getMembers().addObserver(
+                new Observer() {
+                    @Override
+                    public void update() {
+                        ArrayList<Member> members = data.getMembers().getElements();
+
+                        String[] memberList = new String[members.size() + 1];
+                        memberList[0] = "Pilih nama member";
+                        for (int i = 0; i < members.size(); i++) {
+                            memberList[i + 1] = members.get(i).getName();
+                        }
+
+                        @SuppressWarnings("unchecked")
+                        JComboBox<String> memberDropdown = (JComboBox<String>) memberDropdownPanel.getComponent(0);
+                        memberDropdown.setModel(new DefaultComboBoxModel<>(memberList));
+                    }
+                });
+
+        ArrayList<Member> members = data.getMembers().getElements();
+
+        String[] memberList = new String[members.size() + 1];
+        memberList[0] = "Pilih nama member";
+        for (int i = 0; i < members.size(); i++) {
+            memberList[i + 1] = members.get(i).getName();
+        }
+
+        JComboBox<String> memberDropdown = new JComboBox<>(memberList);
+
+        memberDropdown.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+                    boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (index == 0) {
+                    setEnabled(false);
+                    setFont(getFont().deriveFont(Font.ITALIC));
+                } else {
+                    setEnabled(true);
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                }
+                return this;
+            }
+        });
 
         // MEMBER TEXT FIELD
-        JTextField memberTextArea = new JTextField();
-        memberTextArea.setBounds(0,6,300,30);
+        // JTextField memberTextArea = new JTextField();
+        memberDropdown.setBounds(0, 6, 300, 30);
 
         // BUTTON PANEL
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBounds(-132,140,600,80);
-        
+        buttonPanel.setBounds(-132, 140, 600, 80);
+
         // BUTTON SUBMIT
         JButton buttonSubmit = new JButton("Tampilkan Riwayat");
         buttonSubmit.setFocusPainted(false);
         buttonSubmit.setFont(new Font("Poppins", Font.BOLD, 16));
         buttonSubmit.setForeground(Color.white);
-        buttonSubmit.setBounds(80, 6,201, 60);
+        buttonSubmit.setBounds(80, 6, 201, 60);
         buttonSubmit.setBackground(new Color(0x36459A));
-        
-        JPanel imagePanel = new JPanel();
-        imagePanel.setBounds(0,220,600,396);
-        
-        ImageIcon mrbeast = new ImageIcon(getClass().getResource("/images/riwayat/mrBeast.png"));
-        JLabel mrbeastImage = new JLabel(mrbeast);
-        mrbeastImage.setHorizontalAlignment(JLabel.LEFT);
-        mrbeastImage.setVerticalAlignment(JLabel.BOTTOM);  
-        mrbeastImage.setBounds(0, 0, 511, 396);  
-
-        // ADDING TO ITS PANEL
-        titlePanel.add(titleLabel);
-        memberPanel.add(memberLabel);
-        memberTextPanel.add(memberTextArea);
-        buttonPanel.add(buttonSubmit);
-        imagePanel.add(mrbeastImage);
 
         // HISTORY PANEL
         JPanel panel = new JPanel();
@@ -71,54 +109,84 @@ public class HistoriTransaksi extends JPanel {
         panel.setBounds(600, 0, 600, 720);
         panel.setLayout(null);
 
-        // FOR LOOP ALL ITEMS IN HISTORY
-        Item[] itemList = {};
-        JPanel itemPanel = new JPanel();
-        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-        itemPanel.setBackground(Color.white);
+        Item barang1 = new Item(1, "lala", "kskakaks", 10000, "asjjsadjajd", 10);
+        Item barang2 = new Item(1, "lala", "kskakaks", 10000, "asjjsadjajd", 10);
+        LinkedList<Item> listBar = new LinkedList<Item>();
+        listBar.add(barang1);
+        listBar.add(barang2);
+        FixedBill fix1 = new FixedBill(1, 40000, listBar, 1, "10 April 2023");
+        FixedBill fix2 = new FixedBill(1, 40000, listBar, 1, "11 April 2025");
+        ArrayList<FixedBill> bills = new ArrayList<>();
+        bills.add(fix1);
+        bills.add(fix2);
 
-        for (Item item : itemList) {
-            JPanel panelItem = new JPanel();
-            panelItem.setBackground(Color.white);
-            panelItem.setMaximumSize(new Dimension(1000, 30));
+        for (int i = 0; i < bills.size(); i++) {
 
-            JPanel itemNames = new JPanel();
-            itemNames.setBounds(15, 0, 120, 20);
-            itemNames.setBackground(Color.white);
-            itemNames.setLayout(null);
+            // DATE PANEL
+            JPanel datePanel = new JPanel();
+            datePanel.setBounds(20, i*50, 400, 100);
 
-            JPanel itemQuantity = new JPanel();
-            itemQuantity.setBounds(110, 0, 120, 20);
-            itemQuantity.setBackground(Color.white);
-            itemQuantity.setLayout(null);
+            // DATE LABEL
+            JLabel dateLabel = new JLabel(bills.get(i).getDate());
+            dateLabel.setFont(new Font("Poppins", Font.BOLD, 14));
+            datePanel.add(dateLabel);
 
-            JPanel itemPrices = new JPanel();
-            itemPrices.setBounds(210, 0, 120, 20);
-            itemPrices.setBackground(Color.white);
-            itemPrices.setLayout(null);
+            System.out.println("a");
 
-            JLabel nameLabel = new JLabel(item.getName());
-            nameLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
-            nameLabel.setBounds(0, 0, 120, 20);
-            itemNames.add(nameLabel, BorderLayout.WEST); // add name label to left side of panel
+            // ITEM PANEL
+            JPanel itemPanel = new JPanel();
+            itemPanel.setLayout(new GridBagLayout());
 
-            JLabel quantityLabel = new JLabel(item.getName());
-            quantityLabel.setHorizontalAlignment(JLabel.LEFT); // align text to left
-            quantityLabel.setBounds(0, 0, 120, 20);
-            itemQuantity.add(quantityLabel, BorderLayout.WEST); // add name label to left side of panel
+            // LOOP ALL ITEM
+            for (int j = 0; j < bills.get(i).getItems().size(); j++) {
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = j;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.weightx = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
 
-            JLabel priceLabel = new JLabel("Rp " + item.getPrice());
-            priceLabel.setHorizontalAlignment(JLabel.LEFT); // align text to right
-            priceLabel.setBounds(0, 0, 120, 20);
-            itemPrices.add(priceLabel, BorderLayout.EAST);
+                // ITEM NAME LABEL
+                JLabel nameLabel = new JLabel(bills.get(i).getItems().get(j).getName());
+                nameLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                itemPanel.add(nameLabel, gbc);
 
-            panelItem.add(itemNames);
-            panelItem.add(itemPrices);
-            panelItem.setLayout(null);
-            itemPanel.add(panelItem);
+                System.out.println(bills.get(i).getItems().get(j).getName());
+
+                gbc.gridx = 1;
+
+                // ITEM QTY LABEL
+                JLabel qtyLabel = new JLabel(bills.get(i).getItems().get(j).getStock() + "x");
+                qtyLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                itemPanel.add(qtyLabel, gbc);
+
+                gbc.gridx = 2;
+
+                // ITEM PRICE LABEL
+                JLabel priceLabel = new JLabel(bills.get(i).getItems().get(j).getPrice() + "");
+                priceLabel.setFont(new Font("Poppins", Font.PLAIN, 14));
+                itemPanel.add(priceLabel, gbc);
+            }
+            panel.add(datePanel);
+            panel.add(itemPanel);
         }
 
-        panel.add(itemPanel);
+        JPanel imagePanel = new JPanel();
+        imagePanel.setBounds(0, 220, 600, 396);
+
+        ImageIcon mrbeast = new ImageIcon(getClass().getResource("/images/riwayat/mrBeast.png"));
+        JLabel mrbeastImage = new JLabel(mrbeast);
+        mrbeastImage.setHorizontalAlignment(JLabel.LEFT);
+        mrbeastImage.setVerticalAlignment(JLabel.BOTTOM);
+        mrbeastImage.setBounds(0, 0, 511, 396);
+
+        // ADDING TO ITS PANEL
+        titlePanel.add(titleLabel);
+        memberPanel.add(memberLabel);
+        memberTextPanel.add(memberDropdown);
+        buttonPanel.add(buttonSubmit);
+        imagePanel.add(mrbeastImage);
+
 
         // HISTORY SCROLL
         JScrollPane historyScrollPane = new JScrollPane(panel);
@@ -127,6 +195,7 @@ public class HistoriTransaksi extends JPanel {
         historyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         historyScrollPane.setBounds(600, 0, 600, 720);
         historyScrollPane.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
+        // historyScrollPane.add(panel);
 
         // FRAME
         this.setLayout(null);
@@ -137,6 +206,7 @@ public class HistoriTransaksi extends JPanel {
         this.add(memberTextPanel);
         this.add(buttonPanel);
         this.add(imagePanel);
+        this.add(panel);
         this.add(historyScrollPane);
     }
 

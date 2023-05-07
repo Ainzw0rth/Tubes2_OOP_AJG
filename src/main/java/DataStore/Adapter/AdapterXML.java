@@ -5,6 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -18,32 +21,55 @@ import Entity.*;
 public class AdapterXML implements DataStoreAdapter {
     
     private XStream xstream;
+    private String dirPath;
 
-    public AdapterXML() {
+    public AdapterXML(String dirPath) {
+        this.dirPath = dirPath;
         xstream = new XStream(new DomDriver());
         xstream.addPermission(AnyTypePermission.ANY);
-        xstream.alias("list", CustomerList.class);
+
+        xstream.alias("customers", CustomerList.class);
         xstream.alias("customer", Customer.class);
         xstream.addImplicitCollection(CustomerList.class, "customers");
-
+        
+        xstream.alias("items", ItemList.class);
         xstream.alias("item", Item.class);
+        xstream.addImplicitCollection(ItemList.class, "items");
+        
+        xstream.alias("members", MemberList.class);
         xstream.alias("member", Member.class);
+        xstream.addImplicitCollection(MemberList.class, "members");
+        
+        xstream.alias("bills", BillList.class);
         xstream.alias("bill", Bill.class);
-        xstream.alias("fixed_bill", FixedBill.class);
+        xstream.addImplicitCollection(BillList.class, "bills");
+        
+        xstream.alias("fixedBills", FixedBillList.class);
+        xstream.alias("fixedBill", FixedBill.class);
+        xstream.addImplicitCollection(FixedBillList.class, "fixedBills");
     }
 
-    public void read(DataStore d) throws IOException {
-        // TODO: implement
-        d.setCustomers(readCustomers());
-        d.setItems(readItems());
-        d.setMembers(readMembers());
-        d.setBills(readBills());
-        d.setFixedBills(readFixedBills());
+    public void delete(String className) {
+        String filePath = dirPath + "/" + className;
+        try {
+            // Check if the file exists
+            Path path = Paths.get(filePath + ".json");
+            if (Files.exists(path)) {
+                // Delete the file
+                Files.delete(path);   
+            } 
+            path = Paths.get(filePath + ".ser");
+            if (Files.exists(path)){
+                Files.delete(path);
+            }
+        } catch (Exception e) {
+            System.out.println("Error deleting file: " + e.getMessage());
+        }
     }
 
     public ArrayList<Customer> readCustomers() throws IOException {
         // read XML data from file
-        String filename = "database/XML/customers.xml";
+        String filename = dirPath + "/customers.xml";
         String xml = "";
         try {
             FileInputStream file = new FileInputStream(filename);
@@ -80,11 +106,15 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeCustomers(ArrayList<Customer> customers) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(customers);
-            FileWriter fw = new FileWriter("database/XML/customers.xml");
+            CustomerList listCustomer = new CustomerList(customers);
+            String xml = xstream.toXML(listCustomer);
+            FileWriter fw = new FileWriter(dirPath + "/customers.xml");
             fw.write(xml);
             fw.close();
-            System.out.println(xml);
+            
+            delete("customers");
+            
+            System.out.println("File written successfully.");
         } catch (IOException e) {
             System.out.println("Fail to write to customers.xml");
             throw e;
@@ -94,7 +124,7 @@ public class AdapterXML implements DataStoreAdapter {
     public ArrayList<Item> readItems() throws IOException {
         // read XML data from file
         // please implement read items according to readCustomers
-        String filename = "database/XML/items.xml";
+        String filename = dirPath + "/items.xml";
         String xml = "";
         try {
             FileInputStream file = new FileInputStream(filename);
@@ -130,10 +160,12 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeItems(ArrayList<Item> items) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(items);
-            FileWriter fw = new FileWriter("database/XML/items.xml");
+            ItemList listItem = new ItemList(items);
+            String xml = xstream.toXML(listItem);
+            FileWriter fw = new FileWriter(dirPath + "/items.xml");
             fw.write(xml);
             fw.close();
+            delete("items");
             System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to items.xml");
@@ -144,7 +176,7 @@ public class AdapterXML implements DataStoreAdapter {
     public ArrayList<Member> readMembers() throws IOException {
         // TODO: implement
         // please implement according to read customers
-        String filename = "database/XML/members.xml";
+        String filename = dirPath + "/members.xml";
         String xml = "";
         try {
             FileInputStream file = new FileInputStream(filename);
@@ -179,10 +211,12 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeMembers(ArrayList<Member> members) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(members);
-            FileWriter fw = new FileWriter("database/XML/members.xml");
+            MemberList listMember = new MemberList(members);
+            String xml = xstream.toXML(listMember);
+            FileWriter fw = new FileWriter(dirPath + "/members.xml");
             fw.write(xml);
             fw.close();
+            delete("members");
             System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to members.xml");
@@ -193,7 +227,7 @@ public class AdapterXML implements DataStoreAdapter {
     public ArrayList<Bill> readBills() throws IOException {
         // TODO: implement
         // please implement according to read customers
-        String filename = "database/XML/bills.xml";
+        String filename = dirPath + "/bills.xml";
         String xml = "";
         try {
             FileInputStream file = new FileInputStream(filename);
@@ -228,10 +262,12 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeBills(ArrayList<Bill> bills) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(bills);
-            FileWriter fw = new FileWriter("database/XML/bills.xml");
+            BillList listBill = new BillList(bills);
+            String xml = xstream.toXML(listBill);
+            FileWriter fw = new FileWriter(dirPath + "/bills.xml");
             fw.write(xml);
             fw.close();
+            delete("bills");
             System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to bills.xml");
@@ -242,7 +278,7 @@ public class AdapterXML implements DataStoreAdapter {
     public ArrayList<FixedBill> readFixedBills() throws IOException {
         // TODO: implement
         // please implement according to read customers
-        String filename = "database/XML/fixed_bills.xml";
+        String filename = dirPath + "/fixed_bills.xml";
         String xml = "";
         try {
             FileInputStream file = new FileInputStream(filename);
@@ -277,10 +313,12 @@ public class AdapterXML implements DataStoreAdapter {
     public void writeFixedBills(ArrayList<FixedBill> fixedBills) throws IOException {
         // TODO: implement
         try {
-            String xml = xstream.toXML(fixedBills);
-            FileWriter fw = new FileWriter("database/XML/fixed_bills.xml");
+            FixedBillList listFixedBill = new FixedBillList(fixedBills);
+            String xml = xstream.toXML(listFixedBill);
+            FileWriter fw = new FileWriter(dirPath + "/fixed_bills.xml");
             fw.write(xml);
             fw.close();
+            delete("fixed_bills");
             System.out.println(xml);
         } catch (IOException e) {
             Throwable rootCause = e.getCause();
@@ -296,33 +334,33 @@ public class AdapterXML implements DataStoreAdapter {
     }
 
     public static void main(String[] args) {
-        // // test writecustomer
-        // ArrayList<Customer> customers = new ArrayList<Customer>();
-        // customers.add(new Customer(1));
-        // customers.add(new Customer(2));
-        // customers.add(new Customer(3));
-        // customers.add(new Customer(4));
+        // test writecustomer
+        ArrayList<Customer> customers = new ArrayList<Customer>();
+        customers.add(new Customer(1));
+        customers.add(new Customer(2));
+        customers.add(new Customer(3));
+        customers.add(new Customer(4));
 
-        // AdapterXML adapterXML = new AdapterXML();
-        // try {
-        //     adapterXML.writeCustomers(customers);
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-
-        // test readcustomer
-        AdapterXML adapterXML = new AdapterXML();
+        AdapterXML adapterXML = new AdapterXML("D:/ITB 21/KULYAHHH/SEMESTER 4/OOP/Tubes 2 OOP/Tubes2_OOP_AJG/database/customers.xml");
         try {
-            // ArrayList<Item> customerss = adapterXML.readItems();
-            ArrayList<Customer> customers = adapterXML.readCustomers();
-            for (Customer customer : customers) {
-                System.out.println(customer.getId());
-            }
-
+            adapterXML.writeCustomers(customers);
         } catch (IOException e) {
-            System.out.println("disini");
             e.printStackTrace();
         }
+
+        // test readcustomer
+        // AdapterXML adapterXML = new AdapterXML(this.dirPath);
+        // try {
+        //     // ArrayList<Item> customerss = adapterXML.readItems();
+        //     ArrayList<Customer> customers = adapterXML.readCustomers();
+        //     for (Customer customer : customers) {
+        //         System.out.println(customer.getId());
+        //     }
+
+        // } catch (IOException e) {
+        //     System.out.println("disini");
+        //     e.printStackTrace();
+        // }
     }
 }
 

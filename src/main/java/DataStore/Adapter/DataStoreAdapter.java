@@ -6,11 +6,12 @@ import DataStore.DataStore;
 import Entity.*;
 
 public interface DataStoreAdapter {
-    /**
-     * Read all datastore from file
-     * @param d DataStore instance
-     */
-    public void read(DataStore d) throws Exception;
+
+    // /**
+    //  * Read all datastore from file
+    //  * @param d DataStore instance
+    //  */
+    // public void read(DataStore d) throws Exception;
     
     /**
      * Read customers data from file
