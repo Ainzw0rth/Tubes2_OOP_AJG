@@ -36,7 +36,7 @@ public class ChartPlugin2Page extends JPanel {
         for (int i = 0; i < 12; i++) {
             monthValue[i] = Double.valueOf(0);
         }
-    
+
         ArrayList<FixedBill> bills = dataService.getFixedBills().getElements();
         for (FixedBill bill : bills) {
             String[] date = bill.getDate().split("-");
