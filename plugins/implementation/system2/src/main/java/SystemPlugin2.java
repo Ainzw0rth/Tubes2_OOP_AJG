@@ -28,14 +28,14 @@ public class SystemPlugin2 extends JPanel implements BasePlugin {
                 @Override
                 public void update() {
                     for (Bill bill : bills) {
-                        int temp = (int) (bill.getTotalPrice() * (this.tax + this.charge)) ; // tax 5%, service charge 5%
+                        Double temp = (bill.getTotalPrice() * (this.tax + this.charge)) ; // tax 5%, service charge 5%
 
                         if (bill.getTotalPrice() > 100000) {
                             Double value = temp * 0.9; // diskon 10%
-                            bill.setTotalPrice(value.intValue());
+                            bill.setTotalPrice(value);
                         } else {
                             Double value = temp * this.discount; // diskon 7%
-                            bill.setTotalPrice(value.intValue());
+                            bill.setTotalPrice(value);
                         }
                     }
                 }
