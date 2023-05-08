@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import org.jetbrains.annotations.*;
 
+import Entity.Bill;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -61,7 +63,12 @@ public class AppActionListener implements ActionListener {
                 // Menu Riwayat Transaksi Member
                 app.addTab("Riwayat Transaksi Member", new HistoriTransaksi());
             } else if (title.equals("Jual Barang")) {
-                app.addTab("Jual Barang", new JualBarang());
+                Bill newBill;
+                try {
+                    newBill = new Bill(-1);
+                    app.addTab("Jual Barang", new JualBarang(newBill));
+                } catch (Exception e1) {
+                }
             } else if (title.equals("Tambah Barang")) {
                 app.addTab("Tambah Barang", new TambahBarang());
             } else if (title.equals("Update Barang")) {
