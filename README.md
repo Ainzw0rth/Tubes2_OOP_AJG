@@ -40,9 +40,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -61,7 +58,6 @@ Aplikasi yang kami bangun bernama <strong>BNMOStore 🏪</strong>, yang merupaka
 
 Aplikasi BNMOStore dibuat dalam bahasa java, dengan bantuan dependency berikut.
 
-* JavaFX version 8.0.202
 * org.json:json:20230227
 * com.thoughtworks.xstream:xstream:1.4.20
 * xmlpull:xmlpull:1.1.3.1
@@ -80,6 +76,7 @@ Aplikasi BNMOStore dibuat dalam bahasa java, dengan bantuan dependency berikut.
 <!-- GETTING STARTED -->
 ## Prerequisite
 - [Java](https://www.java.com/en/) at least Java 8
+  
 ## Installation
 1. Clone the repo
    ```sh
@@ -94,6 +91,12 @@ Aplikasi BNMOStore dibuat dalam bahasa java, dengan bantuan dependency berikut.
    cd target
    java -jar BNMOStore_AJG.jar
    ```
+4. Initialize Database : 
+   - go to settings > Penyimpanan Data
+   - change database directory to your local
+
+5. Have Fun!
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
