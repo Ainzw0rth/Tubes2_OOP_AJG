@@ -32,9 +32,9 @@ public class ChartPlugin2Page extends JPanel {
         // CHART DATA
         DefaultPieDataset dataset = new DefaultPieDataset();
 
-        Double[] monthValue = new Integer[12];
+        Double[] monthValue = new Double[12];
         for (int i = 0; i < 12; i++) {
-            monthValue[i] = 0;
+            monthValue[i] = Double.valueOf(0);
         }
 
         ArrayList<FixedBill> bills = dataService.getFixedBills().getElements();
