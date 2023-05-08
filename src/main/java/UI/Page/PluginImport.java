@@ -17,15 +17,15 @@ public class PluginImport extends JPanel {
     String selectedPath = "";
 
     JFileChooser fileChooser;
-    DataStore data;
 
     public PluginImport(){
-        this.data = DataStore.getInstance();
+        
         this.setLayout(null);
         init();
     }
 
     public void init() {
+        DataStore data = DataStore.getInstance();
         JLabel title = new JLabel("Plugins");
         title.setBounds(100,40,300,50);
         title.setFont(new Font("Poppins", Font.BOLD, 35));
@@ -34,50 +34,10 @@ public class PluginImport extends JPanel {
         // asumsi nanti daftar plugins yang telah ada dalam bentuk list of string
         // String[] daftarPlugs = {new String("C:/Users/louis/Downloads/Projects/tubes2-ajg/src/main/resources/images/tes.jar"),  new String("C:/Users/louis/Downloads/Projects/tubes2-ajg/src/main/resources/images/tes.jar")};
         String[] daftarPlugs = {};
-        try {
-            daftarPlugs = data.getPluginPaths().toArray(new String[0]);
-        } catch (Exception e) {
-            
-        }
         
-        JPanel plugsPanel = new JPanel();
-        plugsPanel.setBounds(0,0,550,320);
-        plugsPanel.setLayout(new GridLayout(0, 1));
-        plugsPanel.setBackground(Color.white);
-        
-        for (String plug : daftarPlugs) {
-            JButton plugButton = new JButton(plug);
-            plugButton.setHorizontalAlignment(JLabel.LEFT);
-            plugButton.setFont(new Font("Poppins", Font.PLAIN, 18));
-            plugButton.setPreferredSize(new Dimension(300, 35));
-            plugButton.setForeground(Color.black);
-            plugButton.setBackground(Color.WHITE);
-            plugButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    selectedPath = plug;
-                    System.out.println(selectedPath);
-                    plugButton.setBackground(Color.gray);
-                }
-            });
-            
-            plugsPanel.add(plugButton);
-        }
-        plugsPanel.add(Box.createVerticalGlue());
-        plugsPanel.add(Box.createVerticalGlue());
-        plugsPanel.add(Box.createVerticalGlue());
-        plugsPanel.add(Box.createVerticalGlue());
-        plugsPanel.add(Box.createVerticalGlue());
-        plugsPanel.add(Box.createVerticalGlue());
 
+        initPlugsPanel(daftarPlugs);
 
-        JScrollPane scrollPane = new JScrollPane(plugsPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        // scrollPane.setLayout(null);
-        scrollPane.setBounds(100, 110, 550, 320);
-        scrollPane.setBackground(Color.white);
-        scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x36459A)));
-        this.add(scrollPane);
         
         // removebutton
         JButton removeButton = new JButton("Remove");
@@ -124,6 +84,7 @@ public class PluginImport extends JPanel {
                         CustomClassLoader loader = new CustomClassLoader(path);
                         loader.load();
                         data.addPluginPath(path);
+                        initPlugsPanel(daftarPlugs);
                     } catch (Exception err) {
                         System.out.println("Gagal menambahkan plugin");
                     }
@@ -139,5 +100,59 @@ public class PluginImport extends JPanel {
         JLabel sepuhIMG = new JLabel(sepuh);
         sepuhIMG.setBounds(650, 0, 600, 700);
         this.add(sepuhIMG);
+    }
+
+
+    public void initPlugsPanel(String[] daftarPlugs){
+        DataStore data = DataStore.getInstance();
+
+        try {
+            daftarPlugs = data.getPluginPaths().toArray(new String[0]);
+        } catch (Exception e) {
+            
+        }
+        
+        try {
+            daftarPlugs = data.getPluginPaths().toArray(new String[0]);
+        } catch (Exception e) {
+            
+        }
+        JPanel plugsPanel = new JPanel();
+        plugsPanel.setBounds(0,0,550,320);
+        plugsPanel.setLayout(new GridLayout(0, 1));
+        plugsPanel.setBackground(Color.white);
+        
+        for (String plug : daftarPlugs) {
+            JButton plugButton = new JButton(plug);
+            plugButton.setHorizontalAlignment(JLabel.LEFT);
+            plugButton.setFont(new Font("Poppins", Font.PLAIN, 18));
+            plugButton.setPreferredSize(new Dimension(300, 35));
+            plugButton.setForeground(Color.black);
+            plugButton.setBackground(Color.WHITE);
+            plugButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    selectedPath = plug;
+                    System.out.println(selectedPath);
+                    plugButton.setBackground(Color.gray);
+                }
+            });
+            
+            plugsPanel.add(plugButton);
+        }
+        plugsPanel.add(Box.createVerticalGlue());
+        plugsPanel.add(Box.createVerticalGlue());
+        plugsPanel.add(Box.createVerticalGlue());
+        plugsPanel.add(Box.createVerticalGlue());
+        plugsPanel.add(Box.createVerticalGlue());
+        plugsPanel.add(Box.createVerticalGlue());
+
+        JScrollPane scrollPane = new JScrollPane(plugsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        // scrollPane.setLayout(null);
+        scrollPane.setBounds(100, 110, 550, 320);
+        scrollPane.setBackground(Color.white);
+        scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x36459A)));
+        this.add(scrollPane);
     }
 }

@@ -2,7 +2,6 @@ package DataStore.Adapter;
 
 import java.util.*;
 
-import DataStore.DataStore;
 import Entity.*;
 
 public interface DataStoreAdapter {
@@ -13,11 +12,6 @@ public interface DataStoreAdapter {
     //  */
     // public void read(DataStore d) throws Exception;
 
-    /**
-     * delete file 
-     * @param className 
-     */
-    public void deleteOther(String className);
     
     public void setDirPath(String dir);
 
@@ -94,13 +88,19 @@ public interface DataStoreAdapter {
      */
     public void writePluginPaths(ArrayList<String> pluginPaths) throws Exception;
 
+    /**
+     * delete file 
+     * @param className 
+     */
+    public void deleteOther(String className);
+
     // @WaitForImplement
     /**
      * Write Base Plugin path to file
      * @param path String
      */
     // public void writeBasePluginPath(String path) throws IOException;
-
+    
     /**
      * Read Base Plugin path from file
      * @return String
