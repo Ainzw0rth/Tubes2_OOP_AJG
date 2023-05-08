@@ -29,7 +29,12 @@ public class AdapterOBJ implements DataStoreAdapter {
         this.dirPath = dirPath;
     }
 
-    
+    public void isValid(String pathString) throws IOException {
+        Path path = Paths.get(pathString);
+        if (!Files.exists(path)){
+            throw new IOException("File not found!", null);
+        } 
+    }
 
     public void deleteOther(String className) {
         String filePath = dirPath + "/" + className;
@@ -51,6 +56,7 @@ public class AdapterOBJ implements DataStoreAdapter {
     
     public ArrayList<Customer> readCustomers() throws Exception {
         try {
+            isValid(dirPath + "/customers.ser");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/customers.ser"));
             
             @SuppressWarnings("unchecked")
@@ -59,9 +65,9 @@ public class AdapterOBJ implements DataStoreAdapter {
             in.close();
             return customers;
         } catch (Exception e) {
-            Exception _err = new Exception("Cannot read customers from file: " + e.getMessage() + "\n");
-            printError("Fail to read from customers.ser", _err);
-            throw _err;
+            // printError("Fail to read from customers.ser", _err);
+            // throw _err;
+            return new ArrayList<Customer>();
         }
     }
 
@@ -80,6 +86,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<Item> readItems() throws Exception {
         try {
+            isValid(dirPath + "/items.ser");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/items.ser"));
             
             @SuppressWarnings("unchecked")
@@ -88,9 +95,9 @@ public class AdapterOBJ implements DataStoreAdapter {
             in.close();
             return items;
         } catch (Exception e) {
-            Exception _err = new Exception("Cannot read items from file: " + e.getMessage() + "\n");
-            printError("Fail to read from items.ser", _err);
-            throw _err;
+            // printError("Fail to read from items.ser", _err);
+            // throw _err;
+            return new ArrayList<Item>();
         }
     }
 
@@ -110,6 +117,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<Member> readMembers() throws Exception {
         try {
+            isValid(dirPath + "/members.ser");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/members.ser"));
             
             ArrayList<Member> members = new ArrayList<Member>();
@@ -126,15 +134,16 @@ public class AdapterOBJ implements DataStoreAdapter {
             in.close();
             return members;
         } catch (Exception e) {
-            Exception _err = new Exception("Cannot read members from file: " + e.getMessage() + "\n");
-            printError("Fail to read from members.ser", _err);
-            throw _err;
+            // printError("Fail to read from members.ser", _err);
+            // throw _err;
+            return new ArrayList<Member>();
 
         }
     }
 
     public void writeMembers(ArrayList<Member> members) throws Exception {
         try {
+
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dirPath + "/members.ser"));
         
             for (Member member : members) {
@@ -158,6 +167,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<Bill> readBills() throws Exception {
         try {
+            isValid(dirPath + "/bills.ser");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/bills.ser"));
             
             @SuppressWarnings("unchecked")
@@ -166,9 +176,9 @@ public class AdapterOBJ implements DataStoreAdapter {
             in.close();
             return bills;
         } catch (Exception e) {
-            Exception _err = new Exception("Cannot read bills from file: " + e.getMessage() + "\n");
-            printError("Fail to read from bills.ser", _err);
-            throw _err;
+            // printError("Fail to read from bills.ser", _err);
+            // throw _err;
+            return new ArrayList<Bill>();
         }
     }
 
@@ -187,6 +197,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<FixedBill> readFixedBills() throws Exception {
         try {
+            isValid(dirPath + "/fixed_bills.ser");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/fixed_bills.ser"));
             
             @SuppressWarnings("unchecked")
@@ -195,9 +206,9 @@ public class AdapterOBJ implements DataStoreAdapter {
             in.close();
             return fixedBills;
         } catch (Exception e) {
-            Exception _err = new Exception("Cannot read fixedBills from file: " + e.getMessage() + "\n");
-            printError("Fail to read from fixedBills.ser", _err);
-            throw _err;
+            // printError("Fail to read from fixedBills.ser", _err);
+            // throw _err;
+            return new ArrayList<FixedBill>();
         }
     }
     
@@ -215,6 +226,7 @@ public class AdapterOBJ implements DataStoreAdapter {
 
     public ArrayList<String> readPluginPaths() throws Exception {
         try {
+            isValid(dirPath + "/plugins.ser");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(dirPath + "/plugins.ser"));
             
             @SuppressWarnings("unchecked")
@@ -223,7 +235,6 @@ public class AdapterOBJ implements DataStoreAdapter {
             in.close();
             return pluginPaths;
         } catch (Exception e) {
-            Exception _err = new Exception("Cannot read pluginPaths from file: " + e.getMessage() + "\n");
             return new ArrayList<String>();
         }
     }

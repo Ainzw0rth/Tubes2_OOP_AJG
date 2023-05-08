@@ -120,7 +120,6 @@ public class AdapterXML implements DataStoreAdapter {
             
             deleteOther("customers");
             
-            System.out.println("File written successfully.");
         } catch (IOException e) {
             System.out.println("Fail to write to customers.xml");
             throw e;

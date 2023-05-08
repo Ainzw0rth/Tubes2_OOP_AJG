@@ -11,7 +11,6 @@ import DataStore.Enums.*;
 import Entity.*;
 import lombok.*;
 
-import Plugins.CustomClassLoader;
 
 import Utils.Collections.ObservableCollection;
 
@@ -66,16 +65,12 @@ public class DataStore implements DataService{
             this.bills = new ObservableCollection<Bill>(this.adapter.readBills());
             this.fixedBills = new ObservableCollection<FixedBill>(this.adapter.readFixedBills());
             this.pluginPaths = new ArrayList<String>(this.adapter.readPluginPaths());
-            // String path = this.pluginPaths.get(0);
-            // CustomClassLoader loaderr = new CustomClassLoader(path);
-            // loaderr.load();
         } catch (Exception e) {
             printError("Fail to load data", e);
         }
 
         // for (int i=0; i<pluginPaths.size(); i++) {
         // }
-        System.out.println("eksekusi");
     }
 
     // Singleton point
@@ -157,7 +152,6 @@ public class DataStore implements DataService{
             // change config
             config.changeConfig(config.getDirPath(), ext);
             this.ext = ext;
-            System.out.println("halo halo");
         } catch (Exception e) {
             e.printStackTrace();;
             throw e;

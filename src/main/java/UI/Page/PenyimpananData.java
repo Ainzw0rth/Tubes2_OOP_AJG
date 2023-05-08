@@ -74,6 +74,7 @@ public class PenyimpananData extends JPanel {
         
         try {
             data.changeExt(FileStoreExt.valueOf(selectedExt));
+            System.out.println("Extension berhasil diubah");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("extension gagal diubah");
