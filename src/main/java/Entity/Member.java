@@ -29,7 +29,7 @@ public class Member extends Customer {
         this.point += transaction/100;
     }
 
-    public float getDiscount(Integer price) {
-        return (float) 0;
+    public Double getDiscount(Double price) {
+        return Double.valueOf(0);
     }
 }

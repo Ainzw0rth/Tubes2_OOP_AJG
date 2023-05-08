@@ -10,7 +10,7 @@ public class VIP extends Member {
     }
 
     @Override
-    public float getDiscount(Integer price){
-        return (float) (price.floatValue()/10);
+    public Double getDiscount(Double price){
+        return Double.valueOf(price.doubleValue()/10);
     }
 }

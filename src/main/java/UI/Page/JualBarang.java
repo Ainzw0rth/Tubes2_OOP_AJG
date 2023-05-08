@@ -40,8 +40,8 @@ public class JualBarang extends JPanel {
     private JLabel discountLabelNumbers;
     private JLabel totalLabelNumbers;
 
-    private float subtotal;
-    private float discountTotal;
+    private Double subtotal;
+    private Double discountTotal;
 
     private JComboBox<String> memberDropdown;
     private JComboBox<String> kategori;
@@ -117,7 +117,6 @@ public class JualBarang extends JPanel {
             });
             
             kategori = new JComboBox<String>();
-            rerenderCategory();
     
             // input searching
             JTextField searchField = new JTextField();
@@ -157,9 +156,7 @@ public class JualBarang extends JPanel {
                     checkoutItems();
                 }
             });
-            
             memberDropdown = new JComboBox<String>();
-            rerenderMember();
     
             // subtotal label
             JLabel subtotalLabel = new JLabel("Subtotal");
@@ -167,7 +164,7 @@ public class JualBarang extends JPanel {
             subtotalLabel.setBounds(15, 340, 100, 40);
             
             // subtotal nominal
-            subtotalLabelNumber = new JLabel("Rp " + Integer.toString(x.getTotalPrice()));
+            subtotalLabelNumber = new JLabel("Rp " + Double.toString(Double.valueOf(0)));
             subtotalLabelNumber.setFont(new Font("Poppins", Font.PLAIN, 16));
             subtotalLabelNumber.setBounds(230, 340, 100, 40);
     
@@ -177,7 +174,7 @@ public class JualBarang extends JPanel {
             discountLabel.setBounds(15, 360, 100, 40);
     
             // diskon nominal
-            discountLabelNumbers = new JLabel("RP 0");
+            discountLabelNumbers = new JLabel("RP " + Double.toString(Double.valueOf(0)));
             discountLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
             discountLabelNumbers.setBounds(230, 360, 100, 40);
     
@@ -187,7 +184,7 @@ public class JualBarang extends JPanel {
             totalLabel.setBounds(230, 400, 70, 40);
     
             // nominal total price
-            totalLabelNumbers = new JLabel("Rp 0");
+            totalLabelNumbers = new JLabel("Rp " + Double.toString(Double.valueOf(0)));
             totalLabelNumbers.setFont(new Font("Poppins", Font.PLAIN, 16));
             totalLabelNumbers.setBounds(230, 420, 100, 40);
     
@@ -218,8 +215,6 @@ public class JualBarang extends JPanel {
             stockScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             stockScrollPane.setBounds(0, 50, 800, 590);
             stockScrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-            rerenderItems();
     
             // daftar belanjaan
             itemPanel = new JPanel();
@@ -228,9 +223,9 @@ public class JualBarang extends JPanel {
             scrollPane.setBounds(10, 60, 370, 270);
             scrollPane.setBackground(Color.white);
             scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0x36459A)));
-            rerenderBills();
             
-    
+            rerender(); // visualize
+
             JPanel panel = new JPanel();
             panel.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, new Color(0x36459A)));
             panel.setBackground(Color.white);
@@ -273,12 +268,10 @@ public class JualBarang extends JPanel {
     }
     
     public void rerender() {
-        rerenderItems();
-        rerenderBills();
         rerenderCategory();
         rerenderMember();
-
-
+        rerenderItems();
+        rerenderBills();
     }
 
     public void rerenderCategory() {
@@ -463,19 +456,19 @@ public class JualBarang extends JPanel {
             // PRINT
             printableBill += tab + "- " + item.getName() + " x" + item.getStock() + " (Rp " + item.getPrice() + ")\n";
         }
-        printableBill += "\nSubtotal: Rp " + Integer.toString(x.getTotalPrice()) + "\n";
+        printableBill += "\nSubtotal: Rp " + Double.toString(x.getTotalPrice()) + "\n";
         
 
         Dimension billPanelSize = new Dimension(350, (ctr)*70);
         itemPanel.setPreferredSize(billPanelSize);
         scrollPane.setViewportView(itemPanel);
 
-        subtotal = x.getTotalPrice().floatValue();
-        discountTotal = (float) 0;
+        subtotal = x.getTotalPrice().doubleValue();
+        discountTotal = Double.valueOf(0);
         
         String selectedMember = (String) memberDropdown.getSelectedItem();
         if (selectedMember.equals("Pilih nama member")) {
-            discountTotal = (float) 0;
+            discountTotal = Double.valueOf(0);
         } else {
             try {
                 for (Member member: d.getActiveMembers()) {
@@ -486,12 +479,12 @@ public class JualBarang extends JPanel {
             }
         }
 
-        printableBill += "Discount Total: Rp " + Float.toString(subtotal) + "\n";
-        printableBill += "Total Price: Rp " + Float.toString(subtotal-discountTotal) + "\n";
+        printableBill += "Discount Total: Rp " + Double.toString(subtotal) + "\n";
+        printableBill += "Total Price: Rp " + Double.toString(subtotal-discountTotal) + "\n";
 
-        subtotalLabelNumber.setText("Rp " + Float.toString(subtotal));
-        discountLabelNumbers.setText("Rp " + Float.toString(discountTotal));
-        totalLabelNumbers.setText("Rp " + Float.toString(subtotal-discountTotal));
+        subtotalLabelNumber.setText("Rp " + Double.toString(subtotal));
+        discountLabelNumbers.setText("Rp " + Double.toString(discountTotal));
+        totalLabelNumbers.setText("Rp " + Double.toString(subtotal-discountTotal));
     }
 
     public void revalidateBill() {

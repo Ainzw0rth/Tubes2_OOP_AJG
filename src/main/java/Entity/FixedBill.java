@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FixedBill implements Serializable{
     @NotNull private int id;
-    @NotNull private int totalPrice;
+    @NotNull private Double totalPrice;
     @NotNull private LinkedList<Item> items;
     @NotNull private int idCustomer;
     @NotNull private String date;

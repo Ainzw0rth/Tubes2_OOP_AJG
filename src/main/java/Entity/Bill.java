@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Bill implements Serializable{
     @NotNull private int id;
-    @NotNull private Integer totalPrice;
+    @NotNull private Double totalPrice;
     @NotNull private LinkedList<Item> items;
     @NotNull private int idCustomer;
 
@@ -32,7 +32,7 @@ public class Bill implements Serializable{
         } catch (Exception e) {
             throw e;
         }
-        this.totalPrice = 0;
+        this.totalPrice = Double.valueOf(0);
         this.items = new LinkedList<Item>();
     }
 
@@ -40,7 +40,7 @@ public class Bill implements Serializable{
         Integer id = other.getId();
         String name = other.getName();
         String category = other.getCategory();
-        Integer price = other.getPrice();
+        Double price = other.getPrice();
         String image = other.getImageUrl();
         Integer stock = 1;
         this.totalPrice += price;
@@ -58,7 +58,7 @@ public class Bill implements Serializable{
 
     public void hapus (Item other) {
         Integer id = other.getId();
-        Integer price = other.getPrice();
+        Double price = other.getPrice();
         this.totalPrice -= price;
 
         // cek apakah item tersebut sudah ada
