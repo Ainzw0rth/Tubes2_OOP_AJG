@@ -11,6 +11,7 @@ import DataStore.Enums.*;
 import Entity.*;
 import lombok.*;
 
+
 import Utils.Collections.ObservableCollection;
 
 public class DataStore implements DataService{
@@ -67,6 +68,9 @@ public class DataStore implements DataService{
         } catch (Exception e) {
             printError("Fail to load data", e);
         }
+
+        // for (int i=0; i<pluginPaths.size(); i++) {
+        // }
     }
 
     // Singleton point
@@ -144,10 +148,10 @@ public class DataStore implements DataService{
             this.adapter.writeFixedBills(this.fixedBills.getElements());
             this.adapter.writeItems(this.items.getElements());
             this.adapter.writeMembers(this.members.getElements());
+            this.adapter.writePluginPaths(this.pluginPaths);
             // change config
             config.changeConfig(config.getDirPath(), ext);
             this.ext = ext;
-            System.out.println("halo halo");
         } catch (Exception e) {
             e.printStackTrace();;
             throw e;
@@ -166,7 +170,7 @@ public class DataStore implements DataService{
             this.adapter.writeFixedBills(this.fixedBills.getElements());
             this.adapter.writeItems(this.items.getElements());
             this.adapter.writeMembers(this.members.getElements());
-
+            this.adapter.writePluginPaths(this.pluginPaths);
             // change directory
             config.changeConfig(dir, config.getExt());
             this.dirPath = dir;

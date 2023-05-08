@@ -15,6 +15,8 @@ import java.awt.Font;
 
 import javax.swing.*;
 import UI.Page.*;
+import DataStore.DataStore;
+import Plugins.CustomClassLoader;
 
 public class App extends JFrame implements IApp {
 
@@ -31,7 +33,12 @@ public class App extends JFrame implements IApp {
 
     private App() {
         super("BNMOStore by AJG ( ✧Д✧)"); // init JFrame
-
+        
+        // DataStore data = DataStore.getInstance();
+        // System.out.println(data.getPluginPaths());
+        
+        // CustomClassLoader loader = new CustomClassLoader(data.getPluginPaths().get(0));
+        // loader.load();
         /* Window Configuration */
         setSize(WIDTH, HEIGHT);
         setResizable(false);
