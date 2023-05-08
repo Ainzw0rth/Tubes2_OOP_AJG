@@ -172,7 +172,6 @@ public class AdapterXML implements DataStoreAdapter {
             fw.write(xml);
             fw.close();
             deleteOther("items");
-            System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to items.xml");
             throw e;
@@ -233,7 +232,6 @@ public class AdapterXML implements DataStoreAdapter {
             fw.write(xml);
             fw.close();
             deleteOther("members");
-            System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to members.xml");
             throw e;
@@ -284,7 +282,6 @@ public class AdapterXML implements DataStoreAdapter {
             fw.write(xml);
             fw.close();
             deleteOther("bills");
-            System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to bills.xml");
             throw e;
@@ -335,7 +332,6 @@ public class AdapterXML implements DataStoreAdapter {
             fw.write(xml);
             fw.close();
             deleteOther("fixed_bills");
-            System.out.println(xml);
         } catch (IOException e) {
             Throwable rootCause = e.getCause();
             if (rootCause instanceof SAXParseException && rootCause.getMessage().equals("Premature end of file.")) {
@@ -393,7 +389,6 @@ public class AdapterXML implements DataStoreAdapter {
             fw.write(xml);
             fw.close();
             deleteOther("plugins");
-            System.out.println(xml);
         } catch (IOException e) {
             System.out.println("Fail to write to plugins.xml");
             throw e;

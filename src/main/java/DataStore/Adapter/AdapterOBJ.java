@@ -209,7 +209,6 @@ public class AdapterOBJ implements DataStoreAdapter {
             deleteOther("fixed_bills");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write fixedBills to file: " + e.getMessage() + "\n");
-            printError("Fail to write to fixedBills.ser", _err);
             throw _err;
         }
     }
@@ -225,8 +224,7 @@ public class AdapterOBJ implements DataStoreAdapter {
             return pluginPaths;
         } catch (Exception e) {
             Exception _err = new Exception("Cannot read pluginPaths from file: " + e.getMessage() + "\n");
-            printError("Fail to read from pluginPaths.ser", _err);
-            throw _err;
+            return new ArrayList<String>();
         }
     }
 
@@ -239,7 +237,6 @@ public class AdapterOBJ implements DataStoreAdapter {
             deleteOther("plugins");
         } catch (Exception e) {
             Exception _err = new Exception("Cannot write pluginPaths to file: " + e.getMessage() + "\n");
-            printError("Fail to write to pluginPaths.ser", _err);
             throw _err;
         }
     }

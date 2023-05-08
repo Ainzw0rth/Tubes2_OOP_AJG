@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.lang.Thread;
 
+import DataStore.DataStore;
+
 /* 
  * _Cara integrasiin tab ke aplikasi_ 
  * Tambahin tabnya ke AppActionListener dibagian AppActionListener yang
@@ -29,6 +31,7 @@ public class MainMenu extends JPanel {
 
     /* Initialized main menu components */
     private void init() {
+        DataStore data = DataStore.getInstance();
         setLayout(null);
         initLeftSide();
         initRightSide();

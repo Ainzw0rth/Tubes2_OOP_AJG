@@ -33,7 +33,12 @@ public class PluginImport extends JPanel {
         
         // asumsi nanti daftar plugins yang telah ada dalam bentuk list of string
         // String[] daftarPlugs = {new String("C:/Users/louis/Downloads/Projects/tubes2-ajg/src/main/resources/images/tes.jar"),  new String("C:/Users/louis/Downloads/Projects/tubes2-ajg/src/main/resources/images/tes.jar")};
-        String[] daftarPlugs = data.getPluginPaths().toArray(new String[0]);
+        String[] daftarPlugs = {};
+        try {
+            daftarPlugs = data.getPluginPaths().toArray(new String[0]);
+        } catch (Exception e) {
+            
+        }
         
         JPanel plugsPanel = new JPanel();
         plugsPanel.setBounds(0,0,550,320);
@@ -119,7 +124,6 @@ public class PluginImport extends JPanel {
                         CustomClassLoader loader = new CustomClassLoader(path);
                         loader.load();
                         data.addPluginPath(path);
-
                     } catch (Exception err) {
                         System.out.println("Gagal menambahkan plugin");
                     }
