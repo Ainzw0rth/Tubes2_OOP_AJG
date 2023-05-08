@@ -34,8 +34,9 @@ public class Printer {
             document.open();
             document.add(new Paragraph(text));
             document.close();
+            Thread.sleep(10000);
             System.out.println("PDF file created successfully.");
-        } catch (DocumentException | FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -270,7 +270,7 @@ public class UpdateBarang extends JPanel {
         String category = categoryField.getText();
         String imageLoc = imageLocField.getText();
         int stock = (Integer) stockSpinner.getValue();
-        int price = (Integer) priceField.getValue();
+        Double price = Double.valueOf((Integer) priceField.getValue());
 
         Item updatedItem = new Item(id, name, category, price, imageLoc, stock);
 

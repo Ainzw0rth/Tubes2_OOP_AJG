@@ -5,6 +5,9 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="doc/bazo.png" alt="Logo" width="200" height="175">
+  </a>
 
   <h1 align="center">BNMOStore</h1>
 
@@ -51,12 +54,12 @@
 ## About The Project
 
 
-Aplikasi yang kami bangun bernama BNMOStore, yang merupakan aplikasi sistem Point of Sales (POS) yang membantu sebuah toko dalam melakukan dan mencatat transaksi yang terkait dengan usaha mereka. Program ini memiliki fitur-fitur penting seperti manajemen inventaris barang serta manajemen transaksi. Terdapat juga fitur membership untuk memberikan reward kepada pelanggan yang setia dan fitur pembuatan laporan untuk memudahkan toko dalam melakukan evaluasi. Selain itu, program yang kami buat juga bersifat extensible karena mendukung plugin, sehingga pengguna dapat dengan mudah menambahkan fungsionalitas program sesuai dengan kebutuhan toko. Dengan fitur-fitur tersebut, program BNMOStore dapat membantu toko untuk mempercepat proses transaksi dan memudahkan pengelolaan usaha.
+Aplikasi yang kami bangun bernama <strong>BNMOStore 🏪</strong>, yang merupakan aplikasi sistem Point of Sales (POS) yang membantu sebuah toko dalam melakukan dan mencatat transaksi yang terkait dengan usaha mereka. Program ini memiliki fitur-fitur penting seperti manajemen 📦 <strong>inventaris barang</strong> serta 📝 <strong>manajemen transaksi</strong>. Terdapat juga fitur 👥 <strong>membership</strong> untuk memberikan reward kepada pelanggan yang setia dan fitur pembuatan laporan untuk memudahkan toko dalam melakukan evaluasi. Selain itu, program yang kami buat juga bersifat <strong>🏗️ extensible</strong> karena mendukung plugin, sehingga pengguna dapat dengan mudah menambahkan fungsionalitas program sesuai dengan kebutuhan toko. Dengan fitur-fitur tersebut, program BNMOStore dapat membantu toko untuk mempercepat proses transaksi dan memudahkan pengelolaan usaha.
 
 
-### Built With
+## Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+Aplikasi BNMOStore dibuat dalam bahasa java, dengan bantuan dependency berikut.
 
 * JavaFX version 8.0.202
 * org.json:json:20230227
@@ -75,30 +78,22 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * com.itextpdf:itextpdf:5.5.13.2
 
 <!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-
+## Prerequisite
+- [Java](https://www.java.com/en/) at least Java 8
+## Installation
 1. Clone the repo
    ```sh
    git clone https://github.com/Ainzw0rth/Tubes2_OOP_AJG
    ```
-2. Run run.bat if you use windows
+2. Run run.bat if you use Windows
    ```sh
    run.bat
    ```
-
+3. If you are running in different OS, run this instead 
+   ```sh
+   cd target
+   java -jar BNMOStore_AJG.jar
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage

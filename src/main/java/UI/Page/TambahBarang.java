@@ -165,7 +165,7 @@ public class TambahBarang extends JPanel {
         String category = categoryField.getText();
         String imageLoc = imageLocField.getText();
         int stock = (Integer) stockSpinner.getValue();
-        int price = (Integer) priceField.getValue();
+        Double price = Double.valueOf((Integer) priceField.getValue());
 
         DataStore data = DataStore.getInstance();
 
