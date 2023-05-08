@@ -36,7 +36,7 @@ public class ChartPlugin1Page extends JPanel {
         // LINE CHART
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        Integer[] monthValue = new Integer[12];
+        Double[] monthValue = new Integer[12];
         for (int i = 0; i < 12; i++) {
             monthValue[i] = 0;
         }
